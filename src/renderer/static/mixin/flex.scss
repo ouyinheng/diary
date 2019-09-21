@@ -1,0 +1,20 @@
+@mixin flex($dir:row) {
+    display: flex;
+    flex-direction: $dir;
+}
+
+.flex {
+    @include flex(row)
+}
+.flex-column {
+    @include flex(column)
+}
+.-around {
+    justify-content: space-around;
+}
+.-between {
+    justify-content: space-between;
+}
+.-center {
+    align-items: center;
+}

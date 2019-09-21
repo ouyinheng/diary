@@ -1,0 +1,34 @@
+$fill:(
+    l: left,
+    r: right,
+    t: top,
+    b: bottom
+);
+@for $var from 1 to 10 {
+    @each $index, $item in $fill {
+        .p#{$index}-#{$var} {
+            padding-#{$item}: $var*5px;
+        }
+        .m#{$index}-#{$var} {
+            margin-#{$item}: $var*5px;
+        }
+    }
+    .p-#{$var} {
+        padding: $var*5px;
+    }
+    .px-#{$var} {
+        padding: 0 $var*5px;
+    }
+    .py-#{$var} {
+        padding: $var*5px 0;
+    }
+    .m-#{$var} {
+        margin: $var*5px;
+    }
+    .mx-#{$var} {
+        margin: 0 $var*5px;
+    }
+    .my-#{$var} {
+        margin: $var*5px 0;
+    }
+}
