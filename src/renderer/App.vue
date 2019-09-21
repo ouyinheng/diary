@@ -15,4 +15,7 @@
   body {
     -webkit-app-region: drag;
   }
+  #app {
+      -webkit-app-region: no-drag
+  }
 </style>

@@ -1,5 +1,4 @@
-import { app, BrowserWindow } from 'electron'
-
+import { app, BrowserWindow, ipcMain } from 'electron'
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -18,9 +17,9 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 563,
+    height: 180,
     useContentSize: true,
-    width: 1000,
+    width: 180,
     frame: false
   })
 
@@ -44,7 +43,14 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
+// 接收渲染进程的异步信息
+ipcMain.on('asynchronous-message', function(event, arg) {
+  console.log(arg); // 打印的结果为刚才我们定义的名为 'winSize' 的字段
+  if (arg == 'winSize') {    
+    mainWindow.setSize(800, 100); // 改变窗口大小
+    mainWindow.center(); // 使窗口居中     
+  };
+});
 /**
  * Auto Updater
  *
