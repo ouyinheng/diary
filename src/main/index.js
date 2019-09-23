@@ -1,4 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
+import {runShell} from './src/shell'
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -20,7 +21,10 @@ function createWindow () {
     height: 180,
     useContentSize: true,
     width: 180,
-    frame: false
+    frame: false,
+    webPreferences: {
+      webSecurity: false
+    }
   })
 
   mainWindow.loadURL(winURL)
@@ -51,6 +55,7 @@ ipcMain.on('asynchronous-message', function(event, arg) {
     mainWindow.center(); // 使窗口居中     
   };
 });
+ipcMain.on('run-shell', runShell)
 /**
  * Auto Updater
  *

@@ -1,21 +1,32 @@
 <template>
   <div class="index">
       <p @click="setWinSize">index</p>
+	  <div v-html="html"></div>
   </div>
 </template>
 
 <script>
 const { ipcRenderer } = require('electron');
 export default {
-  name: "index",
-  data() {
-    return {};
-  },
-  methods: {
-      setWinSize() {
-        ipcRenderer.send('asynchronous-message', 'winSize');
-      }
-  }
+	name: "index",
+	data() {
+		return {
+			html: ''
+		};
+	},
+	methods: {
+		setWinSize() {
+			ipcRenderer.send('asynchronous-message', 'winSize');
+		}
+	},
+	mounted() {
+		ipcRenderer.send('run-shell', 'ls');
+	},
+	created() {
+		this.$http.get('https://www.jianshu.com/p/42f29f269b78').then(res => {
+			//   this.html = res
+		})
+	}
 };
 </script>
 
