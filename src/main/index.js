@@ -17,9 +17,9 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 180,
+    height: 60,
     useContentSize: true,
-    width: 180,
+    width: 600,
     frame: false
   })
 
@@ -44,11 +44,12 @@ app.on('activate', () => {
   }
 })
 // 接收渲染进程的异步信息
-ipcMain.on('asynchronous-message', function(event, arg) {
+ipcMain.on('asynchronous-message', function(event, arg, height=0) {
   console.log(arg); // 打印的结果为刚才我们定义的名为 'winSize' 的字段
   if (arg == 'winSize') {    
-    mainWindow.setSize(800, 100); // 改变窗口大小
-    mainWindow.center(); // 使窗口居中     
+    height = height >=150 ? 150 : height
+    mainWindow.setSize(600, 70+height); // 改变窗口大小
+    // mainWindow.center/(); // 使窗口居中     
   };
 });
 /**
