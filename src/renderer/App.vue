@@ -18,4 +18,8 @@
   #app {
       -webkit-app-region: no-drag
   }
+  ::selection {
+      color: white;
+      background-color: rgb(4, 224, 231);
+  }
 </style>
