@@ -1,7 +1,9 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+    <div id="app">
+        <el-scrollbar style="height: 600px;overflow-x: hidden;" :native="false">
+            <router-view></router-view>
+        </el-scrollbar>
+    </div>
 </template>
 
 <script>
@@ -16,6 +18,9 @@
     -webkit-app-region: drag;
   }
   #app {
-      -webkit-app-region: no-drag
+      -webkit-app-region: no-drag;
+  }
+  .el-scrollbar__wrap {
+      overflow-x: hidden!important;
   }
 </style>
