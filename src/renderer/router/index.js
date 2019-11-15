@@ -8,7 +8,26 @@ export default new Router({
     {
       path: '/',
       name: 'landing-page',
-      component: require('@/views/index').default
+      component: require('@/views/MainPage').default,
+      children: [
+        {
+          path: '/',
+          name: 'Homepage',
+          component: require("@/views/home/home").default
+        }, {
+          path: '/tv',
+          name: 'Homepage',
+          component: require("@/views/home/douban/TvPlay").default
+        }, {
+          path: '/movie',
+          name: 'Homepage',
+          component: require("@/views/home/douban/movie").default
+        }, {
+          path: '/movieinfo',
+          name: 'MovieInfo',
+          component: require("@/views/home/douban/movieinfo").default
+        }
+      ]
     },
     {
       path: '*',

@@ -55,6 +55,9 @@
     "element-ui": "^2.12.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
+    "muse-ui": "^3.0.2",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "vuex-electron": "^1.0.0"

@@ -1,27 +1,6 @@
 <template>
   <div class="home">
-	<div style="height: 500px;overflow:hidden">
-        <div v-if="list.length==0" class="el-table__empty-block">
-            <span class="el-table__empty-text">暂无数据</span>
-        </div>
-		<el-scrollbar v-else style="height: 100%;" :native="false">
-            <el-checkbox-group v-model="checkList">
-                <div v-for="(item, index) in list" :key="index">
-                    <li>
-                        <el-checkbox :label="item.key">{{item.tip}}</el-checkbox>
-                    </li>
-                </div>
-            </el-checkbox-group>
-		</el-scrollbar>
-	</div>
-	<div class="index flex -center">
-		<div style="width: 100%;">
-			<div class="drag"></div>
-			<input type="text" v-model="tip" placeholder="请输入待办项" @keyup.enter="setList">
-			<div class="drag"></div>
-		</div>
-		<el-button class="btn " icon="el-icon-setting" circle></el-button>
-	</div>
+	
   </div>
 </template>
 
@@ -50,7 +29,8 @@ export default {
 			console.log(this.list)
         },
         getData() {
-            this.$http.get('https://github.com/ouyinheng/diary/blob/master/README.md').then(res => {
+            this.$http.get('https://huaban.com/favorite/beauty').then(res => {
+                ipcRenderer.send('saveFile', 'name.html', res.data);
                 console.log(res)
             })
         }

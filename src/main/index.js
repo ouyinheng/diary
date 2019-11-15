@@ -1,73 +1,71 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
-/**
- * Set `__static` path to static files in production
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
- */
-if (process.env.NODE_ENV !== 'development') {
-  global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
-}
-
-let mainWindow
-const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080`
-  : `file://${__dirname}/index.html`
-
-function createWindow () {
+import {
+    app,
+    BrowserWindow,
+    ipcMain
+  } from 'electron'
+  const path = require('path')
+  
+  // 指定flash路径, 假设与main.js同一目录.
+  let pluginName= 'pepflashplayer.dll';
+  app.commandLine.appendSwitch('ppapi-flash-path', path.join(__dirname, pluginName))
   /**
-   * Initial window options
+   * Set `__static` path to static files in production
+   * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
    */
-  mainWindow = new BrowserWindow({
-    height: 600,
-    useContentSize: true,
-    width: 450,
-    frame: false
-  })
-
-  mainWindow.loadURL(winURL)
-
-  mainWindow.on('closed', () => {
-    mainWindow = null
-  })
-}
-
-app.on('ready', createWindow)
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
+  if (process.env.NODE_ENV !== 'development') {
+    global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
   }
-})
-
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
+  
+  let mainWindow
+  const winURL = process.env.NODE_ENV === 'development' ?
+    `http://localhost:9080` :
+    `file://${__dirname}/index.html`
+  
+  function createWindow() {
+    /**
+     * Initial window options
+     */
+    mainWindow = new BrowserWindow({
+      height: 563,
+      useContentSize: true,
+      width: 1000,
+      frame: false,
+      webPreferences: {
+        plugins: true
+      }
+    })
+  
+    mainWindow.loadURL(winURL)
+  
+    mainWindow.on('closed', () => {
+      mainWindow = null
+    })
+    mainWindow.webContents.openDevTools({
+      mode:"bottom"
+    })
   }
-})
-// 接收渲染进程的异步信息
-ipcMain.on('asynchronous-message', function(event, arg, height=0) {
-  console.log(arg); // 打印的结果为刚才我们定义的名为 'winSize' 的字段
-  if (arg == 'winSize') {    
-    height = height >=150 ? 150 : height
-    mainWindow.setSize(600, 70+height); // 改变窗口大小
-    // mainWindow.center/(); // 使窗口居中     
-  };
-});
-/**
- * Auto Updater
- *
- * Uncomment the following code below and install `electron-updater` to
- * support auto updating. Code Signing with a valid certificate is required.
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
- */
-
-/*
-import { autoUpdater } from 'electron-updater'
-
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
-})
-
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
-})
- */
+  app.on('ready', createWindow)
+  
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+      app.quit()
+    }
+  })
+  app.on('activate', () => {
+    if (mainWindow === null) {
+      createWindow()
+    }
+  })
+  
+  ipcMain.on('min', e=> mainWindow.minimize());
+  ipcMain.on('max', e=> {
+      if (mainWindow.isMaximized()) {
+          mainWindow.unmaximize()
+      } else {
+          mainWindow.maximize()
+      }
+  });
+  ipcMain.on('close', e=> mainWindow.close());
+  ipcMain.on('saveFile', (event, name, data) => {
+      saveFile(name, data)
+  })

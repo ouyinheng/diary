@@ -1,0 +1,20 @@
+.flex {
+  display: flex;
+  align-items: center;
+}
+.between {
+  @extend .flex;
+  justify-content: space-between;
+}
+.around {
+  @extend .flex;
+  justify-content: space-around;
+}
+.between-column {
+  @extend .between;
+  flex-direction: column;
+}
+.around-column {
+  @extend .around;
+  flex-direction: column;
+}
