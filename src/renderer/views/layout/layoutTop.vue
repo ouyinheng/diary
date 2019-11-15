@@ -14,9 +14,10 @@
       </div>
     </div>
     <div class="toolbar flex">
-      <span class="el-icon-minus" @click="closeWin('min')"></span>
-      <span class="el-icon-full-screen" @click="closeWin('max')"></span>
-      <span class="el-icon-close" @click="closeWin('close')"></span>
+        <span></span>
+        <span class="el-icon-minus" @click="closeWin('min')"></span>
+        <span class="el-icon-full-screen" @click="closeWin('max')"></span>
+        <span class="el-icon-close" @click="closeWin('close')"></span>
     </div>
   </div>
 </template>

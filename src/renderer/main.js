@@ -8,12 +8,12 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
-
 import './static/index.scss'
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 Vue.use(ElementUI);
+Vue.use(MuseUI);
 Vue.prototype.$url= 'http://localhost:3000'
 
 /* eslint-disable no-new */
@@ -25,7 +25,6 @@ new Vue({
 }).$mount('#app')
 
 
-Vue.use(ElementUI);
-Vue.use(MuseUI);
+
 
 
