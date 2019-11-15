@@ -26,8 +26,16 @@ export default new Router({
           path: '/movieinfo',
           name: 'MovieInfo',
           component: require("@/views/home/douban/movieinfo").default
+        }, {
+            path: '/skin',
+            name: 'skin',
+            component: require("@/views/setup/skin").default
         }
       ]
+    }, {
+        path: '/showmovie',
+        name: 'Homepage',
+        component: require("@/views/home/movie").default
     },
     {
       path: '*',

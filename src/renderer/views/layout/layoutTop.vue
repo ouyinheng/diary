@@ -14,6 +14,7 @@
       </div>
     </div>
     <div class="toolbar flex">
+        <span class="el-icon-s-tools" @click="toSkin"></span>
         <span></span>
         <span class="el-icon-minus" @click="closeWin('min')"></span>
         <span class="el-icon-full-screen" @click="closeWin('max')"></span>
@@ -55,6 +56,9 @@ export default {
           title: item.value
         }
       })
+    },
+    toSkin() {
+        this.$router.push('/skin')
     }
   },
   created() {

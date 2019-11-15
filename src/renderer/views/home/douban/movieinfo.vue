@@ -46,6 +46,7 @@
 
 <script>
 import {mapState,mapActions} from 'vuex';
+const path = require('path')
 export default {
   name: 'MovieInfo',
   data() {
@@ -84,7 +85,8 @@ export default {
       // http://jqaaa.com/jx.php?url=
       // http://jx.618g.com/?url=
       // https://www.pohaier.com/kuku/index.php?url=
-      win.loadURL('http://jqaaa.com/jx.php?url='+url)
+    //   win.loadURL('http://jqaaa.com/jx.php?url='+url)
+      win.loadURL('http://localhost:9080/#/showmovie?url='+url)
       win.show()
       this.$http.get(`${this.$url}/real?url=${url}`)
     },
