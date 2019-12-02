@@ -1,0 +1,1 @@
+import {getBeauty} from './picture';

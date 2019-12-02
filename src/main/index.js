@@ -4,7 +4,7 @@ import {
     ipcMain
   } from 'electron'
   const path = require('path')
-  
+  import './src/picture';
   // 指定flash路径, 假设与main.js同一目录.
   let pluginName= 'pepflashplayer.dll';
   app.commandLine.appendSwitch('ppapi-flash-path', path.join(__dirname, pluginName))
@@ -31,7 +31,8 @@ import {
       width: 1000,
       frame: false,
       webPreferences: {
-        plugins: true
+        plugins: true,
+        webSecurity: false
       }
     })
   

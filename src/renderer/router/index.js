@@ -30,6 +30,10 @@ export default new Router({
             path: '/skin',
             name: 'skin',
             component: require("@/views/setup/skin").default
+        }, {
+            path: '/picture',
+            name: 'picture',
+            component: require("@/views/pictures/index").default
         }
       ]
     }, {

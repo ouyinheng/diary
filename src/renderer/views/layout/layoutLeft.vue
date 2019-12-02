@@ -59,6 +59,10 @@ export default {
         title: '历史记录',
         icon: 'el-icon-stopwatch',
         link: '/movie'
+      }, {
+        title: '花瓣',
+        icon: 'el-icon-picture-outline',
+        link: '/picture'
       }]
     }
   },
