@@ -15,6 +15,11 @@ Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.use(MuseUI);
 Vue.prototype.$url= 'http://localhost:3000'
+// 主题
+import {theme,themeSetup} from './assets/css/index.js'
+Vue.themeSetup = Vue.prototype.$themeSetup = themeSetup
+Vue.theme = Vue.prototype.$theme = theme
+
 
 /* eslint-disable no-new */
 new Vue({

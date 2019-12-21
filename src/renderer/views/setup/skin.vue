@@ -1,6 +1,6 @@
 <template>
     <div class="skin">
-        skin
+        <span class="body__text--color">skin</span>
     </div>
 </template>
 
@@ -11,12 +11,14 @@ export default {
         return {
 
         }
+    },
+    created() {
+        this.$themeSetup("theme_1")
     }
 }
 </script>
 
 <style lang="scss" scoped>
 .skin {
-    
 }
 </style>
