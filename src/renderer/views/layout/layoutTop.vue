@@ -1,68 +1,95 @@
 <template>
-  <div class="layoutTop between">
-    <div></div>
-    <div class="flex" style="width: 800px;">
-      <div style="-webkit-app-region: no-drag;width: 100%;">
-        <el-autocomplete
-          class="search-input"
-          style="background: #343436;"
-          :trigger-on-focus="false"
-          :fetch-suggestions="querySearchAsync"
-          placeholder="请输入内容"
-          @select="handleSelect"
-        ></el-autocomplete>
-      </div>
+    <div class="layoutTop between">
+        <div></div>
+        <div class="flex" style="width: 800px;">
+            <div class="flex" style="-webkit-app-region: no-drag;width: 100%;">
+				<div class="flex" style="-webkit-app-region: no-drag;">
+					<el-button class="routers el-icon-arrow-left" @click.stop="goBack" type="text" :disabled="backDisabled"></el-button>
+					<el-button class="routers el-icon-arrow-right" @click.stop="goPre" type="text" :disabled="!backDisabled"></el-button>
+				</div>
+				<el-autocomplete
+						class="search-input"
+						style="background: #343436;"
+						:trigger-on-focus="false"
+						:fetch-suggestions="querySearchAsync"
+						placeholder="请输入内容"
+						@select="handleSelect"
+				></el-autocomplete>
+            </div>
+        </div>
+        <div class="toolbar flex">
+            <span class="el-icon-s-tools" @click="toSkin"></span>
+            <span></span>
+            <span class="el-icon-minus" @click="closeWin('min')"></span>
+            <span class="el-icon-full-screen" @click="closeWin('max')"></span>
+            <span class="el-icon-close" @click="closeWin('close')"></span>
+        </div>
     </div>
-    <div class="toolbar flex">
-        <span class="el-icon-s-tools" @click="toSkin"></span>
-        <span></span>
-        <span class="el-icon-minus" @click="closeWin('min')"></span>
-        <span class="el-icon-full-screen" @click="closeWin('max')"></span>
-        <span class="el-icon-close" @click="closeWin('close')"></span>
-    </div>
-  </div>
 </template>
 
 <script>
 const {ipcRenderer: ipc} = require('electron');
 export default {
-  name: 'layoutTop',
-  data() {
-    return {
-      searchValue: '',
-      restaurants: ''
-    }
-  },
-  methods: {
-    closeWin(type) {
-      ipc.send(type);
-    },
-    querySearchAsync(queryString, cb) {
-      if(!queryString)return;
-      this.$http.get(`${this.$url}/movie/getAuto?moviename=${queryString}`).then((res) => {
-        res.data.result.forEach((item, index) => {
-          item.value = item.word;
-        })
-        this.restaurants = res.data.result;
-        cb(this.restaurants);
-      }).catch(err=>{
-        console.log(err)
-      })
-    },
-    handleSelect(item) {
-      this.$router.push({
-        path: '/movieinfo',
-        query: {
-          title: item.value
-        }
-      })
-    },
-    toSkin() {
-        this.$router.push('/skin')
-    }
-  },
-  created() {
-  }
+	name: 'layoutTop',
+	data() {
+		return {
+			searchValue: '',
+			restaurants: '',
+			backDisabled: false
+		}
+	},
+	watch: {
+		'$route.path'(val) {
+			if(this.$route.matched[1].path === '/') {
+				this.backDisabled = true;
+			} else {
+				this.backDisabled = false;
+			}
+		}
+	},
+	methods: {
+		closeWin(type) {
+			ipc.send(type);
+		},
+		querySearchAsync(queryString, cb) {
+			if(!queryString)return;
+			this.$http.get(`${this.$url}/movie/getAuto?moviename=${queryString}`).then((res) => {
+				res.data.result.forEach((item, index) => {
+				item.value = item.word;
+				})
+				this.restaurants = res.data.result;
+				cb(this.restaurants);
+			}).catch(err=>{
+				console.log(err)
+			})
+		},
+		handleSelect(item) {
+		this.$router.push({
+			path: '/movieinfo',
+			query: {
+				title: item.value
+			}
+		})
+		},
+		toSkin() {
+			this.$router.push('/skin')
+		},
+		goBack() {
+			if(this.$route.matched[1].path!=='/') {
+				this.$router.back();
+			}
+		},
+		goPre() {
+			window.history.forward()
+		}
+	},
+	created() {
+		if(this.$route.matched[1].path === '/') {
+			this.backDisabled = true;
+		} else {
+			this.backDisabled = false;
+		}
+	}
 }
 </script>
 
@@ -89,6 +116,15 @@ export default {
         cursor: pointer;
       }
     }
+  }
+  .routers {
+    display: block;
+    padding:0 10px;
+    height: 100%;
+    font-size: 16px;
+    color: white;
+    margin-right: 10px;
+    cursor: pointer;
   }
 }
 .flex {

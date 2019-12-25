@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+	<div id="app">
+		<router-view></router-view>
+	</div>
 </template>
 
 <script>
@@ -12,8 +12,9 @@
 
 <style>
     /* CSS */
-    body {
+	html, body {
         -webkit-app-region: drag;
+        color: #D1D1D1;
     }
     #app {
         -webkit-app-region: no-drag

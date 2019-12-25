@@ -7,7 +7,9 @@
       <layout-top></layout-top>
       <div class="content" v-loading="loading" >
         <el-scrollbar :native="false">
-          <router-view></router-view>
+          <transition name="el-fade-in-linear">
+            <router-view></router-view>
+          </transition>
         </el-scrollbar>
       </div>
     </div>

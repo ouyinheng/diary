@@ -8,51 +8,93 @@
         </a>
       </el-carousel-item>
     </el-carousel>
+    <section>
+		<el-row>
+			<el-col :span="24" class="tag-list">
+				<span class="tags" v-for="(item, index) in tagList" :key="index" @click="setTags(item)">{{item.label}}</span>
+			</el-col>
+		</el-row>
+    </section>
   </div>
 </template>
 
 <script>
 import {mapState,mapActions} from 'vuex';
 export default {
-  name: 'HomePage',
-  data() {
-    return {
-      banner: []
-    }
-  },
-  computed: {
-    ...mapState([
-      'loading'
-    ]),
-  },
-  methods: {
-    ...mapActions([
-      'SET_LOADING_FALSE',
-      'SET_LOADING_TURE'
-    ]),
-    getHomeData() {
-      this.SET_LOADING_TURE()
-      this.$http.get(`${this.$url}/movie/qqrecomm`).then((res) => {
-        this.banner = res.data.result;
-        this.SET_LOADING_FALSE()
-      }).catch(err=>{
-      this.SET_LOADING_FALSE()
-      })
-    },
-    seeInfo(e,link) {
-      e.preventDefault();
-    }
-  },
-  created() {
-    this.getHomeData();
-  }
+  	name: 'HomePage',
+	data() {
+		return {
+			banner: [],
+			tagList: [{
+				label: '电视剧',
+				value: 'tv'
+			}, {
+				label: '电影',
+				value: 'movie'
+			}]
+		}
+	},
+	computed: {
+		...mapState([
+			'loading'
+		]),
+	},
+	methods: {
+		...mapActions([
+			'SET_LOADING_FALSE',
+			'SET_LOADING_TURE'
+		]),
+		getHomeData() {
+			this.SET_LOADING_TURE()
+			this.$http.get(`${this.$url}/movie/qqrecomm`).then((res) => {
+				this.banner = res.data.result;
+				this.SET_LOADING_FALSE()
+			}).catch(err=>{
+				this.SET_LOADING_FALSE()
+			})
+		},
+		seeInfo(e,link) {
+			e.preventDefault();
+		},
+		setChanges() {
+
+		},
+		setTags(item) {
+			this.$router.push({
+				path: '/tv',
+				query: {
+					video: item.value
+				}
+			})
+		}
+	},
+	created() {
+		this.getHomeData();
+	}
 }
 </script>
 
 <style lang="scss" scoped>
 .home {
-  box-sizing: border-box;
-  padding: 20px;
+	box-sizing: border-box;
+	padding: 20px;
+    color: #D1D1D1;
+	.tag-list {
+		display: flex;
+		background-color: rgb(48, 48, 49);
+		margin-top: 10px;
+		padding: 20px;
+		border-radius: 50px;
+	}
+	.tags {
+		cursor: pointer;
+		display: block;
+		color: white;
+		margin-left: 10px;
+		&:hover {
+			color: rgb(30, 204, 148);
+		}
+	}
 }
 .el-carousel__item:nth-child(2n) {
   background-color: #99a9bf;

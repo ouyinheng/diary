@@ -1,133 +1,215 @@
 <template>
   <div class="tv-play">
-    <el-row>
-      <el-radio-group v-model="video" size="small" @change="setChanges">
-        <el-radio-button label="tv">电视剧</el-radio-button>
-        <el-radio-button label="movie">电影</el-radio-button>
-      </el-radio-group>
+    <el-row class="tag-group">
+        <el-col :span="20">
+            <span :class="{ tag: true, active: item == tag }" v-for="(item, index) in tags" :key="index" @click="setTag(item)">{{item}}</span>
+        </el-col>
+        <el-col :span="4">
+            <el-dropdown trigger="click" @command="setSortRule">
+                <span class="el-dropdown-link">
+                    {{sortMenu[sortRule].label}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-for="(item, index) in sortMenu" :key="index" :command="index">
+                        <span :class="{sortActive: index == sortRule}">{{item.label}}</span>
+                    </el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+        </el-col>
     </el-row>
-    
-    <el-row style="margin-top: 10px;">
-      <el-radio-group v-model="tag" size="small" @change="setChange">
-        <el-radio-button :label="item" v-for="(item, index) in tags" :key="index"></el-radio-button>
-      </el-radio-group>
-    </el-row>
-    <el-row style="margin-top: 10px;">
-      <mu-flex align-items="center" style="padding-bottom: 8px;">
-        <mu-radio v-model="sortRule" style="margin-right: 16px;" label="热度" value="recommend" @change="setChange"></mu-radio>
-        <mu-radio v-model="sortRule" style="margin-right: 16px;" label="时间" value="time" @change="setChange"></mu-radio>
-        <mu-radio v-model="sortRule" style="margin-right: 16px;" label="评价" value="rank" @change="setChange"></mu-radio>
-      </mu-flex>
-    </el-row>
-    <!-- <el-image :src="'http://localhost:3000/image?url=https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2552503815.jpg'" ></el-image> -->
-
-    <div style="display: flex;justify-content:space-around;flex-wrap:wrap;">
-      <div :span="4" v-for="(item, index) in infos" :key="index" style="margin: 10px;" @click="toInfo(item.title)">
-        <el-card :body-style="{ padding: '0px'}" shadow="hover">
-          <div style="height:400px;overflow:hidden;min-width: 270px;">
-            <el-image :src="item.cover" :title="item.title"></el-image>
-          </div>
-          <div style="padding: 14px;">
-            <p style="color:#37a;text-align:center;font-size:16px;">{{item.title}}</p>
-            <div class="bottom clearfix" style="color:#e09015;text-align:center;">
-              {{item.rate}}分
+    <transition name="el-fade-in-linear">
+        <div style="display: flex;justify-content:space-around;flex-wrap:wrap;margin-top: 25px;" v-if="changeTag" v-infinite-scroll="loadmore">
+            <div class="items" :span="4" v-for="(item, index) in infos" :key="index" style="margin: 10px;" @click="toInfo(item.title)">
+                <el-card :body-style="{ padding: '0px'}" shadow="hover">
+                    <div style="height:400px;overflow:hidden;min-width: 270px;">
+                        <el-image :src="item.cover" :title="item.title"></el-image>
+                    </div>
+                    <div style="padding: 14px;">
+                        <p style="color:#37a;text-align:center;font-size:16px;">{{item.title}}</p>
+                        <div class="bottom clearfix" style="color:#e09015;text-align:center;">
+                            {{item.rate}}分
+                        </div>
+                    </div>
+                </el-card>
             </div>
-          </div>
-        </el-card>
-      </div>
-    </div>
-
-    <mu-flex justify-content="center" align-items="center" style="padding: 20px;">
+            <div :span="4"></div>
+            <div :span="4"></div>
+            <div :span="4"></div>
+            <div :span="4"></div>
+        </div>
+    </transition>
+    <!-- <mu-flex justify-content="center" align-items="center" style="padding: 20px;" v-if="infos.length">
       <mu-button full-width color="primary" v-loading="loading" @click="loadmore">加载更多</mu-button>
-    </mu-flex>
+    </mu-flex> -->
   </div>
 </template>
 
 <script>
 import {mapActions} from 'vuex';
 export default {
-  name: 'TvPlay',
-  data() {
-    return {
-      tags: [],
-      tag: '',
-      video: 'tv',
-      sortRule: 'recommend',
-      start: 0,
-      limit: 20,
-      infos: [],
-      loading: false
-    }
-  },
-  methods: {
-     ...mapActions([
-      'SET_LOADING_FALSE',
-      'SET_LOADING_TURE'
-    ]),
-    getTag() {
-      this.SET_LOADING_TURE();
-      this.$http.get(`${this.$url}/douban/tag?video=${this.video}`).then((res)=>{
-        this.tags = res.data.result;
-        this.tag = this.tags[0]
-        this.getList();
-      }).catch(err=>{
-        this.SET_LOADING_FALSE();
-      })
-    },
-    getList(bool=true) {
-      this.$http.get(`${this.$url}/douban/taginfo?video=${this.video}&tag=${this.tag}&sort=${this.sortRule}&start=${this.start}&limit=${this.limit}`).then((res) => {
-        if(bool) {
-          this.infos.push(...res.data.result)
-        } else {
-          this.infos = res.data.result;
+    name: 'TvPlay',
+    data() {
+        return {
+            tags: [],
+            tag: '',
+            changeTag: false,
+            video: 'tv',
+            sortRule: 0,
+            start: 0,
+            limit: 20,
+            infos: [],
+            loading: false,
+            sortMenu: [{
+                label: '热度',
+                value: 'recommend'
+            }, {
+                label: '时间',
+                value: 'time'
+            }, {
+                label: '评价',
+                value: 'rank'
+            }]
         }
-        this.start += 20;
-        this.SET_LOADING_FALSE();
-        this.loading = false;
-      }).catch(err=>{
-        this.loading = false;
-        this.SET_LOADING_FALSE();
-      })
     },
-    loadmore() {
-      this.loading = true;
-      this.getList();
-    },
-    setChanges() {
-      this.start = 0;
-      this.infos= [];
-      this.SET_LOADING_TURE();
-      this.getTag();
-    },
-    setChange() {
-      this.start = 0;
-      this.SET_LOADING_TURE();
-      this.getList(false);
-    },
-    toInfo(title) {
-      this.$router.push({
-        path: '/movieinfo',
-        query: {
-          title: title
+    methods: {
+        ...mapActions([
+            'SET_LOADING_FALSE',
+            'SET_LOADING_TURE'
+        ]),
+        getTag() {
+            this.SET_LOADING_TURE();
+            this.$http.get(`${this.$url}/douban/tag?video=${this.video}`).then((res)=>{
+                this.tags = res.data.result;
+                this.tag = this.tags[0]
+                this.getList();
+            }).catch(err=>{
+                this.SET_LOADING_FALSE();
+            })
+        },
+        getList(bool=true) {
+            this.$http.get(`${this.$url}/douban/taginfo?video=${this.video}&tag=${this.tag}&sort=${this.sortMenu[this.sortRule].value}&start=${this.start}&limit=${this.limit}`).then((res) => {
+                if(bool) {
+                    this.infos.push(...res.data.result)
+                } else {
+                    this.infos = res.data.result;
+                }
+                this.start += 20;
+                this.SET_LOADING_FALSE();
+                this.loading = false;
+                this.changeTag = true;
+            }).catch(err=>{
+                this.changeTag = true;
+                this.loading = false;
+                this.SET_LOADING_FALSE();
+            })
+        },
+        loadmore() {
+            this.loading = true;
+            this.getList();
+        },
+        setChanges() {
+            this.start = 0;
+            this.infos= [];
+            this.SET_LOADING_TURE();
+            this.getTag();
+        },
+        setChange() {
+            this.start = 0;
+            this.SET_LOADING_TURE();
+            this.getList(false);
+        },
+        setTag(item) {
+            this.changeTag = false;
+            this.tag = item;
+            this.setChange();
+        },
+        // 切换排序规则
+        setSortRule(index) {
+            console.log(index)
+            this.sortRule = index;
+            this.setChange();
+        },
+        toInfo(title) {
+            this.$router.push({
+                path: '/movieinfo',
+                query: {
+                    title: title
+                }
+            })
         }
-      })
+    },
+    created() {
+        this.video = this.$route.query.video;
+        this.getTag()
     }
-  },
-  created() {
-    this.getTag()
-  }
 }
 </script>
 
 <style lang="scss" scoped>
-  .tv-play {
+.sortActive {
+    color: rgb(30, 204, 148);
+}
+.el-dropdown-link {
+    color: white;
+    cursor: pointer;
+    &:hover {
+        color: rgb(30, 204, 148);
+    }
+}
+.tv-play {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
     padding: 10px;
+    position: relative;
     .el-radio-button {
-      margin-right: 10px;
-      margin-bottom: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
     }
-  }
+    .tag-group {
+        margin: 10px 0 20px 10px;
+        position: fixed;
+        top: 50px;
+        left: 250px;
+        right: 0;
+        background-color: #1E1E20;
+        z-index: 100;
+        .el-col {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .tag {
+            cursor: pointer;
+            display: block;
+            padding: 0 5px 5px;
+            margin: 0 5px 10px 20px;
+            color: white;
+            &:hover {
+                color: rgb(30, 204, 148);
+            }
+        }
+        .active {
+            position: relative;
+            color: rgb(30, 204, 148);
+            &::after {
+                content: '';
+                background-color: rgb(30, 204, 148);
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                z-index: 10;
+            }
+        }
+    }
+    .items {
+        transition: all .3s;
+        cursor: pointer;
+        &:hover {
+            transform: scale(1.03);
+        }
+    }
+}
 </style>
