@@ -1,8 +1,8 @@
 <template>
   <div class="movie-info">
-    <el-row>
+    <!-- <el-row>
       <mu-button flat color="primary" @click="$router.back()">返回</mu-button>
-    </el-row>
+    </el-row> -->
     <el-row>
       <el-radio-group v-model="sourth" size="small" @change="setChanges">
         <el-radio-button label="qq">腾讯</el-radio-button>
@@ -78,6 +78,7 @@ export default {
       let win = new BrowserWindow({ 
         width: 900,
         height: 520,
+        frame: false,
         webPreferences: {
           plugins: true
         }
@@ -113,6 +114,7 @@ export default {
   .movie-info {
     width: 1000px;
     margin: 30px auto;
+    color: white;
     .sub {
       color: #828282;
       font-size: 14px;
@@ -136,7 +138,7 @@ export default {
         word-break: break-all;
     }
     .content {
-      color: #2a2a2a;
+      color: #D1D1D1;
     }
     .mu-raised-button {
       min-width: 50px;

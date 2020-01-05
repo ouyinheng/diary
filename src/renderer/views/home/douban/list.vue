@@ -14,9 +14,9 @@
 		</el-row>
 		<el-row style="margin-top: 10px;">
 			<mu-flex align-items="center" style="padding-bottom: 8px;">
-				<mu-radio v-model="sortRule" style="margin-right: 16px;" label="热度" value="recommend" @change="setChange"></mu-radio>
-				<mu-radio v-model="sortRule" style="margin-right: 16px;" label="时间" value="time" @change="setChange"></mu-radio>
-				<mu-radio v-model="sortRule" style="margin-right: 16px;" label="评价" value="rank" @change="setChange"></mu-radio>
+				<el-radio v-model="sortRule" label="recommend" @change="setChange" style="margin-right: 16px;">热度</el-radio>
+				<el-radio v-model="sortRule" label="time" @change="setChange" style="margin-right: 16px;">时间</el-radio>
+				<el-radio v-model="sortRule" label="rank" @change="setChange" style="margin-right: 16px;">评价</el-radio>
 			</mu-flex>
 		</el-row>
 		<div style="display: flex;justify-content:space-around;flex-wrap:wrap;">
