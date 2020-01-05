@@ -13,7 +13,7 @@ export default {
         }
     },
     created() {
-        this.$themeSetup("theme_1")
+        this.$themeSetup("theme_0")
     }
 }
 </script>

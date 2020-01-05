@@ -1,5 +1,5 @@
 <template>
-    <div class="picture" ref="picture" v-infinite-scroll="loadmore">
+    <div class="picture" ref="picture">
         <el-image 
             class="showImg"
             lazy
@@ -33,8 +33,7 @@ export default {
     },
     methods: {
         getBeauty() {
-            console.log('getBeauty')
-            this.$http('https://huaban.com/explore/shoujisheying').then(res => {
+            this.$http('https://huaban.com/discovery/?category=beauty').then(res => {
                 this.parseHtml(res.data);
             })
         },
@@ -51,12 +50,11 @@ export default {
             })
         },
         loadmore() {
-            console.log('loadmore')
             if(this.beautyList.length == 0) {
                 return;
             }
-            const url = `https://huaban.com/explore/shoujisheying?k47wco49&max=${this.beautyList[this.beautyList.length-1]['pin_id']}&limit=${this.limit}&wfl=${this.wfl}`;
-            // `https://huaban.com/explore/shoujisheying?k47vxbps&max=2874516543&limit=20&wfl=1`
+            const url = `https://huaban.com/discovery/?category=beauty?k47wco49&max=${this.beautyList[this.beautyList.length-1]['pin_id']}&limit=${this.limit}&wfl=${this.wfl}`;
+            // `https://huaban.com/discovery/?category=beauty?k47vxbps&max=2874516543&limit=20&wfl=1`
             this.$http.get(url).then(res => {
                 this.parseHtml(res.data);
             })
@@ -90,6 +88,8 @@ export default {
             this.heightArray.push(0);
         }
         this.getBeauty();
+        const height = this.$refs.picture.clientHeight;
+        console.log(height)
     }
 }
 

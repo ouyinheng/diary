@@ -17,7 +17,7 @@ export default new Router({
         }, {
           path: '/tv',
           name: 'Homepage',
-          component: require("@/views/home/douban/TvPlay").default
+          component: require("@/views/home/douban/list").default
         }, {
           path: '/movie',
           name: 'Homepage',

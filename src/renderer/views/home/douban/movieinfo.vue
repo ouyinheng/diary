@@ -46,9 +46,11 @@
 
 <script>
 import {mapState,mapActions} from 'vuex';
+import getQQMovieInfo from '@/utils/mixins/getQQMovieInfo.js'
 const path = require('path')
 export default {
   name: 'MovieInfo',
+  mixins: [getQQMovieInfo],
   data() {
     return {
       infos: [],
@@ -62,15 +64,15 @@ export default {
       'SET_LOADING_FALSE',
       'SET_LOADING_TURE'
     ]),
-    getInfos(title) {
-      this.SET_LOADING_TURE();
-      this.$http.get(`${this.$url}/movie/sourth?sourth=${this.sourth}&moviename=${title}`).then((res)=>{
-        this.infos = res.data.result;
-        this.SET_LOADING_FALSE();
-      }).catch(()=>{
-        this.SET_LOADING_FALSE();
-      })
-    },
+    // getInfos(title) {
+    //   this.SET_LOADING_TURE();
+    //   this.$http.get(`${this.$url}/movie/sourth?sourth=${this.sourth}&moviename=${title}`).then((res)=>{
+    //     this.infos = res.data.result;
+    //     this.SET_LOADING_FALSE();
+    //   }).catch(()=>{
+    //     this.SET_LOADING_FALSE();
+    //   })
+    // },
     play(url) {
       const BrowserWindow = require('electron').remote.BrowserWindow
       let win = new BrowserWindow({ 
@@ -101,7 +103,8 @@ export default {
   },
   created() {
     this.title = this.$route.query.title
-    this.getInfos(this.title);
+        this.getInfo(this.title)
+    // this.getInfos(this.title);
   }
 }
 </script>

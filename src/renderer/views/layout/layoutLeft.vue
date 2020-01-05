@@ -1,28 +1,9 @@
 <template>
-  <div class="layout-left">
+  <div class="layout-left layout-left__bg---color">
     <div class="portrait"></div>
     <el-row class="tac">
       <el-col :span="24">
         <el-scrollbar>
-          <!-- <el-menu
-            :default-active="active"
-            class="el-menu-vertical-demo"
-            :router="true"
-            @open="handleOpen"
-            @close="handleClose">
-            <el-menu-item index="/">
-              <i class="el-icon-thumb"></i>
-              <span slot="title">推荐</span>
-            </el-menu-item>
-            <el-menu-item index="/tv">
-              <i class="el-icon-s-data"></i>
-              <span slot="title">豆瓣排行</span>
-            </el-menu-item>
-            <el-menu-item index="/movie">
-              <i class="el-icon-stopwatch"></i>
-              <span slot="title">历史记录</span>
-            </el-menu-item>
-          </el-menu> -->
           <ul class="left-menu">
             <li 
               v-for="(item, index) in menuList"
@@ -91,7 +72,6 @@ li {
 .layout-left {
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: #171718;
   .portrait {
     width: 100%;
     height: 50px;
@@ -120,19 +100,9 @@ li {
       padding: 10px;
       margin: 0 20px 10px -10px;
       border-radius: 3px;
-      &:hover {
-        background: rgba(255, 255, 255, .1);
-      }
       &>i {
         font-weight: bold;
         margin-right: 2px;
-      }
-    }
-    .active {
-      color: white;
-      background: linear-gradient(to right, #1FD4AE , #1ECC94);
-      &:hover{
-        background: linear-gradient(to right, #1FD4AE , #1ECC94);
       }
     }
   }

@@ -1,10 +1,11 @@
 import Vue from 'vue'
 
-const DEFAULT_THEME = 'theme_0' //默认主题
+const DEFAULT_THEME = 'theme_2' //默认主题
 
 let themeOptions = {
     "theme_0": './theme/index.scss',
-    "theme_1":'./theme1/index.scss'
+    "theme_1":'./theme1/index.scss',
+    "theme_2":'./ele-theme/index.scss',
 }
 
 /*------------------------------------
