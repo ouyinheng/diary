@@ -17,7 +17,7 @@ export default {
 	},
 	methods: {
 		setWinSize(len) {
-			ipcRenderer.send('asynchronous-message', 'winSize', 30*len);
+			// ipcRenderer.send('asynchronous-message', 'winSize', 30*len);
 		},
 		setList() {
 			this.list.push({
