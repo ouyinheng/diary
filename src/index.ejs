@@ -1,26 +1,114 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>diary</title>
-    <meta name="referrer" content="no-referrer" />
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1138757_o7pz1wcf08i.css">
-    <% if (htmlWebpackPlugin.options.nodeModules) { %>
-      <!-- Add `node_modules/` to global paths so `require` works properly in development -->
-      <script>
-        require('module').globalPaths.push('<%= htmlWebpackPlugin.options.nodeModules.replace(/\\/g, '\\\\') %>')
-      </script>
-    <% } %>
-  </head>
-  <body>
-    <div id="app"></div>
-    <!-- Set `__static` path to static files in production -->
-    <% if (!process.browser) { %>
-      <script>
-        if (process.env.NODE_ENV !== 'development') window.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
-      </script>
-    <% } %>
+	<head>
+		<meta charset="utf-8">
+		<title>diary</title>
+		<meta name="referrer" content="no-referrer" />
+		<meta name="referrer" content="never">
+		<link rel="stylesheet" href="//at.alicdn.com/t/font_1138757_o7pz1wcf08i.css">
+		<% if (htmlWebpackPlugin.options.nodeModules) { %>
+		<!-- Add `node_modules/` to global paths so `require` works properly in development -->
+		<script>
+			require('module').globalPaths.push('<%= htmlWebpackPlugin.options.nodeModules.replace(/\\/g, '\\\\') %>')
+		</script>
+		<% } %>
+		<style>
+			html,
+			body {
+				background-color: #171718;
+				padding: 0;
+				margin: 0;
+			}
 
-    <!-- webpack builds are automatically injected -->
+			#loading {
+				width: 100vw;
+				height: 100vh;
+				overflow: hidden auto;
+				display: flex;
+				justify-content: space-around;
+				align-items: center;
+				padding: 10px;
+				box-sizing: border-box;
+			}
+			.eleven {
+				width: 100px;
+				height: 100px;
+				display: flex;
+				align-items: center;
+				justify-content: space-around;
+				position: relative;
+				transform-origin: top;
+			}
+
+			.eleven .circle {
+				border-radius: 50%;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+
+			.eleven .circle:nth-of-type(1) {
+				width: 60px;
+				height: 60px;
+				border: 3px solid transparent;
+				border-top-color: #ff4545;
+				border-left-color: #ff4545;
+				margin-left: -30px;
+				margin-top: -30px;
+				animation: eleven 1s infinite linear;
+			}
+
+			.eleven .circle:nth-of-type(2) {
+				width: 30px;
+				height: 30px;
+				border: 3px solid transparent;
+				border-bottom-color: #ff4545;
+				border-right-color: #ff4545;
+				margin-left: -15px;
+				margin-top: -15px;
+				animation: eleven 1s infinite linear;
+			}
+
+			.eleven .circle:nth-of-type(3) {
+				width: 10px;
+				height: 10px;
+				border: 3px solid transparent;
+				border-bottom-color: #ff4545;
+				border-left-color: #ff4545;
+				margin-left: -5px;
+				margin-top: -5px;
+				animation: eleven 1s infinite linear reverse;
+			}
+
+			@keyframes eleven {
+				from {
+					transform: rotate(0)
+				}
+
+				to {
+					transform: rotate(360deg)
+				}
+			}
+		</style>
+	</head>
+  <body>
+		<div id="app">
+			<div id="loading">
+				<div class="eleven">
+					<div class="circle"></div>
+					<div class="circle"></div>
+					<div class="circle"></div>
+				</div>
+			</div>
+		</div>
+		<!-- Set `__static` path to static files in production -->
+		<% if (!process.browser) { %>
+		<script>
+			if (process.env.NODE_ENV !== 'development') window.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+		</script>
+		<% } %>
+
+		<!-- webpack builds are automatically injected -->
   </body>
 </html>

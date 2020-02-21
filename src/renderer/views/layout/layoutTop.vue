@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="toolbar flex">
-            <span class="el-icon-s-tools" @click="toSkin"></span>
+            <span class="el-icon-s-tools" @click="toSetup"></span>
             <span></span>
             <span class="el-icon-minus" @click="closeWin('min')"></span>
             <span class="el-icon-full-screen" @click="closeWin('max')"></span>
@@ -40,6 +40,7 @@ export default {
 	},
 	watch: {
 		'$route.path'(val) {
+			if(val === '/setup')return;
 			if(this.$route.matched[1].path === '/') {
 				this.backDisabled = true;
 			} else {
@@ -71,8 +72,8 @@ export default {
 			}
 		})
 		},
-		toSkin() {
-			this.$router.push('/skin')
+		toSetup() {
+			this.$router.push('/setup')
 		},
 		goBack() {
 			if(this.$route.matched[1].path!=='/') {

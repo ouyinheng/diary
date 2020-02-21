@@ -1,3 +1,4 @@
+const {ipcRenderer: ipc} = require('electron');
 export default {
     name: 'qq',
     data() {
@@ -8,6 +9,7 @@ export default {
     methods: {
         getInfo(keyword) {
             this.$http.get(`https://v.qq.com/x/search/?q=${keyword}`).then(res => {
+                ipc.send('saveFile', keyword, res.data);
                 this.parseHtml(res.data)
             })
         },

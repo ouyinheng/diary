@@ -1,0 +1,32 @@
+@import './var.scss';
+.li-hover--color {
+    &:hover {
+        background: rgba(255, 255, 255, .1);
+    }
+}
+.active {
+    color: #1FD4AE;
+    // background: linear-gradient(to right, #1FD4AE , #1ECC94);
+    // &:hover{
+    //   background: linear-gradient(to right, #1FD4AE , #1ECC94);
+    // }
+  }
+.title {
+    padding: 5px 0 15px;
+    font-size: 40px;
+    color: white;
+    text-shadow: 0 0 1px white;
+}
+.title-2 {
+    padding: 5px 0 15px;
+    font-size: 30px;
+    color: white;
+    text-shadow: 0 0 1px white;
+}
+.mu-radio-label {
+    color: $--color-white;
+}
+.hover-dom:hover {
+    color: #1FD4AE !important;
+    cursor: pointer;
+}

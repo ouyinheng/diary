@@ -40,6 +40,10 @@ export default new Router({
         path: '/showmovie',
         name: 'Homepage',
         component: require("@/views/home/movie").default
+    }, {
+      path: '/setup',
+      name: 'setup',
+      component: require("@/views/setup/index").default
     },
     {
       path: '*',

@@ -1,0 +1,42 @@
+.bottom-to-top-enter {
+    position: fixed;
+    top: 100vh;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+.bottom-to-top-enter-active {
+    position: fixed;
+    top: 100vh;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+.bottom-to-top-enter-to {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+.top-to-bottom-leave {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+.top-to-bottom-leave-active {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+.top-to-bottom-leave-to {
+    position: fixed;
+    top: 100vh;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}

@@ -1,0 +1,19 @@
+@import './var.scss';
+.bg--color-primary {
+    background: $--color-primary;
+}
+.bg--color-success {
+    background: $--color-success;
+}
+.bg--color-warning {
+    background: $--color-warning;
+}
+.bg--color-danger {
+    background: $--color-danger;
+}
+.bg--color-info {
+    background: $--color-info;
+}
+.layout-left__bg---color {
+    background: #171718;
+}
