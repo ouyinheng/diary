@@ -1,20 +1,21 @@
 <template>
   <div class="movie">
-	  <el-select v-model="valueUrl" placeholder="请选择">
+	  <!-- <el-select v-model="valueUrl" placeholder="请选择">
 			<el-option
 				v-for="item in options"
 				:key="item.value"
 				:label="item.label"
 				:value="item.value">
 			</el-option>
-		</el-select>
-    <!-- <webview :src="'https://660e.com/?url='+url" plugins></webview> -->
-	<video v-if="show" :src="valueUrl" controls></video>
+		</el-select> -->
+    <webview :src="'https://660e.com/?url='+url" plugins></webview>
+	<!-- <video v-if="show" :src="valueUrl" controls></video> -->
   </div>
 </template>
 
 <script>
 import func from '@/utils/mixins/getVideoUrl.js'
+import qqVideo from "@/utils/mixins/qqVideo.js"
 export default {
   name: 'Movie',
   watch: {
@@ -100,10 +101,13 @@ export default {
   },
 	created() {
 		this.url = this.$route.query.url
-		console.log(this.url, func)
-		this.$http.get(this.url).then(res => {
-			this.getUrl(res.data)
-		})
+		console.log(this.url)
+		// this.$http.get(this.url).then(res => {
+		// 	this.getUrl(res.data)
+		// })
+		// qqVideo.getVideoes('b00331uu0ts').then(function (res) {
+		// 	console.log(res)
+		// })
 	}
 }
 </script>

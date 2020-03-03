@@ -22,7 +22,7 @@
 				<p>
 					<span style="font-size:16px;font-weight:bold;">{{item.introduce.title.pri}}</span>
 					<span class="sub">{{item.introduce.title.sub}}</span>
-					<!-- 
+					<!--
 					<span class="type">{{item.introduce.title.type}}</span> -->
 				</p>
 				<p class="info_item" style="margin-top: 10px;">
@@ -38,7 +38,28 @@
 					<span class="content">{{item.introduce.info_item_desc}}</span>
 				</p>
 				<p>
-					<mu-button color="primary" v-for="(Item, Index) in item.list" :key="Index" @click="play(Item.url)" v-if="!gj.includes(Item.title)">{{Item.title}}</mu-button>
+					<!--  -->
+					<mu-badge
+						v-for="(Item, Index) in item.list"
+						:key="Index"
+						v-if="!gj.includes(Item.title)"
+						:content="Item.type == 2 ? '预告' : ''"
+						color="secondary"
+						class="mr-2">
+						<mu-button
+							color="primary"
+							@click="btnHandle(Item, item)">
+							{{Item.title}}
+						</mu-button>
+					</mu-badge>
+					<!-- <mu-button
+						color="primary"
+						v-for="(Item, Index) in item.list"
+						:key="Index"
+						v-if="!gj.includes(Item.title)"
+						@click="btnHandle(Item, item)">
+						{{Item.title}}
+					</mu-button> -->
 					<mu-button color="primary" v-if="item.list.length==0" @click="play(item.href)">立即播放</mu-button>
 				</p>
 			</el-col>
@@ -79,12 +100,19 @@ export default {
 		//     this.SET_LOADING_FALSE();
 		//   })
 		// },
+		btnHandle(Item, item) {
+			if(Item.title === '...') {
+				this.getMoreList(Item, item)
+			} else {
+				this.play(Item.url)
+			}
+		},
 		play(url) {
 			const BrowserWindow = require('electron').remote.BrowserWindow
-			let win = new BrowserWindow({ 
+			let win = new BrowserWindow({
 				width: 900,
 				height: 520,
-				frame: false,
+				frame: true,
 				webPreferences: {
 					webSecurity: false,
 					plugins: true
@@ -99,6 +127,19 @@ export default {
 			win.loadURL('http://localhost:9080/#/showmovie?url='+url)
 			win.show()
 			this.$http.get(`${this.$url}/real?url=${url}`)
+		},
+		getMoreList(row, item) {
+			this.$http.get(`https://s.video.qq.com/get_playsource?id=${item.id}&plat=2&type=4&range=0-1&data_type=2&video_type=2&plname=qq&otype=json&callback=getMoreList&_t=${new Date().getTime()}`).then(res => {
+				let result = JSON.parse(res.data.substring(12, res.data.length-1));
+				console.log(item, result)
+				item.list = result.PlaylistItem.videoPlayList.map(row => {
+					return {
+						title: row.title,
+						url: row.playUrl,
+						type: row.type
+					}
+				})
+			})
 		},
 		handleCommand(sourth) {
 			this.sourth = sourth;

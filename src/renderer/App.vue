@@ -23,7 +23,6 @@ export default {
 			} else if(from.name === 'setup') {
                 this.transition = 'top-to-bottom'
 			}
-			console.log(to, from)
         }
     },
 	created() {

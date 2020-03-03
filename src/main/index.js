@@ -1,26 +1,15 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
-const path = require('path')
-const fs = require('fs');
-import './src/picture';
-import './src/utils.js';
-// 指定flash路径, 假设与main.js同一目录.
+import { app, BrowserWindow, ipcMain} from 'electron'
+const path = require('path');
+import myTray from './src/tray'
 let pluginName= 'pepflashplayer.dll';
-app.commandLine.appendSwitch('ppapi-flash-path', path.join(__dirname, pluginName))
-/**
- * Set `__static` path to static files in production
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
- */
+app.commandLine.appendSwitch('ppapi-flash-path', path.join(__dirname, pluginName));
 if (process.env.NODE_ENV !== 'development') {
 	global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
-  
-let mainWindow
-const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:9080` : `file://${__dirname}/index.html`
-  
+let mainWindow;
+const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:9080` : `file://${__dirname}/index.html`;
+let trayIcon = path.join(__dirname, 'app');
 function createWindow() {
-	/**
-	 * Initial window options
-	 */
 	mainWindow = new BrowserWindow({
 		height: 663,
 		useContentSize: true,
@@ -30,29 +19,30 @@ function createWindow() {
 			plugins: true,
 			webSecurity: false
 		}
-	})
+	});
 
-	mainWindow.loadURL(winURL)
+	mainWindow.loadURL(winURL);
 
 	mainWindow.on('closed', () => {
 		mainWindow = null
-	})
+	});
 	mainWindow.webContents.openDevTools({
 		mode:"bottom"
-	})
+	});
+	myTray.setTray(mainWindow, trayIcon);
 }
-app.on('ready', createWindow)
+app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
 		app.quit()
 	}
-})
+});
 app.on('activate', () => {
 	if (mainWindow === null) {
 		createWindow()
 	}
-})
+});
 
 ipcMain.on('min', e=> mainWindow.minimize());
 ipcMain.on('max', e=> {
@@ -67,4 +57,8 @@ ipcMain.on('saveFile', (event, name, data) => {
 	fs.writeFile(`./${name}.html`, data, res => {
 		console.log('写入成功')
 	})
-})
+});
+
+// const win = new BrowserWindow()
+
+// win.setProgressBar(0.5)

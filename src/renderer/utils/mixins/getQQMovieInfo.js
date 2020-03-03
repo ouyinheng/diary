@@ -1,4 +1,5 @@
 const {ipcRenderer: ipc} = require('electron');
+import {mapState,mapActions} from 'vuex';
 export default {
     name: 'qq',
     data() {
@@ -7,7 +8,12 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+            'SET_LOADING_FALSE',
+            'SET_LOADING_TURE'
+        ]),
         getInfo(keyword) {
+            this.SET_LOADING_TURE();
             this.$http.get(`https://v.qq.com/x/search/?q=${keyword}`).then(res => {
                 ipc.send('saveFile', keyword, res.data);
                 this.parseHtml(res.data)
@@ -35,7 +41,7 @@ export default {
                     href: item.querySelector('._infos a.figure.result_figure').getAttribute('href'),
                     cover: item.querySelector('.figure_pic').getAttribute('src'),
                     source: {
-                        img: item.querySelector('.result_source img').getAttribute('src'),
+                        img: item.querySelector('.result_source img._cur_playsrc_img').getAttribute('src'),
                         text: item.querySelector('.result_source .icon_text').innerText
                     },
                     introduce: {
@@ -54,7 +60,7 @@ export default {
                 this.list.push(movieInfo)
             })
             this.infos = this.list
-            console.log(this.infos)
+		    this.SET_LOADING_FALSE();
         },
     },
     created() {

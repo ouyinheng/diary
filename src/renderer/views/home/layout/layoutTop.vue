@@ -8,13 +8,18 @@
 					<el-button class="routers el-icon-arrow-right" @click.stop="goPre" type="text" :disabled="!backDisabled"></el-button>
 				</div>
 				<el-autocomplete
-						class="search-input"
-						style="background: #343436;"
-						:trigger-on-focus="false"
-						:fetch-suggestions="querySearchAsync"
-						placeholder="请输入内容"
-						@select="handleSelect"
-				></el-autocomplete>
+					class="search-input"
+					style="background: #343436;"
+					:trigger-on-focus="true"
+					:fetch-suggestions="querySearchAsync"
+					placeholder="请输入内容"
+					@select="handleSelect"
+					v-model="searchValue">
+					<template slot-scope="scoped">
+						<span>{{scoped.item.tt}}</span>
+						<span style="color: darkgray">{{scoped.item.class}}</span>
+					</template>	
+				</el-autocomplete>
             </div>
         </div>
         <div class="toolbar flex">
@@ -54,23 +59,28 @@ export default {
 		},
 		querySearchAsync(queryString, cb) {
 			if(!queryString)return;
-			this.$http.get(`${this.$url}/movie/getAuto?moviename=${queryString}`).then((res) => {
-				res.data.result.forEach((item, index) => {
-				item.value = item.word;
-				})
-				this.restaurants = res.data.result;
+			this.$http.get(`https://s.video.qq.com/smartbox?callback=querySearchAsync&plat=2&ver=0&num=10&otype=json&query=${queryString}&_=${new Date().getTime()}`).then((res) => {
+				// res.data.result.forEach((item, index) => {
+				// item.value = item.word;
+				// })
+				// this.restaurants = res.data.result;
+				// cb(this.restaurants);
+				let result = JSON.parse(res.data.substring(17, res.data.length-1));
+				console.log(result.item)
+				this.restaurants = result.item
 				cb(this.restaurants);
 			}).catch(err=>{
 				console.log(err)
 			})
 		},
 		handleSelect(item) {
-		this.$router.push({
-			path: '/movieinfo',
-			query: {
-				title: item.value
-			}
-		})
+			console.log(item)
+			this.$router.push({
+				path: '/movieinfo',
+				query: {
+					title: item.value
+				}
+			})
 		},
 		toSetup() {
 			this.$router.push('/setup')
