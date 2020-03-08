@@ -1,14 +1,14 @@
 <template>
     <div class="setup">
-        <mu-appbar style="width: 100%;" color="#1E1E20">
-            <mu-button icon slot="left" @click="goback">
+        <mu-appbar style="width: 100%; -webkit-app-region: drag;" color="#1E1E20">
+            <mu-button icon slot="left" @click="goback" style="-webkit-app-region: no-drag;">
                 <span class="el-icon-arrow-down"></span>
             </mu-button>
             设置
             <!-- <mu-button flat slot="right" @click="goHome">LOGIN</mu-button> -->
             <template slot="right">
                 <div class="toolbar flex">
-                    <span class="el-icon-minus" @click="closeWin('min')"></span>
+                    <span class="el-icon-minus" @click.native="closeWin('min')"></span>
                     <span class="el-icon-full-screen" @click="closeWin('max')"></span>
                     <span class="el-icon-close" @click="closeWin('close')"></span>
                 </div>
@@ -78,8 +78,9 @@
         }
     }
     .section {
-        width: 100%;
+        width: 90%;
         display: flex;
+        margin: 0 auto;
         .mu-list {
             width: 300px;
             .mu-list-item-title {

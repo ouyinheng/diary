@@ -26,9 +26,9 @@ function createWindow() {
 	mainWindow.on('closed', () => {
 		mainWindow = null
 	});
-	mainWindow.webContents.openDevTools({
-		mode:"bottom"
-	});
+	// mainWindow.webContents.openDevTools({
+	// 	mode:"bottom"
+	// });
 	myTray.setTray(mainWindow, trayIcon);
 }
 app.on('ready', createWindow);
@@ -44,20 +44,15 @@ app.on('activate', () => {
 	}
 });
 
-ipcMain.on('min', e=> mainWindow.minimize());
-ipcMain.on('max', e=> {
+ipcMain.on('min', e => mainWindow.minimize());
+ipcMain.on('max', e => {
 	if (mainWindow.isMaximized()) {
 		mainWindow.unmaximize()
 	} else {
 		mainWindow.maximize()
 	}
 });
-ipcMain.on('close', e=> mainWindow.close());
-ipcMain.on('saveFile', (event, name, data) => {
-	fs.writeFile(`./${name}.html`, data, res => {
-		console.log('写入成功')
-	})
-});
+ipcMain.on('close', e => mainWindow.close());
 
 // const win = new BrowserWindow()
 

@@ -1,13 +1,21 @@
 <template>
   <div class="home">
-    <el-carousel :interval="4000" type="card" height="300px">
+    <!-- <el-carousel :interval="4000" type="card" height="300px">
       <el-carousel-item v-for="(item, index) in banner" :key="index">
         <a :href="item.link" class="banner-item" @click="seeInfo($event,item.link)">
           <h3 class="medium">{{ item.title }}</h3>
           <img :src="item.picUrl" />
         </a>
       </el-carousel-item>
-    </el-carousel>
+    </el-carousel> -->
+	<mu-carousel>
+		<mu-carousel-item v-for="(item, index) in banner" :key="index">
+			<a :href="item.href" class="banner-item" @click="seeInfo($event,item)">
+				<h3 class="medium">{{ item.title }}</h3>
+				<img :src="item.picUrl" :alt="item.title"/>
+			</a>
+		</mu-carousel-item>
+	</mu-carousel>
     <section>
 		<el-row>
 			<el-col :span="24" class="tag-list">
@@ -20,8 +28,10 @@
 
 <script>
 import {mapState,mapActions} from 'vuex';
+import getBanner from '@/utils/mixins/getBanner.js'
 export default {
-  	name: 'HomePage',
+	  name: 'HomePage',
+	  mixins: [getBanner],
 	data() {
 		return {
 			banner: [],
@@ -53,8 +63,14 @@ export default {
 				this.SET_LOADING_FALSE()
 			})
 		},
-		seeInfo(e,link) {
+		seeInfo(e,item) {
 			e.preventDefault();
+			this.$router.push({
+				path: '/movieinfo',
+				query: {
+					title: item.title
+				}
+			})
 		},
 		setChanges() {
 
@@ -66,10 +82,10 @@ export default {
 					video: item.value
 				}
 			})
-		}
+		},
 	},
 	created() {
-		this.getHomeData();
+		// this.getBanner();
 	}
 }
 </script>
@@ -108,7 +124,7 @@ export default {
   img {
     display: block;
     width: 100%;
-    height: 100%;
+    // height: 500px;
   }
   h3 {
     position: absolute;

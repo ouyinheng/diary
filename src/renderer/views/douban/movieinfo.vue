@@ -74,7 +74,7 @@
 import {mapState,mapActions} from 'vuex';
 import getQQMovieInfo from '@/utils/mixins/getQQMovieInfo.js'
 import func from '@/utils/mixins/getVideoUrl.js'
-const path = require('path')
+const path = require('path');
 export default {
 	name: 'MovieInfo',
 	mixins: [getQQMovieInfo],
@@ -91,15 +91,6 @@ export default {
 			'SET_LOADING_FALSE',
 			'SET_LOADING_TURE'
 		]),
-		// getInfos(title) {
-		//   this.SET_LOADING_TURE();
-		//   this.$http.get(`${this.$url}/movie/sourth?sourth=${this.sourth}&moviename=${title}`).then((res)=>{
-		//     this.infos = res.data.result;
-		//     this.SET_LOADING_FALSE();
-		//   }).catch(()=>{
-		//     this.SET_LOADING_FALSE();
-		//   })
-		// },
 		btnHandle(Item, item) {
 			if(Item.title === '...') {
 				this.getMoreList(Item, item)
@@ -117,7 +108,7 @@ export default {
 					webSecurity: false,
 					plugins: true
 				}
-			})
+			});
 			win.on('close', function () { win = null })
 			// https://beaacc.com/api.php?url=
 			// http://jqaaa.com/jx.php?url=
@@ -147,14 +138,15 @@ export default {
 		}
 	},
 	watch: {
-		// '$route.query'(val) {
-		// 	this.getInfo(val.title);
-		// }
+		'$route.query'(val) {
+			this.title = val.title
+			this.infos = [];
+			this.getInfo(val.title);
+		}
 	},
 	created() {
-		this.title = this.$route.query.title
+		this.title = this.$route.query.title;
 		this.getInfo(this.title)
-		// this.getInfos(this.title);
 	}
 }
 </script>

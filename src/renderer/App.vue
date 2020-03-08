@@ -13,7 +13,8 @@ export default {
 	name: "diary",
 	data() {
 		return {
-			transition: ''
+			transition: '',
+			pageName: ['Homepage', 'picture']
 		}
 	},
 	watch: {

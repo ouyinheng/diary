@@ -10,15 +10,15 @@
 				<el-autocomplete
 					class="search-input"
 					style="background: #343436;"
-					:trigger-on-focus="true"
+					:trigger-on-focus="false"
 					:fetch-suggestions="querySearchAsync"
-					placeholder="请输入内容"
+					:placeholder="placeholder"
 					@select="handleSelect"
 					v-model="searchValue">
 					<template slot-scope="scoped">
 						<span>{{scoped.item.tt}}</span>
 						<span style="color: darkgray">{{scoped.item.class}}</span>
-					</template>	
+					</template>
 				</el-autocomplete>
             </div>
         </div>
@@ -40,7 +40,8 @@ export default {
 		return {
 			searchValue: '',
 			restaurants: '',
-			backDisabled: false
+			backDisabled: false,
+			placeholder: '请输入内容'
 		}
 	},
 	watch: {
@@ -51,6 +52,9 @@ export default {
 			} else {
 				this.backDisabled = false;
 			}
+		},
+		'$route.query'(val) {
+			this.placeholder = val.title ? val.title : '请输入内容'
 		}
 	},
 	methods: {
@@ -60,27 +64,29 @@ export default {
 		querySearchAsync(queryString, cb) {
 			if(!queryString)return;
 			this.$http.get(`https://s.video.qq.com/smartbox?callback=querySearchAsync&plat=2&ver=0&num=10&otype=json&query=${queryString}&_=${new Date().getTime()}`).then((res) => {
-				// res.data.result.forEach((item, index) => {
-				// item.value = item.word;
-				// })
-				// this.restaurants = res.data.result;
-				// cb(this.restaurants);
 				let result = JSON.parse(res.data.substring(17, res.data.length-1));
-				console.log(result.item)
-				this.restaurants = result.item
+				this.restaurants = result.item;
 				cb(this.restaurants);
 			}).catch(err=>{
 				console.log(err)
 			})
 		},
 		handleSelect(item) {
-			console.log(item)
-			this.$router.push({
-				path: '/movieinfo',
-				query: {
-					title: item.value
-				}
-			})
+			if(this.$route.name === 'MovieInfo') {
+				this.$router.replace({
+					path: '/movieinfo',
+					query: {
+						title: item.tt
+					}
+				})
+			} else {
+				this.$router.push({
+					path: '/movieinfo',
+					query: {
+						title: item.tt
+					}
+				})
+			}
 		},
 		toSetup() {
 			this.$router.push('/setup')
@@ -100,6 +106,7 @@ export default {
 		} else {
 			this.backDisabled = false;
 		}
+		this.placeholder = this.$route.query.title ? this.$route.query.title : '请输入内容'
 	}
 }
 </script>

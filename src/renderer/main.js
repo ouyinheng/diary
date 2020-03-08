@@ -18,7 +18,6 @@ themeMuseUI.add('teal', {
 }, 'light');
 
 themeMuseUI.use('teal');
-import 'video.js/dist/video-js.css';
 
 import './static/index.scss'
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))

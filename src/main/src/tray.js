@@ -1,8 +1,8 @@
-import {Menu, Tray} from "electron";
+import {Menu, Tray, app} from "electron";
 const path = require('path');
 
 export default  {
-	// 右键菜单
+	// 任务栏右键菜单
 	setTray(win, trayIcon) {
 		let appTary = null;
 		var trayMenuTemplate = [{
@@ -10,7 +10,9 @@ export default  {
 			click: function() {}
 		}, {
 			label: '退出',
-			click: function() {}
+			click: function() {
+				app.quit();
+			}
 		}];
 		appTary = new Tray(path.join(trayIcon, 'icon.ico'));
 		const contextMenu = Menu.buildFromTemplate(trayMenuTemplate);

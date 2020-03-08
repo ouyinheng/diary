@@ -16,11 +16,11 @@ export default new Router({
 					component: require("@/views/home/home").default
 				}, {
 					path: '/tv',
-					name: 'Homepage',
+					name: 'tv',
 					component: require("@/views/douban/list").default
 				}, {
 					path: '/movie',
-					name: 'Homepage',
+					name: 'movie',
 					component: require("@/views/douban/movie").default
 				}, {
 					path: '/movieinfo',
@@ -38,7 +38,7 @@ export default new Router({
 			]
 		}, {
 			path: '/showmovie',
-			name: 'Homepage',
+			name: 'showmovie',
 			component: require("@/views/home/movie").default
 		}, {
 			path: '/setup',

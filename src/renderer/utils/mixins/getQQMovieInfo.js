@@ -13,9 +13,10 @@ export default {
             'SET_LOADING_TURE'
         ]),
         getInfo(keyword) {
+            this.list = [];
             this.SET_LOADING_TURE();
             this.$http.get(`https://v.qq.com/x/search/?q=${keyword}`).then(res => {
-                ipc.send('saveFile', keyword, res.data);
+                // ipc.send('saveFile', keyword, res.data);
                 this.parseHtml(res.data)
             })
         },

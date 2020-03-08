@@ -3,6 +3,7 @@
         <el-input
             placeholder="请输入内容"
             v-model="input"
+            class="parsing"
             clearable>
         </el-input>
     </div>
@@ -17,10 +18,20 @@ export default {
     }
 };
 </script>
-<style>
+<style lang="scss">
 .mu-demo-form {
     width: 100%;
     max-width: 460px;
     color: white;
+}
+.parsing {
+    width: 400px;
+    .el-input {
+        &__inner {
+            border-color: black;
+            background-color: black;
+            color: white;
+        }
+    }
 }
 </style>

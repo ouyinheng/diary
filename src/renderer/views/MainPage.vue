@@ -7,8 +7,8 @@
             <layout-top></layout-top>
             <div class="content" v-loading="loading">
                 <el-scrollbar :native="false">
-                    <transition name="el-fade-in-linear">
-                        <router-view></router-view>
+                    <transition :name="transition" mode="out-in">
+                        <router-view class="view"></router-view>
                     </transition>
                 </el-scrollbar>
             </div>
@@ -24,6 +24,19 @@
         components: {
             "layout-top": layoutTop,
             "layout-left": LayoutLeft
+        },
+        data() {
+            return {
+                pageName: ['Homepage', 'picture'],
+                transition: 'el-fade-in'
+            }
+        },
+        watch: {
+            $route (to, from ) {
+                if(this.pageName.includes(to.name)) {
+                    this.transition = 'page-transfer'
+                }
+            }
         },
         computed: {
             loading() {
@@ -76,6 +89,9 @@
                     height: 100%;
                 }
             }
+        }
+        .view {
+            transition: all .1s linear;
         }
     }
 </style>

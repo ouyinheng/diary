@@ -56,13 +56,12 @@
     "muse-ui": "^3.0.2",
     "node-sass": "^4.13.1",
     "sass-loader": "^7.3.1",
-    "video.js": "^7.6.6",
-    "videojs-contrib-hls": "^5.15.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
-    "vuex-electron": "^1.0.0"
+    "vuex-electron": "^1.0.0",
+    "webpack": "^4.42.0"
   },
   "devDependencies": {
     "ajv": "^6.5.0",

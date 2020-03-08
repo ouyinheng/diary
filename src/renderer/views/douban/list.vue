@@ -25,23 +25,23 @@
 				<span :class="{sortRule:true, active_sortRule: sortRule == 'rank'}" @click="sortRuleChange('rank')" style="margin-right: 16px;">评价</span>
 			</div>
 		</el-row>
-		<mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="getList">
-			<div style="display: flex;justify-content:space-around;flex-wrap:wrap;">
-				<div :span="4" v-for="(item, index) in infos" :key="index" style="margin: 10px;" @click="toInfo(item.title)">
-					<el-card :body-style="{ padding: '0px'}" shadow="hover">
-						<div style="height:400px;overflow:hidden;min-width: 270px;">
-							<el-image :src="item.cover" :title="item.title"></el-image>
-						</div>
-						<div style="padding: 14px;">
-							<p style="color:#37a;text-align:center;font-size:16px;">{{item.title}}</p>
-							<div class="bottom clearfix" style="color:#e09015;text-align:center;">
-							{{item.rate}}分
+			<mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="getList">
+				<div class="m_col" >
+					<div class="m-col-item" v-for="(item, index) in infos"  style="margin: 20px" :key="index" @click="toInfo(item.title)">
+						<el-card :body-style="{ padding: '0px'}" shadow="hover">
+							<div style="height:400px;overflow:hidden;min-width: 270px;">
+								<el-image :src="item.cover" :title="item.title"></el-image>
 							</div>
-						</div>
-					</el-card>
+							<div style="padding: 14px;">
+								<p style="color:#37a;text-align:center;font-size:16px;">{{item.title}}</p>
+								<div class="bottom clearfix" style="color:#e09015;text-align:center;">
+									{{item.rate}}分
+								</div>
+							</div>
+						</el-card>
+					</div>
 				</div>
-			</div>
-		</mu-load-more>
+			</mu-load-more>
 	</div>
 </template>
 
@@ -60,6 +60,12 @@ export default {
 			infos: [],
 			refreshing: false,
 			loading: false,
+			e_col: 4
+		}
+	},
+	watch: {
+		e_col(val) {
+			console.log(val);
 		}
 	},
 	methods: {
@@ -76,6 +82,9 @@ export default {
 			}).catch(err=>{
 				this.SET_LOADING_FALSE();
 			})
+		},
+		resetData() {
+			this.start = 0;
 		},
 		refresh() {},
 		getList(bool=true) {
@@ -104,17 +113,19 @@ export default {
 			this.start = 0;
 			this.infos= [];
 			this.SET_LOADING_TURE();
-			this.getTag();
+			this.resetData();
 		},
 		// 切换tag时
 		tagChange(item) {
 			this.tag = item;
+			this.start = 0;
 			this.scrollTop();
 			this.getList(false);
 		},
 		// 设置排序规则
 		sortRuleChange(item) {
 			this.sortRule = item;
+			this.start = 0;
 			this.getList(false);
 		},
 		toInfo(title) {
@@ -131,6 +142,18 @@ export default {
 	},
 	created() {
 		this.getTag()
+	},
+	mounted() {
+		// let m_col = this.$refs.m_col;
+		// window.addEventListener('resize', (e) => {
+		// 	this.e_col = parseInt(24/(m_col.$el.clientWidth/270))
+		// 	if(this.e_col<3) {
+		// 		this.e_col = 3;
+		// 	}
+		// 	if(this.e_col >= 5) {
+		// 		this.e_col = 5;
+		// 	}
+		// })
 	}
 }
 </script>
@@ -145,12 +168,17 @@ export default {
 	color: #1FD4AE;
 }
 </style>
-<style lang="scss" scoped>
+<style lang="scss">
   .tv-play {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
 	padding: 10px;
+	  .m_col {
+		  display: grid;
+		  justify-content: space-between;
+		  grid-template-columns: repeat(auto-fill, 310px);
+	  }
 	.header {
 		display:flex;
 		justify-content: space-between;
@@ -193,7 +221,7 @@ export default {
 		display:flex;
 		flex-wrap: wrap;
 		position: sticky;
-		top: 0px;
+		top: 0;
 		background: #1E1E20;
 		margin-top: 10px;
 		z-index: 100;
