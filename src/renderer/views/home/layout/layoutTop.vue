@@ -23,6 +23,7 @@
             </div>
         </div>
         <div class="toolbar flex">
+            <span class="iconfont icon-pifu" @click="selectSkin"></span>
             <span class="el-icon-s-tools" @click="toSetup"></span>
             <span></span>
             <span class="el-icon-minus" @click="closeWin('min')"></span>
@@ -98,6 +99,10 @@ export default {
 		},
 		goPre() {
 			window.history.forward()
+		},
+		selectSkin() {
+			console.log(this.$theme)
+			this.$themeSetup('theme_1')
 		}
 	},
 	created() {
