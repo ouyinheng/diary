@@ -13,11 +13,14 @@ function createWindow() {
 	mainWindow = new BrowserWindow({
 		height: 663,
 		useContentSize: true,
-		width: 1300,
+		width: 1200,
 		frame: false,
+		hasShadow: false,
+		transparent: true,
 		webPreferences: {
 			plugins: true,
-			webSecurity: false
+			webSecurity: false,
+			nodeIntegration: true
 		}
 	});
 

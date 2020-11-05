@@ -44,6 +44,10 @@ export default {
         title: '花瓣',
         icon: 'el-icon-picture-outline',
         link: '/picture'
+      }, {
+        title: 'Play',
+        icon: 'el-icon-picture-outline',
+        link: '/play'
       }]
     }
   },
