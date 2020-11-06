@@ -17,6 +17,7 @@ function createWindow() {
 		frame: false,
 		hasShadow: false,
 		transparent: true,
+		resizable: false,
 		webPreferences: {
 			plugins: true,
 			webSecurity: false,
@@ -49,12 +50,13 @@ app.on('activate', () => {
 
 ipcMain.on('min', e => mainWindow.minimize());
 ipcMain.on('max', e => {
-	if (mainWindow.isMaximized()) {
-		mainWindow.unmaximize()
-	} else {
+	// if (mainWindow.isMaximized()) {
+	// 	mainWindow.unmaximize()
+	// } else {
 		mainWindow.maximize()
-	}
+	// }
 });
+ipcMain.on('unmax', e => mainWindow.unmaximize());
 ipcMain.on('close', e => mainWindow.close());
 
 // const win = new BrowserWindow()

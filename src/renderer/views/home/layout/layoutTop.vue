@@ -25,9 +25,9 @@
         <div class="toolbar flex">
             <span class="el-icon-s-tools" @click="toSetup"></span>
             <span></span>
-            <span class="el-icon-minus" @click="closeWin('min')"></span>
+            <span class="el-icon-minus" @click="closeWin('close')"></span>
             <span class="el-icon-full-screen" @click="closeWin('max')"></span>
-            <span class="el-icon-close" @click="closeWin('close')"></span>
+            <span class="el-icon-close" @click="closeWin('min')"></span>
         </div>
     </div>
 </template>

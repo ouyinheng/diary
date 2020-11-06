@@ -8,7 +8,7 @@ let randomLenth = 0;
 let updateTime = new Date().getTime(); // 更新时间
 
 function randomGetData() {
-    while(randomLenth < 5) {
+    while(randomLenth < 16) {
         let index = parseInt(Math.random(0,1)*length);
         if(!randomIndex.includes(index)) {
             randomIndex.push(index);
@@ -20,13 +20,28 @@ function randomGetData() {
         }
     }
 }
+function getYear() {
+    let startYear = 2015;
+    let nowYear = new Date().getFullYear();
+    let i = 0;
+    let yearList = [];
+    while(2015 + i < Number(nowYear)) {
+        yearList.push(2015 + i)
+        i=i+1;
+    }
+    localStorage.yearList = JSON.stringify(yearList)
+    return yearList;
+}
 export const getRecommList = async () => {
-    if(localStorage.updateTime && updateTime - localStorage.updateTime <= 1000000*3600)return;
+    if(localStorage.updateTime && updateTime - localStorage.updateTime <= 1000*1800)return;
+    let yearList = getYear();
+    let yearIndex =yearList[parseInt(Math.random(0,1)*yearList.length)];
+    localStorage.yearIndex = yearIndex;
     /**
      * @params year 2017
      */
     // https://movie.douban.com/annual/${year}?source=navigation#3
-    await axios.get('https://movie.douban.com/ithil_j/activity/movie_annual2018').then(res => {
+    await axios.get('https://movie.douban.com/ithil_j/activity/movie_annual'+yearIndex).then(res => {
         movie_annual = res.data.res.widget_infos;
         length = movie_annual.length;
         // localStorage.setItem('movie_annual', JSON.stringify(movie_annual))
@@ -38,7 +53,7 @@ export const getRecommList = async () => {
 
 export const getDetailsList = async (index) => {
     let details = {};
-    await axios.get(`https://movie.douban.com/ithil_j/activity/movie_annual2018/widget/${index}`).then(res => {
+    await axios.get(`https://movie.douban.com/ithil_j/activity/movie_annual${localStorage.yearIndex}/widget/${index}`).then(res => {
         details = res.data.res
     })
     return details
