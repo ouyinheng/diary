@@ -6,7 +6,7 @@
             </div>
             <div class="link">
                 <span v-for="(item, index) in menus" :key="index" :class="{
-                    active: index==activeIndex
+                    active: item.link===activeIndex
                 }" @click="setActive(index)">{{item.name}}</span>
             </div>
             <div class="setting">
@@ -61,6 +61,9 @@ const {ipcRenderer: ipc} = require('electron');
                 if(this.pageName.includes(to.name)) {
                     this.transition = 'page-transfer'
                 }
+            },
+            '$route.fullPath'(path) {
+                this.activeIndex = path;
             }
         },
         computed: {
@@ -80,12 +83,13 @@ const {ipcRenderer: ipc} = require('electron');
                 ipc.send(type);
             },
             setActive(index) {
-                this.activeIndex = index;
-                this.$router.push(this.menus[this.activeIndex].link)
+                this.activeIndex = this.menus[index].link;
+                this.$router.push(this.menus[index].link)
             }
         },
         created() {
-            console.log(this.$store.state);
+            console.log(this.$route);
+            this.activeIndex = this.$route.fullPath;
         }
     };
 </script>
@@ -104,8 +108,9 @@ const {ipcRenderer: ipc} = require('electron');
         height: 100%;
         display: flex;
         position: relative;
-        .active {
+        .top .link .active {
             position: relative;
+            color: lightcoral;
             &::before {
                 position: absolute;
                 background-color: lightcoral;
@@ -168,6 +173,7 @@ const {ipcRenderer: ipc} = require('electron');
         }
         .view {
             transition: all .1s linear;
+            padding: 5vh 10px 10px;
         }
     }
 </style>
