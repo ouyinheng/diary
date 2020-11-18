@@ -38,9 +38,6 @@
             <div :span="4"></div>
         </div>
     </transition>
-    <!-- <mu-flex justify-content="center" align-items="center" style="padding: 20px;" v-if="infos.length">
-      <mu-button full-width color="primary" v-loading="loading" @click="loadmore">加载更多</mu-button>
-    </mu-flex> -->
   </div>
 </template>
 

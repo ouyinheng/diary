@@ -1,6 +1,8 @@
 <template>
     <div id="main-page">
-        <div class="top">
+        <div class="top" :class="{
+            hiddenTop: hiddenTop
+        }">
             <div class="logo">
                 &nbsp;
             </div>
@@ -64,6 +66,7 @@ const {ipcRenderer: ipc} = require('electron');
             },
             '$route.fullPath'(path) {
                 this.activeIndex = path;
+                this.hiddenTop = (this.activeIndex != '/newThemeRouter');
             }
         },
         computed: {
@@ -90,6 +93,7 @@ const {ipcRenderer: ipc} = require('electron');
         created() {
             console.log(this.$route);
             this.activeIndex = this.$route.fullPath;
+            this.hiddenTop = (this.activeIndex != '/newThemeRouter');
         }
     };
 </script>
@@ -103,6 +107,11 @@ const {ipcRenderer: ipc} = require('electron');
     body {
         font-family: "Source Sans Pro", sans-serif;
     }
+    .hiddenTop {
+        height: 0 !important;
+        line-height: 0 !important;
+        // transition: all .3s;
+    }
     #main-page {
         width: 100%;
         height: 100%;
@@ -111,6 +120,7 @@ const {ipcRenderer: ipc} = require('electron');
         .top .link .active {
             position: relative;
             color: lightcoral;
+            overflow: hidden;
             &::before {
                 position: absolute;
                 background-color: lightcoral;
@@ -173,7 +183,6 @@ const {ipcRenderer: ipc} = require('electron');
         }
         .view {
             transition: all .1s linear;
-            padding: 5vh 10px 10px;
         }
     }
 </style>
