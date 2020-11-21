@@ -1,8 +1,8 @@
 <template>
 	<div class="homepage">
-		<div class="left">
+		<!-- <div class="left">
 			<icon-oyh-menus></icon-oyh-menus>
-		</div>
+		</div> -->
 		<div class="right">
             <header class="header"></header>
             <section class="section">

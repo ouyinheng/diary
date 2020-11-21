@@ -1,22 +1,22 @@
 <template>
     <div id="main-page">
-        <div class="top" :class="{
-            hiddenTop: hiddenTop
-        }">
-            <div class="logo">
-                &nbsp;
-            </div>
-            <div class="link">
-                <span v-for="(item, index) in menus" :key="index" :class="{
-                    active: item.link===activeIndex
-                }" @click="setActive(index)">{{item.name}}</span>
+        <div class="top" :class="{ hiddenTop: hiddenTop}">
+            <div class="top_left">
+                <mu-avatar :size="20">
+                    <img src="../assets/images/logo_icon.png">
+                </mu-avatar>
+                <div class="link">
+                    <span v-for="(item, index) in menus" :key="index" :class="{
+                        active: item.link===activeIndex
+                    }" @click="setActive(index)">{{item.name}}</span>
+                </div>
+                <el-input v-model="keyword" size="mini" placeholder="请输入内容"></el-input>
             </div>
             <div class="setting">
                 <span class="iconfont icon-minus" @click="closeWin('min')"></span>
                 <span class="iconfont icon-fullscreen-expand" @click="closeWin('max')"></span>
                 <span class="iconfont icon-error" @click="closeWin('close')"></span>
             </div>
-            <!-- <layout-left></layout-left> -->
         </div>
         <div class="section">
             <div class="content" v-loading="loading">
@@ -43,6 +43,7 @@ const {ipcRenderer: ipc} = require('electron');
                 transition: 'el-fade-in',
                 max: false,
                 activeIndex: 0,
+                keyword: '',
                 menus: [{
                     name: '推荐',
                     link: '/newThemeRouter'
@@ -108,8 +109,10 @@ const {ipcRenderer: ipc} = require('electron');
         font-family: "Source Sans Pro", sans-serif;
     }
     .hiddenTop {
-        height: 0 !important;
-        line-height: 0 !important;
+        // height: 0 !important;
+        // line-height: 0 !important;
+        // box-shadow: none !important;
+        // background-color: white !important;
         // transition: all .3s;
     }
     #main-page {
@@ -117,20 +120,11 @@ const {ipcRenderer: ipc} = require('electron');
         height: 100%;
         display: flex;
         position: relative;
-        .top .link .active {
+        .top .top_left .link .active {
             position: relative;
-            color: lightcoral;
-            overflow: hidden;
-            &::before {
-                position: absolute;
-                background-color: lightcoral;
-                bottom: 1px;
-                left: 0;
-                right: 0;
-                width: 100%;
-                height: 2px;
-                border-radius: 5px;
-            }
+            color: white;
+            background-color: #121212;
+            border-radius: 15px;
         }
         .top {
             -webkit-app-region: drag;
@@ -138,25 +132,42 @@ const {ipcRenderer: ipc} = require('electron');
             top: 0;
             left: 0;
             right: 0;
-            height: 5vh;
-            line-height: 5vh;
+            height: 6vh;
             padding: 0 10px;
-            background-color: rgba(0, 0, 0, .2);
+            background-color: rgba(255, 255, 255, .4);
             overflow: hidden;
             z-index: 10000;
             display: flex;
             justify-content: space-between;
+            align-items: center;
             box-shadow: -80vw 1px 100px 1px #000000, 80vw 1px 100px 1px #000000;
-            span {
-                -webkit-app-region: no-drag;
-                font-size: 20px;
-                color: white;
-                cursor: pointer;
-                margin-left: 10px;
+            .top_left {
+                display: flex;
+                align-items: center;
+                .logo {
+
+                }
+                span, .el-input {
+                    -webkit-app-region: no-drag;
+                    font-size: 20px;
+                    color: white;
+                    cursor: pointer;
+                    margin-left: 10px;
+                }
+                .link {
+                    width: 550px;
+                    span {
+                        cursor: pointer;
+                        display: inline-block;
+                        color: #121212;
+                        font-size: 16px;
+                        padding: 5px 15px;
+                    }
+                }
             }
-            .link {
+            .setting {
                 span {
-                    font-size: 16px;
+                    -webkit-app-region: no-drag;
                 }
             }
         }
