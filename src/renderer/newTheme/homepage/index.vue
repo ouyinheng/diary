@@ -19,15 +19,15 @@
                         </div>
                     </div> -->
                     <div class="m_col" >
-                        <div class="m-col-item" v-for="(item, index) in infos"  style="margin: 20px" :key="index" @click="toInfo(item.title)">
+                        <div class="m-col-item" v-for="(item, index) in infos"  style="margin: 20px" :key="index" @click="toInfo(item.name)">
                             <el-card :body-style="{ padding: '0px'}" shadow="hover">
                                 <div style="height:250px;overflow:hidden;min-width: 270px;">
-                                    <el-image :src="item.cover" :title="item.title"></el-image>
+                                    <el-image :src="cover" :title="item.name"></el-image>
                                 </div>
                                 <div style="padding: 14px;">
-                                    <p style="color:#37a;text-align:center;font-size:16px;">{{item.title}}</p>
+                                    <p style="color:#37a;text-align:center;font-size:16px;">{{item.name}}</p>
                                     <div class="bottom clearfix" style="color:#e09015;text-align:center;">
-                                        {{item.rate}}分
+                                        <!-- {{item.tid}}分 -->
                                     </div>
                                 </div>
                             </el-card>
@@ -41,34 +41,40 @@
 
 <script>
 import iconOyhMenus from '../components/magicIcon/menus'
+import { mapState, mapActions } from 'vuex'
+import * as utils from '@/utils/index'
 export default {
     name: 'homepage',
     components: {
         iconOyhMenus
     },
+    computed: {
+        ...mapState([
+            'sites',
+        ]),
+        // sites() {
+        //     return this.$store.state.Home.sites
+        // }
+	},
     data: () => ({
-        infos: [{
-            cover: 'https://uploadfile.bizhizu.cn/up/ec/85/b6/ec85b6d07d9f2c2d8d1062aa03d9b322.jpg',
-            title: '迪丽热巴',
-            rate: '8.9'
-        }, {
-            cover: 'https://uploadfile.bizhizu.cn/up/ec/85/b6/ec85b6d07d9f2c2d8d1062aa03d9b322.jpg',
-            title: '迪丽热巴',
-            rate: '8.9'
-        }, {
-            cover: 'https://uploadfile.bizhizu.cn/up/ec/85/b6/ec85b6d07d9f2c2d8d1062aa03d9b322.jpg',
-            title: '迪丽热巴',
-            rate: '8.9'
-        }, {
-            cover: 'https://uploadfile.bizhizu.cn/up/ec/85/b6/ec85b6d07d9f2c2d8d1062aa03d9b322.jpg',
-            title: '迪丽热巴',
-            rate: '8.9'
-        }],
+        cover: 'https://uploadfile.bizhizu.cn/up/ec/85/b6/ec85b6d07d9f2c2d8d1062aa03d9b322.jpg',
+        title: '迪丽热巴',
+        rate: '8.9',
+        infos: [],
     }),
     methods: {
+        ...mapActions([
+			'getHomePageResourth',
+		]),
         toInfo(item) {
 
         }
+    },
+    async created() {
+        let xmlData = await this.getHomePageResourth()
+        let list = utils.xmlObj2json(xmlData.data)
+        this.infos = list.rss.list.video;
+        console.log(this.infos, list)
     }
 }
 </script>
@@ -77,11 +83,11 @@ export default {
 .homepage {
 	width: 100vw;
 	height: 100vh;
-	// background-color: white;
+	background-color: white;
 	color: white;
 	// padding: 5vh 10px 10px;
 	box-sizing: border-box;
-	box-shadow: inset 1px 1px 100px 1px rgba(60, 10, 140, 0.3);
+	// box-shadow: inset 1px 1px 100px 1px rgba(60, 10, 140, 0.3);
 	display: flex;
 	.left {
 		width: 20%;

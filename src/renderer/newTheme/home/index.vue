@@ -74,13 +74,13 @@ export default {
 	},
 	async created() {
 		let updateTime = new Date().getTime(); // 更新时间
-		console.log('updateTime - localStorage.updateTime', updateTime - localStorage.updateTime)
+		// console.log('updateTime - localStorage.updateTime', updateTime - localStorage.updateTime)
 		if (
 			localStorage.updateTime &&
 			updateTime - localStorage.updateTime <= (1000 * 1800)
 		) {
 			this.detailsList = JSON.parse(localStorage.detailsList);
-			console.log(this.detailsList);
+			// console.log(this.detailsList);
 		} else {
 			this.movieList = await getRecommList();
 			this.getDetailsList();

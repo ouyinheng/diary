@@ -22,4 +22,8 @@ export default [{
             component: require("@/newTheme/favorites/index").default,
         }
     ]
+}, {
+    path: '/showMovies',
+    name: 'showMovie',
+    component: require("@/newTheme/showMovie/index").default,
 }]

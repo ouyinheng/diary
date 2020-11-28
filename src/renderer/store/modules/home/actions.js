@@ -5,3 +5,9 @@ export const getBanner = ({ commit }) => {
     return resp;
   })
 }
+
+export const getHomePageResourth = ({commit}) => {
+  return Svc.getHomePageResourth().then(resp => {
+    return resp;
+  })
+}

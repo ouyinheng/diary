@@ -92,7 +92,6 @@ const {ipcRenderer: ipc} = require('electron');
             }
         },
         created() {
-            console.log(this.$route);
             this.activeIndex = this.$route.fullPath;
             this.hiddenTop = (this.activeIndex != '/newThemeRouter');
         }
@@ -111,8 +110,8 @@ const {ipcRenderer: ipc} = require('electron');
     .hiddenTop {
         // height: 0 !important;
         // line-height: 0 !important;
-        // box-shadow: none !important;
-        // background-color: white !important;
+        box-shadow: none !important;
+        background-color: white !important;
         // transition: all .3s;
     }
     #main-page {

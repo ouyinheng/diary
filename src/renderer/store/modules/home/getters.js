@@ -1,3 +1,3 @@
-export const getRecommList = function(state) {
-    return state.recommList
+export const getSites = function(state) {
+    return state.sites
 }

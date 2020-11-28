@@ -40,11 +40,10 @@
         },
         computed: {
             loading() {
-                return this.$store.state.Counter.loading;
+                return false;
             }
         },
         created() {
-            console.log(this.$store.state);
         }
     };
 </script>
