@@ -1,6 +1,13 @@
 <template>
     <div class="liveBroadcast">
-        <div class="m_col">
+        <header>
+            <el-switch
+                v-model="displayForm"
+                active-color="#13ce66"
+                inactive-color="#ff4949">
+            </el-switch>
+        </header>
+        <div class="m_col" v-if="displayForm">
             <div class="m-col-item" v-for="(item, index) in getIptv" :key="index"  style="margin: 20px" @click="play(item)">
                 <el-card :body-style="{ padding: '0px'}" shadow="hover">
                     <div style="overflow:hidden;">
@@ -16,6 +23,19 @@
                 </el-card>
             </div>
         </div>
+        <mu-list v-else textline="two-line">
+            <mu-list-item avatar :ripple="false" button v-for="(item, index) in getIptv" :key="index"  style="margin: 20px" @click="play(item)">
+                <mu-list-item-content>
+                    <mu-list-item-title>{{item.name}}</mu-list-item-title>
+                    <mu-list-item-sub-title>{{item.group}}</mu-list-item-sub-title>
+                </mu-list-item-content>
+                <mu-list-item-action >
+                    <mu-list-item-after-text></mu-list-item-after-text>
+                    <!-- <mu-checkbox color="yellow700" v-model="selects" value="value1" uncheck-icon="star_border" checked-icon="star"></mu-checkbox> -->
+                </mu-list-item-action>
+            </mu-list-item>
+            <mu-divider></mu-divider>
+        </mu-list>
     </div>
 </template>
 
@@ -24,7 +44,7 @@ import { mapGetters , mapActions } from 'vuex'
 export default {
     name: 'liveBroadcast',
     data: () => ({
-
+        displayForm: true, // true: 卡片；false：列表
     }),
     computed: {
         ...mapGetters([
@@ -35,6 +55,14 @@ export default {
         ...mapActions([
 			'getHomePageResourth',
         ]),
+        tableRowClassName({row, rowIndex}) {
+            if (rowIndex === 1) {
+                return 'warning-row';
+            } else if (rowIndex === 3) {
+                return 'success-row';
+            }
+            return '';
+        },
         play(item) {
 			const BrowserWindow = require('electron').remote.BrowserWindow
 			let win = new BrowserWindow({
@@ -47,12 +75,12 @@ export default {
 				}
 			});
 			win.on('close', function () { win = null })
-			win.loadURL('http://localhost:9080/#/showMovies?url='+item.url)
+			win.loadURL(window.location.origin + '/#/' + 'showMovies?url='+item.url)
 			win.show()
 		},
     },
     created() {
-        console.log('asdf', this.getIptv)
+        console.log('asdf', window.location.origin + '/#/')
     }
 }
 </script>
@@ -61,7 +89,7 @@ export default {
 .liveBroadcast {
     width: 100vw;
     height: 100vh;
-    padding-top: 20px;
+    padding-top: 40px;
     // background-color: black;
     color: black;
     .m_col {

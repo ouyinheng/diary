@@ -2,9 +2,7 @@
     <div id="main-page">
         <div class="top" :class="{ hiddenTop: hiddenTop}">
             <div class="top_left">
-                <mu-avatar :size="20">
-                    <img src="../assets/images/logo_icon.png">
-                </mu-avatar>
+                <img class="logo" src="../assets/images/logo_icon.png">
                 <div class="link">
                     <span v-for="(item, index) in menus" :key="index" :class="{
                         active: item.link===activeIndex
@@ -144,7 +142,8 @@ const {ipcRenderer: ipc} = require('electron');
                 display: flex;
                 align-items: center;
                 .logo {
-
+                    width: 25px;
+                    height: 25px;
                 }
                 span, .el-input {
                     -webkit-app-region: no-drag;

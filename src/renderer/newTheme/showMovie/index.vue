@@ -36,7 +36,7 @@ export default {
             variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
             autoplay:true,
             html5m3u8:true,
-            video: 'http://112.50.243.8/PLTV/88888888/224/3221225922/1.m3u8',//视频地址
+            video: this.url,//视频地址
             hlsjsConfig: {   // hlsjs和CDNBye的配置参数
                 debug: false,
                 // Other hlsjsConfig options provided by hls.js
