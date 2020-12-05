@@ -79,7 +79,7 @@ ipcMain.on('saveFile', (event, name="test", data) => {
 ipcMain.on('getFileData', function(event, url) {
     // arg是从渲染进程返回来的数据
    // 这里是传给渲染进程的数据
-    fs.readFile(url,"utf8",(err,data)=>{
+    fs.readFile(path.join(__dirname, url),"utf8",(err,data)=>{
         console.log(data)
         if(err){
             event.sender.send('asynchronous-reply', "读取失败");

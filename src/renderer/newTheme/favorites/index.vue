@@ -27,7 +27,24 @@
                 </div>
             </el-menu>
         </div>
-        <div class="right"></div>
+        <div class="right">
+            <div class="m_col">
+                <div class="m-col-item" v-for="(item, index) in movieList.lives" :key="index"  style="margin: 20px" @click="play(item)">
+                    <el-card :body-style="{ padding: '0px'}" shadow="hover">
+                        <div style="overflow:hidden;">
+                            <el-image :src="item.logo" :title="item.name">
+                                <div slot="placeholder" class="image-slot">
+                                    加载中<span class="dot">...</span>
+                                </div>
+                            </el-image>
+                        </div>
+                        <div style="padding: 4px;">
+                            <p style="color:#37a;text-align:center;font-size:16px;">{{item.name}}</p>
+                        </div>
+                    </el-card>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -36,13 +53,14 @@ const {ipcRenderer: ipc} = require('electron');
 export default {
     name: 'favorites',
     data: () => ({
+        movieList: [],
         menuList: [{
             isSubmenu: true,
             submenu: {
                 title: '官方收藏',
                 menuItem: [{
                     title: '80S',
-                    url: '../../lib/80S.json'
+                    url: '../renderer/lib/80S.json'
                 }]
             }
         }, {
@@ -68,7 +86,8 @@ export default {
                 console.log("render+" + arg);
             });
             ipc.on('asynchronous-reply', (event, arg) => {
-                console.log("render+" + arg);
+                // console.log("render+" + arg);
+                this.movieList = JSON.parse(arg)
             })
         }
     },
@@ -96,6 +115,11 @@ export default {
         width: 100%;
         height: 100%;
         background-color: gainsboro;
+    }
+    .m_col {
+        display: grid;
+        justify-content: space-between;
+        grid-template-columns: repeat(auto-fill, 300px);
     }
 }
 </style>
