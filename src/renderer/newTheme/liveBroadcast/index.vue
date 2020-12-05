@@ -23,19 +23,15 @@
                 </el-card>
             </div>
         </div>
-        <mu-list v-else textline="two-line">
-            <mu-list-item avatar :ripple="false" button v-for="(item, index) in getIptv" :key="index"  style="margin: 20px" @click="play(item)">
-                <mu-list-item-content>
-                    <mu-list-item-title>{{item.name}}</mu-list-item-title>
-                    <mu-list-item-sub-title>{{item.group}}</mu-list-item-sub-title>
-                </mu-list-item-content>
-                <mu-list-item-action >
-                    <mu-list-item-after-text></mu-list-item-after-text>
-                    <!-- <mu-checkbox color="yellow700" v-model="selects" value="value1" uncheck-icon="star_border" checked-icon="star"></mu-checkbox> -->
-                </mu-list-item-action>
-            </mu-list-item>
-            <mu-divider></mu-divider>
-        </mu-list>
+        <v-list v-else three-line>
+            <v-list-item v-for="(item, index) in getIptv" :key="index"  style="margin: 20px" @click="play(item)">
+                <v-list-item-content>
+                    <v-list-item-title v-html="item.name"></v-list-item-title>
+                    <v-list-item-subtitle v-html="item.group"></v-list-item-subtitle>
+                </v-list-item-content>
+            </v-list-item>
+            <v-divider></v-divider>
+        </v-list>
     </div>
 </template>
 

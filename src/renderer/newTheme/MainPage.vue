@@ -164,6 +164,7 @@ const {ipcRenderer: ipc} = require('electron');
                 }
             }
             .setting {
+                margin: 0 10px;
                 span {
                     -webkit-app-region: no-drag;
                 }
@@ -173,6 +174,7 @@ const {ipcRenderer: ipc} = require('electron');
             width: 100%;
             min-width: 800px;
             height: 100vh;
+            overflow: hidden;
             position: relative;
             .content {
                 position: absolute;

@@ -1,10 +1,12 @@
 <template>
 	<div id="app">
+                <el-scrollbar :native="false">
 		<transition :name="transition">
 			<keep-alive>
 				<router-view class="view"></router-view>
 			</keep-alive>
 		</transition>
+                </el-scrollbar>
 	</div>
 </template>
 
@@ -39,11 +41,20 @@ html, body {
     color: #D1D1D1;
 }
 #app {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
   	-webkit-app-region: no-drag;
 }
 ::selection {
 	color: white;
 	background-color: rgb(4, 224, 231);
+}
+::-webkit-scrollbar {
+    display: none;
+}
+.el-scrollbar {
+    height: 100%;
 }
 .el-scrollbar__wrap {
 	overflow-x: hidden !important;
