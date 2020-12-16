@@ -34,7 +34,12 @@ function createWindow() {
 	// mainWindow.webContents.openDevTools({
 	// 	mode:"bottom"
 	// });
-	myTray.setTray(mainWindow, trayIcon);
+    myTray.setTray(mainWindow, trayIcon);
+    if(fs.existsSync('E:\\diary\\')) {
+        // 存在
+    } else {
+        fs.mkdirSync('E:\\diary');
+    }
 }
 app.on('ready', createWindow);
 
@@ -90,6 +95,49 @@ ipcMain.on('getFileData', function(event, url) {
     })
  });
 
+ ipcMain.on('getFileStreamData', function(event, url) {
+    // arg是从渲染进程返回来的数据
+   // 这里是传给渲染进程的数据
+    const stream = fs.createReadStream(path.join(__dirname, url), {flags: 'r', encoding: 'utf-8'});
+    var buf = '';
+
+    stream.on('data', function(d) {
+        buf += d.toString(); // when data is read, stash it in a string buffer
+        pump(); // then process the buffer
+    });
+
+    function pump() {
+        var pos;
+
+        while ((pos = buf.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
+            if (pos == 0) { // if there's more than one newline in a row, the buffer will now start with a newline
+                buf = buf.slice(1); // discard it
+                continue; // so that the next iteration will start with data
+            }
+            processLine(buf.slice(0,pos)); // hand off the line
+            buf = buf.slice(pos+1); // and slice the processed data off the buffer
+        }
+    }
+
+    function processLine(line) { // here's where we do something with a line
+
+        if (line[line.length-1] == '\r') line=line.substr(0,line.length-1); // discard CR (0x0D)
+
+        if (line.length > 0) { // ignore empty lines
+            var obj = JSON.parse(line); // parse the JSON
+            console.log(obj); // do something with the data here!
+        }
+    }
+    // fs.readFile(path.join(__dirname, url),"utf8",(err,data)=>{
+    //     console.log(data)
+    //     if(err){
+    //         event.sender.send('asynchronous-reply', "读取失败");
+    //     }else{
+    //         event.sender.send('asynchronous-reply', data);
+    //     }
+        
+    // })
+ });
 // const win = new BrowserWindow()
 
 // win.setProgressBar(0.5)
