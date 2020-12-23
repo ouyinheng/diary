@@ -20,7 +20,10 @@
             <div class="content" v-loading="loading">
                 <el-scrollbar :native="false">
                     <transition :name="transition" mode="out-in">
-                        <router-view class="view"></router-view>
+                        <keep-alive v-if="needKeep">
+                            <router-view class="view"></router-view>
+                        </keep-alive>
+                        <router-view v-else class="view"></router-view>
                     </transition>
                 </el-scrollbar>
             </div>
@@ -54,11 +57,14 @@ const {ipcRenderer: ipc} = require('electron');
                 }, {
                     name: '收藏',
                     link: '/favorites'
-                }]
+                }],
+                needKeep: false
             }
         },
         watch: {
             $route (to, from ) {
+                console.log(from)
+                this.needKeep = !!from.meta.needKeep
                 if(this.pageName.includes(to.name)) {
                     this.transition = 'page-transfer'
                 }

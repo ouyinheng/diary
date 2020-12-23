@@ -23,7 +23,7 @@
                 </el-card>
             </div>
         </div>
-        <v-list v-else three-line>
+        <!-- <v-list v-else three-line>
             <v-list-item v-for="(item, index) in getIptv" :key="index"  style="margin: 20px" @click="play(item)">
                 <v-list-item-content>
                     <v-list-item-title v-html="item.name"></v-list-item-title>
@@ -31,7 +31,7 @@
                 </v-list-item-content>
             </v-list-item>
             <v-divider></v-divider>
-        </v-list>
+        </v-list> -->
     </div>
 </template>
 

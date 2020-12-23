@@ -1,33 +1,12 @@
 <template>
     <div class="favorites">
-        <!-- <div class="left">
-            <el-menu
-                default-active="2"
-                class="el-menu-vertical-demo"
-                @open="handleOpen"
-                @close="handleClose">
-                <div v-for="(item, index) in menuList" :key="index">
-                    <template v-if="item.isSubmenu">
-                        <el-submenu :index="index">
-                            <template slot="title">
-                                <i class="el-icon-location"></i>
-                                <span>导航一</span>
-                            </template>
-                            <el-menu-item-group v-for="(ele, key) in item.submenu.menuItem" :key="key">
-                                <el-menu-item :index="index+'-'+key" @click="setRightListData(ele)">{{ele.title}}</el-menu-item>
-                            </el-menu-item-group>
-                        </el-submenu>
-                    </template>
-                    <template v-else>
-                        <el-menu-item :index="index">
-                            <i class="el-icon-menu"></i>
-                            <span slot="title">{{item.title}}</span>
-                        </el-menu-item>
-                    </template>
-                </div>
-            </el-menu>
-        </div> -->
         <header>
+            <div>
+                <!-- <el-button icon="el-icon-arrow-left"></el-button> -->
+                <mu-button icon color="primary" small v-if="!showFolder" @click="showFolder=true">
+                    <span class="el-icon-arrow-left"></span>
+                </mu-button>
+            </div>
             <div>
                 <el-input
                     size="small"
@@ -38,7 +17,7 @@
                 </el-input>
             </div>
         </header>
-        <div class="right">
+        <div class="right" v-if="showFolder">
             <div class="header">
                 <span class="header-title">全部项目</span>
                 <el-dropdown :hide-on-click="true">
@@ -55,11 +34,11 @@
                 </el-dropdown>
             </div>
             <el-row>
-                <el-col :span="6" style="padding: 5px 20px; box-sizing: border-box;">
-                    <movie-item-card></movie-item-card>
+                <el-col v-for="(item, index) in officialList" :key="index" :span="6" style="padding: 5px 20px; box-sizing: border-box;">
+                    <movie-item-card :item="item" @showDetails="showDetails"></movie-item-card>
                 </el-col>
                 <el-col :span="6" style="padding: 5px 20px; box-sizing: border-box;">
-                    <el-card class="mx-auto addBtn" max-width="350" shadow="always" style="height: 204px;width: 100%" @click.native="showAdd">
+                    <el-card class="mx-auto addBtn" max-width="350" shadow="always" style="height: 187.5px;width: 100%" @click.native="showAdd">
                         <div class="iconfont icon-add addFile"></div>
                     </el-card>
                 </el-col>
@@ -68,23 +47,33 @@
                 </div> -->
             </el-row>
         </div>
+        <list v-else :url="folderUrl"></list>
         <add v-model="visible"></add>
     </div>
 </template>
 
 <script>
 const {ipcRenderer: ipc} = require('electron');
+import dbOption from "../../../main/src/sql/favoritedb.js";
 import movieItemCard from '../components/movieItemCard'
 import add from './add'
+import list from './list'
+const path = require('path');
+function getPath(path) {
+    return path.join(__dirname, path);
+}
 export default {
     name: 'favorites',
     components: {
-        movieItemCard, add
+        movieItemCard, add, list
     },
     data: () => ({
+        showFolder: true, // 收藏夹
+        folderUrl: '', // 收藏夹中的路径
         movieList: [],
         keyWord: '',
         visible: false,
+        officialList: [],
         menuList: [{
             isSubmenu: true,
             submenu: {
@@ -120,11 +109,21 @@ export default {
             //     // console.log("render+" + arg);
             //     this.movieList = JSON.parse(arg)
             // })
+        },
+        getOfficialList() {
+            dbOption.getData((db) => {
+                this.officialList = db.get("posts").value();
+                // this.showDetails(this.officialList[0]);
+            })
+        },
+        showDetails(item) {
+            this.folderUrl = item.url;
+            this.showFolder = false;
         }
     },
     created() {
         console.log('adsf')
-        this.testFile()
+        this.getOfficialList()
     }
 }
 </script>
@@ -146,6 +145,7 @@ export default {
         padding: 10px;
         background-color: white;
         display: flex;
+        justify-content: space-between;
         .header_search {
             width: 250px;
         }

@@ -1,29 +1,19 @@
 <template>
-	<el-dialog
-		title="提示"
-		class="addDialog"
-		:visible.sync="dialogVisible"
-		width="30%"
-	>
-		<el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <mu-dialog title="提示" width="300" :open.sync="dialogVisible">
+        <el-form ref="form" :model="form" :rules="rules" label-width="80px">
 			<el-form-item label="文件名" prop="name">
 				<el-input v-model="form.name" maxlength="8"></el-input>
 			</el-form-item>
-			<el-form-item>
-				<el-button type="primary" @click="addFavorites">立即创建</el-button>
-				<el-button @click="close">取消</el-button>
-			</el-form-item>
 		</el-form>
-		<!-- <span slot="footer" class="dialog-footer">
-			<el-button @click="close">取 消</el-button>
-			<el-button type="primary" @click="addFavorites">确 定</el-button>
-		</span> -->
-	</el-dialog>
+        <mu-button slot="actions" flat @click="close">关闭</mu-button>
+        <mu-button slot="actions" flat color="primary" @click="addFavorites">确定</mu-button>
+    </mu-dialog>
 </template>
 
 <script>
 import fileOptions from "../../../main/src/file";
-import dbOption from '../../../main/src/sql/80sdb'
+import getAllOption from "../../../main/src/sql/getAllOption";
+import favoritedb from "../../../main/src/sql/favoritedb";
 export default {
 	name: "add",
 	props: {
@@ -53,20 +43,22 @@ export default {
 	},
 	methods: {
 		close() {
+            this.form.name = '';
 			this.dialogVisible = false;
 			this.$emit("input", this.dialogVisible);
 		},
 		addFavorites() {
-			this.$refs['form'].validate((valid) => {
+			this.$refs["form"].validate((valid) => {
 				if (valid) {
-                    dbOption.getData((db) => {
-                       console.log(db.get('lives').splice(0,10).value())
+                    getAllOption.init(this.form.name+'.json')
+                    favoritedb.getData(db => {
+                        db.get('posts').push({
+                            "title": this.form.name,
+                            "url": `${this.form.name}.json`,
+                            "canDelete": true
+                        }).write();
                     })
-					// fileOptions
-					// 	.WhetherTheFileExists("diary\\input.txt", false)
-					// 	.then((res) => {
-					// 		fileOptions.saveFile("diary\\input.txt", "谢谢侬");
-					// 	});
+                    this.close();
 				} else {
 					console.log("error submit!!");
 					return false;

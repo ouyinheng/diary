@@ -1,27 +1,9 @@
 <template>
-	<v-card class="mx-auto" max-width="350">
-		<v-img
-			class="white--text align-end"
-			height="150px"
-			src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-		>
-			<!-- <v-card-title>Top 10 Australian beaches</v-card-title> -->
-		</v-img>
-
-		<v-card-subtitle class="pb-0"> Number 10 </v-card-subtitle>
-
-		<!-- <v-card-text class="text--primary">
-			<div>Whitehaven Beach</div>
-
-			<div>Whitsunday Island, Whitsunday Islands</div>
-		</v-card-text> -->
-
-		<!-- <v-card-actions>
-			<v-btn color="orange" text> Share </v-btn>
-
-			<v-btn color="orange" text> Explore </v-btn>
-		</v-card-actions> -->
-	</v-card>
+	<mu-card style="width: 100%; max-width: 375px; max-height: 187.5px;margin: 0 auto;" @click="showDetails">
+        <mu-card-media :title="item.title">
+            <img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg">
+        </mu-card-media>
+	</mu-card>
 </template>
 
 <script>
@@ -32,11 +14,16 @@ export default {
 			type: Object,
 			default() {
 				return {
-					name: "",
+					title: "",
 					logo: "",
 				};
 			},
 		},
-	},
+    },
+    methods: {
+        showDetails() {
+            this.$emit('showDetails', this.item)
+        }
+    }
 };
 </script>
