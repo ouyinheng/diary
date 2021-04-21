@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import fileOptions from "../../../main/src/file";
-import getAllOption from "../../../main/src/sql/getAllOption";
-import favoritedb from "../../../main/src/sql/favoritedb";
+import fileOptions from "../../../../main/src/file";
+import getAllOption from "../../../../main/src/sql/getAllOption";
+import favoritedb from "../../../../main/src/sql/favoritedb";
 export default {
 	name: "add",
 	props: {

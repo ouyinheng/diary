@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import dbOption from "../../../main/src/sql/getAllOption.js";
+import dbOption from "../../../../main/src/sql/getAllOption.js";
 
 export default {
     name: 'favorites-details-list',

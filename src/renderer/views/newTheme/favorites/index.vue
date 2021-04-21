@@ -54,7 +54,7 @@
 
 <script>
 const {ipcRenderer: ipc} = require('electron');
-import dbOption from "../../../main/src/sql/favoritedb.js";
+import dbOption from "../../../../main/src/sql/favoritedb.js";
 import movieItemCard from '../components/movieItemCard'
 import add from './add'
 import list from './list'

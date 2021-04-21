@@ -2,7 +2,7 @@
     <div id="main-page">
         <div class="top" :class="{ hiddenTop: hiddenTop}">
             <div class="top_left">
-                <img class="logo" src="../assets/images/logo_icon.png">
+                <img class="logo" src="../../assets/images/logo_icon.png">
                 <div class="link">
                     <span v-for="(item, index) in menus" :key="index" :class="{
                         active: item.link===activeIndex
@@ -57,6 +57,9 @@ const {ipcRenderer: ipc} = require('electron');
                 }, {
                     name: '收藏',
                     link: '/favorites'
+                }, {
+                    name: '应用',
+                    link: '/apply'
                 }],
                 needKeep: false
             }
@@ -159,7 +162,7 @@ const {ipcRenderer: ipc} = require('electron');
                     margin-left: 10px;
                 }
                 .link {
-                    width: 550px;
+                    width: 650px;
                     span {
                         cursor: pointer;
                         display: inline-block;
