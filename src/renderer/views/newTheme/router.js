@@ -1,3 +1,4 @@
+import applyRoute from './apply/router.js'
 export default [{
     path: '/newThemeRouter',
     name: 'newTheme-page',
@@ -36,6 +37,9 @@ export default [{
                 needKeep: true
             },
             component: require("@/views/newTheme/apply/apply").default,
+            children: [
+                ...applyRoute
+            ]
         }
     ]
 }, {

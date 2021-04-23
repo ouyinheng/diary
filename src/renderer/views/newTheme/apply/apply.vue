@@ -2,9 +2,28 @@
     <div class="apply">
         <section class="section">
             <div class="apply-left">
-
+                <mu-paper :z-depth="1" class="demo-list-wrap">
+                    <mu-list textline="three-line">
+                        <mu-sub-header>今天</mu-sub-header>
+                        <div v-for="(item, index) in applyList" :key="index" @click="setRoute(item)">
+                            <mu-list-item avatar :ripple="false" button>
+                                <mu-list-item-action>
+                                    <mu-avatar>
+                                        <img src="https://picsum.photos/1920/1080?random">
+                                    </mu-avatar>
+                                </mu-list-item-action>
+                                <mu-list-item-content>
+                                    <mu-list-item-title>{{item.name}}</mu-list-item-title>
+                                </mu-list-item-content>
+                            </mu-list-item>
+                            <mu-divider></mu-divider>
+                        </div>
+                    </mu-list>
+                </mu-paper>
             </div>
-            <div class="apply-right"></div>
+            <div class="apply-right">
+                <router-view></router-view>
+            </div>
         </section>
     </div>
 </template>
@@ -16,10 +35,19 @@ export default {
         return {
             reqUrlList: [
                 'https://v.qq.com/'
+            ],
+            applyList: [
+                {
+                    name: '笔趣阁',
+                    url: '/biquge'
+                }
             ]
         }
     },
     methods: {
+        setRoute(item) {
+            this.$router.push('/biquge')
+        },
         getVideoPageSourth() {
             this.$http({
                 method: 'get',
@@ -32,7 +60,6 @@ export default {
         }
     },
     created() {
-        this.getVideoPageSourth();
     }
 }
 </script>
@@ -53,6 +80,10 @@ export default {
         height: 100%;
         overflow: auto;
         background-color: #ccc;
+        border-right: 1px solid gainsboro;
+        .demo-list-wrap {
+            height: 100%;
+        }
     }
     &-right {
         width: 80vw;

@@ -53,6 +53,7 @@
   "dependencies": {
     "axios": "^0.18.1",
     "element-ui": "2.12.0",
+    "lodash": "^4.17.21",
     "lowdb": "^1.0.0",
     "muse-ui": "^3.0.2",
     "node-sass": "^4.13.1",

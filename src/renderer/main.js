@@ -12,8 +12,11 @@ Vue.use(ElementUI);
 
 import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
-
 Vue.use(MuseUI);
+
+import _ from 'lodash' 
+Vue.prototype.$lodash = _;
+
 import './static/index.scss'
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
