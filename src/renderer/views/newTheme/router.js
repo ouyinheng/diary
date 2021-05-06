@@ -40,12 +40,20 @@ export default [{
             children: [
                 ...applyRoute
             ]
+        }, {
+            path: '/movieDetails',
+            name: 'movieDetails',
+            component: require("@/views/newTheme/home/movieDetails").default,
         }
     ]
 }, {
     path: '/showMovies',
     name: 'showMovie',
     component: require("@/views/newTheme/showMovie/index").default,
+}, {
+    path: '/playMovie',
+    name: 'playMovie',
+    component: require("@/views/newTheme/showMovie/showMovie").default,
 }, {
     path: '/xgplayer',
     name: 'xgplayer',

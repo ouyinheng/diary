@@ -4,7 +4,8 @@ export default {
     name: 'qq',
     data() {
         return {
-            list: []
+            list: [],
+            infos: []
         }
     },
     methods: {
@@ -14,7 +15,7 @@ export default {
         ]),
         getInfo(keyword) {
             this.list = [];
-            this.SET_LOADING_TURE();
+            // this.SET_LOADING_TURE();
             this.$http.get(`https://v.qq.com/x/search/?q=${keyword}`).then(res => {
                 // ipc.send('saveFile', keyword, res.data);
                 this.parseHtml(res.data)
@@ -51,7 +52,7 @@ export default {
                             sub: item.querySelector('.result_title .sub').innerText.replace(/\s*/g,""),
                             type: item.querySelector('.result_title .type').innerText,
                         },
-                        info_item_odd: item.querySelector('.info_item.info_item_odd .content').innerText,
+                        info_item_odd: item.querySelector('.info_item.info_item_odd .content') ? item.querySelector('.info_item.info_item_odd .content').innerText : '',
                         info_item_even: item.querySelector('.info_item.info_item_even .content').innerText,
                         info_item_desc: item.querySelector('.info_item.info_item_desc .desc_text').innerText,
                     },
@@ -61,10 +62,11 @@ export default {
                 this.list.push(movieInfo)
             })
             this.infos = this.list
-		    this.SET_LOADING_FALSE();
+            console.log(this.infos)
+		    // this.SET_LOADING_FALSE();
         },
     },
     created() {
-        this.getInfo()
+        // this.getInfo()
     }
 }

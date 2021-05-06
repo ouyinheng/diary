@@ -2,13 +2,13 @@
     <div id="main-page">
         <div class="top" :class="{ hiddenTop: hiddenTop}">
             <div class="top_left">
-                <img class="logo" src="../../assets/images/logo_icon.png">
-                <div class="link">
+                <img class="logo" src="../../assets/images/logo_icon.png" @click.stop="goHome()">
+                <div class="link" v-if="isHomeLink">
                     <span v-for="(item, index) in menus" :key="index" :class="{
                         active: item.link===activeIndex
                     }" @click="setActive(index)">{{item.name}}</span>
                 </div>
-                <el-input v-model="keyword" size="mini" placeholder="请输入内容"></el-input>
+                <el-input v-if="isHomeLink" v-model="keyword" size="mini" placeholder="请输入内容"></el-input>
             </div>
             <div class="setting">
                 <span class="iconfont icon-minus" @click="closeWin('min')"></span>
@@ -80,6 +80,9 @@ const {ipcRenderer: ipc} = require('electron');
         computed: {
             loading() {
                 return this.$store.state.Counter.loading;
+            },
+            isHomeLink() {
+                return ['/newThemeRouter', '/homePage', '/liveBroadcast', '/favorites', '/apply'].includes(this.activeIndex)
             }
         },
         methods: {
@@ -96,6 +99,10 @@ const {ipcRenderer: ipc} = require('electron');
             setActive(index) {
                 this.activeIndex = this.menus[index].link;
                 this.$router.push(this.menus[index].link)
+            },
+            goHome() {
+                console.log('newThemeRouter')
+                this.$router.push('/newThemeRouter')
             }
         },
         created() {
@@ -153,6 +160,7 @@ const {ipcRenderer: ipc} = require('electron');
                 .logo {
                     width: 25px;
                     height: 25px;
+                    -webkit-app-region: no-drag;
                 }
                 span, .el-input {
                     -webkit-app-region: no-drag;

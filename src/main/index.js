@@ -65,6 +65,7 @@ ipcMain.on('max', e => {
 ipcMain.on('unmax', e => mainWindow.unmaximize());
 ipcMain.on('close', e => mainWindow.close());
 ipcMain.on('saveFile', (event, name="test", data) => {
+    console.log('name:saveFile', name)
     if(fs.existsSync('E:\\diary\\')) {
         fs.writeFile('E:\\diary\\' + name, data,  function(err) {
             if (err) {
