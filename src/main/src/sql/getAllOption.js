@@ -7,7 +7,15 @@ let db = null;
 export default {
 	init(filename) {
         console.log('filename', filename)
-        const adapter = new FileSync(`./src/renderer/lib/${filename}`);
+        if (process.env.NODE_ENV === "production") {
+            global.__lib = path.join(__dirname, "./static");
+        }
+        
+        const url =
+            process.env.NODE_ENV === "development"
+                ? "static/lib/" + filename
+                : `${global.__lib}/lib/` + filename;
+        const adapter = new FileSync(url);
         db = low(adapter);
         db.defaults({ posts: []}).write();
     },

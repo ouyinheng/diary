@@ -35,7 +35,7 @@ export default {
         }
     },
     methods: {
-        async getTableData() {
+        async getTableData() {            
             await dbOption.init(this.url);
             dbOption.getData((db) => {
                 this.tableData.push(...db.get("lives").splice(this.pageIndex, (this.pageIndex + 1) * this.pageSize).value());

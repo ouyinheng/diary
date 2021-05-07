@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain} from 'electron'
 const path = require('path');
 const fs = require("fs")
-import myTray from './src/tray'
+// import myTray from './src/tray'
 let pluginName= 'pepflashplayer.dll';
 app.commandLine.appendSwitch('ppapi-flash-path', path.join(__dirname, pluginName));
 if (process.env.NODE_ENV !== 'development') {
@@ -27,14 +27,14 @@ function createWindow() {
 	});
 
 	mainWindow.loadURL(winURL);
-
+    mainWindow.webContents.openDevTools()
 	mainWindow.on('closed', () => {
 		mainWindow = null
 	});
 	// mainWindow.webContents.openDevTools({
 	// 	mode:"bottom"
 	// });
-    myTray.setTray(mainWindow, trayIcon);
+    // myTray.setTray(mainWindow, trayIcon);
     if(fs.existsSync('E:\\diary\\')) {
         // 存在
     } else {

@@ -49,14 +49,14 @@ export default {
                     introduce: {
                         title: {
                             pri: item.querySelector('.result_title .hl').innerText,
-                            sub: item.querySelector('.result_title .sub').innerText.replace(/\s*/g,""),
+                            sub: item.querySelector('.result_title .sub') ? item.querySelector('.result_title .sub').innerText.replace(/\s*/g,"") : '',
                             type: item.querySelector('.result_title .type').innerText,
                         },
                         info_item_odd: item.querySelector('.info_item.info_item_odd .content') ? item.querySelector('.info_item.info_item_odd .content').innerText : '',
                         info_item_even: item.querySelector('.info_item.info_item_even .content').innerText,
                         info_item_desc: item.querySelector('.info_item.info_item_desc .desc_text').innerText,
                     },
-                    rating: item.querySelector('._infos .result_score').innerText,
+                    rating: item.querySelector('._infos .result_score') ? item.querySelector('._infos .result_score').innerText : '',
                     list
                 }
                 this.list.push(movieInfo)

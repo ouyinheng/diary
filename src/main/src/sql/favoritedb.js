@@ -2,9 +2,20 @@ const fs = require("fs");
 const low = require("lowdb");
 const path = require('path');
 const FileSync = require("lowdb/adapters/FileSync");
-const adapter = new FileSync( "./src/renderer/lib/favoriteLib.json");
-const db = low(adapter);
+
 // Set some defaults
+const isDevelopment = process.env.NODE_ENV !== "production";
+if (process.env.NODE_ENV === "production") {
+    global.__lib = path.join(__dirname, "./static");
+}
+
+const libJSON =
+    process.env.NODE_ENV === "development"
+        ? "static/lib/favoriteLib.json"
+        : `${global.__lib}/lib/favoriteLib.json`;
+
+const adapter = new FileSync(libJSON);
+const db = low(adapter);
 export default {
 	init() {
 		db.defaults({ posts: []}).write();
