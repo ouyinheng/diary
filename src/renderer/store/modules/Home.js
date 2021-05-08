@@ -9,7 +9,8 @@ export default {
         recommList: [],
         loading: false,
         sites: ['sites'],
-        TypeList: []
+        TypeList: [],
+        playMovieUrl: ''
     },
     actions,
     mutations,

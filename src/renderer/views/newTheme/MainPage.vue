@@ -8,7 +8,7 @@
                         active: item.link===activeIndex
                     }" @click="setActive(index)">{{item.name}}</span>
                 </div>
-                <el-input v-if="isHomeLink" v-model="keyword" size="mini" placeholder="请输入内容"></el-input>
+                <el-input v-if="isHomeLink" v-model="keyword" size="mini" placeholder="请输入内容" @keyup.native.enter="enterDetails" clearable></el-input>
             </div>
             <div class="setting">
                 <span class="iconfont icon-minus" @click="closeWin('min')"></span>
@@ -28,88 +28,134 @@
                 </el-scrollbar>
             </div>
         </div>
+        <div class="play-box" :class="{
+                'closePlay': getClosePlay
+            }" @click.stop="showThisBox" v-if="getPlayMovieUrl">
+            <header class="play-box-header" v-if="!getClosePlay">
+                <span></span>
+                <span class="close-play el-icon-circle-close" @click.stop="closePlayHandler"></span>
+            </header>
+            <show-movie :playUrl="getPlayMovieUrl" v-if="showCom" v-show="!getClosePlay"></show-movie>
+        </div>
     </div>
 </template>
 
 <script>
+// import showMovie from '@/views/newTheme/showMovie/showMovie'
+import ShowMovie from './showMovie/showMovie.vue';
 const {ipcRenderer: ipc} = require('electron');
-    export default {
-        name: "MainPage",
-        components: {
-            
-        },
-        data() {
-            return {
-                pageName: ['Homepage', 'picture'],
-                transition: 'el-fade-in',
-                max: false,
-                activeIndex: 0,
-                keyword: '',
-                menus: [{
-                    name: '推荐',
-                    link: '/newThemeRouter'
-                }, {
-                    name: '主页',
-                    link: '/homePage'
-                }, {
-                    name: '直播',
-                    link: '/liveBroadcast'
-                }, {
-                    name: '收藏',
-                    link: '/favorites'
-                }, {
-                    name: '应用',
-                    link: '/apply'
-                }],
-                needKeep: false
-            }
-        },
-        watch: {
-            $route (to, from ) {
-                console.log(from)
-                this.needKeep = !!from.meta.needKeep
-                if(this.pageName.includes(to.name)) {
-                    this.transition = 'page-transfer'
-                }
-            },
-            '$route.fullPath'(path) {
-                this.activeIndex = path;
-                this.hiddenTop = (this.activeIndex != '/newThemeRouter');
-            }
-        },
-        computed: {
-            loading() {
-                return this.$store.state.Counter.loading;
-            },
-            isHomeLink() {
-                return ['/newThemeRouter', '/homePage', '/liveBroadcast', '/favorites', '/apply'].includes(this.activeIndex)
-            }
-        },
-        methods: {
-            closeWin(type) {
-                if(this.max&&type === 'max') {
-                    type = 'unmax'
-                    this.max = false;
-                }
-                if(type === 'max' && !this.max) {
-                    this.max = true;
-                }
-                ipc.send(type);
-            },
-            setActive(index) {
-                this.activeIndex = this.menus[index].link;
-                this.$router.push(this.menus[index].link)
-            },
-            goHome() {
-                console.log('newThemeRouter')
-                this.$router.push('/newThemeRouter')
-            }
-        },
-        created() {
-            this.activeIndex = this.$route.fullPath;
-            this.hiddenTop = (this.activeIndex != '/newThemeRouter');
+import { mapGetters , mapMutations } from 'vuex'
+export default {
+    name: "MainPage",
+    components: {
+        ShowMovie
+    },
+    data() {
+        return {
+            pageName: ['Homepage', 'picture'],
+            transition: 'el-fade-in',
+            max: false,
+            activeIndex: 0,
+            keyword: '',
+            showCom: true,
+            closePlay: true,
+            menus: [{
+                name: '推荐',
+                link: '/newThemeRouter'
+            }, {
+                name: '主页',
+                link: '/homePage'
+            }, {
+                name: '直播',
+                link: '/liveBroadcast'
+            }, {
+                name: '收藏',
+                link: '/favorites'
+            }, {
+                name: '应用',
+                link: '/apply'
+            }],
+            needKeep: false
         }
-    };
+    },
+    watch: {
+        $route (to, from ) {
+            console.log(from)
+            this.needKeep = !!from.meta.needKeep
+            if(this.pageName.includes(to.name)) {
+                this.transition = 'page-transfer'
+            }
+        },
+        '$route.fullPath'(path) {
+            this.activeIndex = path;
+            this.hiddenTop = (this.activeIndex != '/newThemeRouter');
+        },
+        getPlayMovieUrl() {
+            this.showCom = false;
+            this.$nextTick(() => {
+                this.showCom = true;
+            })
+        }
+    },
+    computed: {
+        ...mapGetters([
+            'getPlayMovieUrl', 'getClosePlay'
+        ]),
+        loading() {
+            return this.$store.state.Counter.loading;
+        },
+        isHomeLink() {
+            return ['/newThemeRouter', '/homePage', '/liveBroadcast', '/favorites', '/apply'].includes(this.activeIndex)
+        }
+    },
+    methods: {
+        ...mapMutations([
+			'setClosePlay',
+        ]),
+        enterDetails() {
+            if(this.keyword) {
+                this.$router.push({
+                    path: '/movieDetails',
+                    query: {
+                        title: this.keyword
+                    }
+                })
+            }
+        },
+        showThisBox() {
+            console.log(this.getClosePlay)
+            if(this.getClosePlay) {
+                this.setClosePlay(false)
+            }
+        },
+        closeWin(type) {
+            if(this.max&&type === 'max') {
+                type = 'unmax'
+                this.max = false;
+            }
+            if(type === 'max' && !this.max) {
+                this.max = true;
+            }
+            ipc.send(type);
+        },
+        setActive(index) {
+            this.activeIndex = this.menus[index].link;
+            this.$router.push(this.menus[index].link)
+        },
+        goHome() {
+            console.log('newThemeRouter')
+            this.$router.push('/newThemeRouter')
+        },
+        closePlayHandler() {
+            // this.closePlay = true;
+            this.setClosePlay(true)
+        }
+    },
+    created() {
+        this.activeIndex = this.$route.fullPath;
+        this.hiddenTop = (this.activeIndex != '/newThemeRouter');
+    }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -133,6 +179,46 @@ const {ipcRenderer: ipc} = require('electron');
         height: 100%;
         display: flex;
         position: relative;
+        .closePlay {
+            // display: none;
+            bottom: 80px;
+            right: 80px;
+            border-radius: 50%;
+            width: 80px !important;
+            height: 80px !important;
+            box-shadow: 1px 1px 1px #fff;
+        }
+        .play-box {
+            position: fixed;
+            z-index: 99999;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, .6);
+            overflow: hidden;
+            &-header {
+                position: absolute;
+                top: 0px;
+                left: 0;
+                right: 0;
+                background-color: rgba(0, 0, 0, .5);
+                height: 40px;
+                transition: all .3s;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 10px;
+                .close-play {
+                    font-size: 25px;
+                    color: white;
+                    cursor: pointer;
+                }
+            }
+            &:hover {
+                .play-box-header {
+                    top: 0;
+                }
+            }
+        }
         .top .top_left .link .active {
             position: relative;
             color: white;

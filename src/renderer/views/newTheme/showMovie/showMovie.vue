@@ -1,43 +1,45 @@
 <template>
-  <div class="movie">
-    <webview :src="'https://660e.com/?url='+url" plugins></webview>
-  </div>
+	<div class="movie">
+		<webview :src="'https://660e.com/?url=' + url" plugins></webview>
+	</div>
 </template>
 <script>
 export default {
-	  name: 'Movie',
-	  watch: {
-		  valueUrl() {
-			  this.show = false;
-			  this.$nextTick(() => {
-				  this.show = true;
-			  })
-		  }
-	  },
-	  data() {
-		  return {
-			  url: '',
-			  valueUrl: '',
-			  options: [],
-			  show: false
-		  }
-	  },
-  	methods: {
-	  },
+	name: "Movie",
+	props: {
+		playUrl: String,
+	},
+	watch: {
+		valueUrl() {
+			this.show = false;
+			this.$nextTick(() => {
+				this.show = true;
+			});
+		},
+	},
+	data() {
+		return {
+			url: "",
+			valueUrl: "",
+			options: [],
+			show: false,
+		};
+	},
+	methods: {},
 	created() {
-		this.url = this.$route.query.url
-	}
-}
+		this.url = this.$route.query.url || this.playUrl;
+	},
+};
 </script>
 
 <style lang="scss">
 .movie {
-    width: 100vw;
-    height: 100vh;
-    webview {
-        width: 100%;
-        height: 100%;
-    }
+	width: 100vw;
+	height: 100vh;
+	webview {
+		width: 100%;
+		height: 100%;
+	}
 	video {
 		width: 500px;
 		height: 300px;

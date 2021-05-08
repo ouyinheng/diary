@@ -1,5 +1,5 @@
 <template>
-    <div class="favorites">
+    <div class="typeDetails">
         <header>
             <div>
                 <!-- <el-button icon="el-icon-arrow-left"></el-button> -->
@@ -99,7 +99,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.favorites {
+.typeDetails {
     width: 100vw;
     height: 100vh;
     // padding-top: 6vh;

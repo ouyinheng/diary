@@ -1,8 +1,22 @@
 <template>
     <div class="header_box movie-info">
+        <el-row>
+            <el-col style="display:flex; justify-content:space-between;align-items:center" :span="24">
+                <el-button type="text" @click="$router.back()"><i class="el-icon-arrow-left"></i> 返回</el-button>
+                <el-dropdown trigger="click" @command="handleCommand">
+                    <span class="el-dropdown-link">
+                        {{getSelectSourch}}<i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item command="腾讯">腾讯</el-dropdown-item>
+                        <el-dropdown-item command="优酷">优酷</el-dropdown-item>
+                    </el-dropdown-menu>
+                    </el-dropdown>
+            </el-col>
+        </el-row>
         <el-row v-for="(item, index) in infos" :key="index" style="margin: 20px 0;">
 			<el-col :span="6">
-				<el-image :src="item.cover" style="width: 200px;"></el-image>
+				<el-image :src="item.cover" class="cover_image"></el-image>
 			</el-col>
 			<el-col :span="18">
 				<p>
@@ -21,10 +35,11 @@
 				</p>
 				<p>
 					<span>简介：</span>
-					<span class="content">{{item.introduce.info_item_desc}}</span>
+					<p class="content overflow-text-el" :title="item.introduce.info_item_desc">{{item.introduce.info_item_desc}}</p>
 				</p>
 				<p>
-					<!--  -->
+                    <el-link type="primary" @click="toMovieDesHandler(item)">查看详情<i class="el-icon-arrow-right"></i></el-link>
+					<!-- 
 					<mu-badge
 						v-for="(Item, Index) in item.list"
 						:key="Index"
@@ -36,6 +51,7 @@
 							{{Item.title}}
 						</mu-button>
 					</mu-badge>
+                     -->
 					<!-- <mu-button
 						color="primary"
 						v-for="(Item, Index) in item.list"
@@ -44,7 +60,7 @@
 						@click="btnHandle(Item, item)">
 						{{Item.title}}
 					</mu-button> -->
-					<mu-button color="primary" v-if="item.list.length==0" @click="play(item.href)">立即播放</mu-button>
+					<!-- <mu-button color="primary" v-if="item.list.length==0" @click="play(item.href)">立即播放</mu-button> -->
 				</p>
 			</el-col>
 		</el-row>
@@ -57,6 +73,7 @@
 <script>
 import getDetailsList from './getDetailsList'
 import getQQMovieInfo from '../../../utils/mixins/getQQMovieInfo'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
     name: 'movieDetails',
     data() {
@@ -66,8 +83,31 @@ export default {
         }
     },
     mixins: [getQQMovieInfo],
+    computed: {
+        ...mapGetters([
+            'getSelectSourch', 'getQqList', 'getYkList'
+        ]),
+        infos() {
+            const obj = {
+                '腾讯': 'getQqList',
+                '优酷': 'getYkList',
+            }
+            return this[obj[this.getSelectSourch]]
+        }
+    },
     methods: {
+        ...mapMutations([
+            'setPlayMovieUrl', 'setClosePlay', 'setSelectSourch', 'setSearchKeyWord'
+        ]),
+        handleCommand(command) {
+            this.setSelectSourch(command)
+            if(this.title === this.getSearchKeyWord && this.infos.length > 0)return;
+            this.getInfo(this.title)
+        },
         play(url) {
+            this.setPlayMovieUrl(url);
+            this.setClosePlay(false);
+            return;
             console.log(window.location.href + ':' + window.location.port)
 			const BrowserWindow = require('electron').remote.BrowserWindow
 			let win = new BrowserWindow({
@@ -89,6 +129,11 @@ export default {
 			win.show()
 			// this.$http.get(`${this.$url}/real?url=${url}`)
 		},
+        toMovieDesHandler(item) {
+            this.$router.push({
+                path: '/movieDescription'
+            })
+        },
         btnHandle(Item, item) {
 			if(Item.title === '...') {
 				this.getMoreList(Item, item)
@@ -113,6 +158,9 @@ export default {
     created() {
         this.title = this.$route.query.title
         // getDetailsList.init(this.title)
+        console.log(this.title, this.getSearchKeyWord)
+        if(this.title === this.getSearchKeyWord && this.infos.length > 0)return;
+        this.setSearchKeyWord(this.title)
         this.getInfo(this.title)
     }
 }
@@ -121,8 +169,13 @@ export default {
 <style lang="scss" scoped>
 	.movie-info {
 		width: 1000px;
-		margin: 30px auto;
+		margin: 0 auto;
 		color: black;
+        .cover_image {
+            width: 160px;
+            border-radius: 5px;
+            background: #ebebeb;
+        }
 		.header {
 			display:flex;
 			justify-content: space-between;

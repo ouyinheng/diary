@@ -48,20 +48,24 @@ export default {
 	},
 	methods: {
 		async getDetailsList() {
-			await this.movieList.forEach(async (item, index) => {
-				let datas = await getDetailsList(item.index);
-				// 必须有标题和海报
-				if(datas.subjects && datas.subjects.length > 0 && datas.subject && datas.payload && datas.payload.background_img) {
-					this.detailsList.push({
-						payload: datas.payload,
-						subject: datas.subject,
-					});
-					localStorage.setItem(
-						"detailsList",
-						JSON.stringify(this.detailsList)
-					);
-				}
-			});
+			try {
+                await this.movieList.forEach(async (item, index) => {
+                    let datas = await getDetailsList(item.index);
+                    // 必须有标题和海报
+                    if(datas.subjects && datas.subjects.length > 0 && datas.subject && datas.payload && datas.payload.background_img) {
+                        this.detailsList.push({
+                            payload: datas.payload,
+                            subject: datas.subject,
+                        });
+                        localStorage.setItem(
+                            "detailsList",
+                            JSON.stringify(this.detailsList)
+                        );
+                    }
+                });
+            } catch (error) {
+                
+            }
 		},
 		setDragName(name) {
 			setTimeout(() => {

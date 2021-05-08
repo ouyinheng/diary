@@ -91,10 +91,10 @@ export default {
     }),
     methods: {
         ...mapActions([
-            'getHomePageResourth',
-            'getHomePageTypeList',
+            // 'getHomePageResourth',
+            // 'getHomePageTypeList',
             'getBanner',
-            'getRecommList'
+            // 'getRecommList'
 		]),
         toInfo(item) {
 
@@ -107,9 +107,9 @@ export default {
         // let xmlData = await this.getHomePageResourth()
         // let list = utils.xmlObj2json(xmlData.data)
         // this.infos = list.rss.list.video;
-        this.getHomePageTypeList()
+        // this.getHomePageTypeList()
         this.getBanner()
-        this.getRecommList();
+        // this.getRecommList();
     }
 }
 </script>
@@ -132,7 +132,7 @@ export default {
     }
 	.right {
 		width: 100%;
-        height: calc(100% - 50px);
+        height: calc(100%);
         background-color: rgba(255, 255, 255, .1);
         padding: 10px 20px;
         overflow: {

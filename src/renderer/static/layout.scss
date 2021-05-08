@@ -22,3 +22,8 @@
 .header_box {
     padding-top: 6vh;
 }
+.overflow-text-el {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

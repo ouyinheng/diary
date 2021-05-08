@@ -13,6 +13,7 @@
                     class="header_search"
                     placeholder="请输入内容"
                     suffix-icon="el-icon-search"
+                    @change="searchValue"
                     v-model="keyWord">
                 </el-input>
             </div>
@@ -119,6 +120,9 @@ export default {
         showDetails(item) {
             this.folderUrl = item.url;
             this.showFolder = false;
+        },
+        searchValue() {
+            
         }
     },
     created() {

@@ -41,6 +41,10 @@ export default [{
                 ...applyRoute
             ]
         }, {
+            path: '/movieDescription',
+            name: 'movieDescription',
+            component: require("@/views/newTheme/home/movieDescription").default,
+        }, {
             path: '/movieDetails',
             name: 'movieDetails',
             component: require("@/views/newTheme/home/movieDetails").default,

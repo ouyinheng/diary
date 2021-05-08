@@ -1,3 +1,5 @@
+const path = require('path');
+
 /**
  * xml字符串转换xml对象数据
  * @param {Object} xmlStr
@@ -5,55 +7,66 @@
 function xmlStr2XmlObj(xmlStr) {
     var xmlObj = {};
     if (document.all) {
-      var xmlDom = new ActiveXObject("Microsoft.XMLDOM");
-      xmlDom.loadXML(xmlStr);
-      xmlObj = xmlDom;
+        var xmlDom = new ActiveXObject("Microsoft.XMLDOM");
+        xmlDom.loadXML(xmlStr);
+        xmlObj = xmlDom;
     } else {
-      xmlObj = new DOMParser().parseFromString(xmlStr, "text/xml");
+        xmlObj = new DOMParser().parseFromString(xmlStr, "text/xml");
     }
     return xmlObj;
-  }
-  
-  /**
-   * xml字符串转换json数据
-   * @param {Object} xml
-   */
-  export function xmlObj2json(xml) {
+}
+
+/**
+ * xml字符串转换json数据
+ * @param {Object} xml
+ */
+export function xmlObj2json(xml) {
     var xmlObj = xmlStr2XmlObj(xml);
     var jsonObj = {};
     if (xmlObj.childNodes.length > 0) {
-      jsonObj = xml2json(xmlObj);
+        jsonObj = xml2json(xmlObj);
     }
     return jsonObj;
-  }
-  
-  /**
-   * xml转换json数据
-   * @param {Object} xml
-   */
-  function xml2json(xml) {
+}
+
+/**
+ * xml转换json数据
+ * @param {Object} xml
+ */
+function xml2json(xml) {
     try {
-      var obj = {};
-      if (xml.children.length > 0) {
-        for (var i = 0; i < xml.children.length; i++) {
-          var item = xml.children.item(i);
-          var nodeName = item.nodeName;
-          if (typeof(obj[nodeName]) == "undefined") {
-            obj[nodeName] = xml2json(item);
-          } else {
-            if (typeof(obj[nodeName].push) == "undefined") {
-              var old = obj[nodeName];
-              obj[nodeName] = [];
-              obj[nodeName].push(old);
+        var obj = {};
+        if (xml.children.length > 0) {
+            for (var i = 0; i < xml.children.length; i++) {
+                var item = xml.children.item(i);
+                var nodeName = item.nodeName;
+                if (typeof (obj[nodeName]) == "undefined") {
+                    obj[nodeName] = xml2json(item);
+                } else {
+                    if (typeof (obj[nodeName].push) == "undefined") {
+                        var old = obj[nodeName];
+                        obj[nodeName] = [];
+                        obj[nodeName].push(old);
+                    }
+                    obj[nodeName].push(xml2json(item));
+                }
             }
-            obj[nodeName].push(xml2json(item));
-          }
+        } else {
+            obj = xml.textContent;
         }
-      } else {
-        obj = xml.textContent;
-      }
-      return obj;
+        return obj;
     } catch (e) {
-      console.log(e.message);
+        console.log(e.message);
     }
-  }
+}
+/**
+ * 转换开发环境和生产环境引用静态文件的路径
+ */
+ export function transferPath(dirname='./static', name) {
+    if (process.env.NODE_ENV === "production") {
+        global.__lib = path.join(__dirname, dirname);
+    }
+    return process.env.NODE_ENV === "development"
+        ? `${dirname.substring(2)}/${name}`
+        : `${global.__lib}/${name}`;
+}
