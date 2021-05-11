@@ -154,6 +154,7 @@ export default {
     created() {
         this.activeIndex = this.$route.fullPath;
         this.hiddenTop = (this.activeIndex != '/newThemeRouter');
+        console.log('getPlayMovieUrl', this.getPlayMovieUrl)
     }
 };
 </script>

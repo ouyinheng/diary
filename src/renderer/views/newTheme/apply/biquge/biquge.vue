@@ -15,17 +15,19 @@
                 </ul>
             </div>
         </header>
-        <section class="biquge-section">
+        <section class="biquge-section" @click="disposeChild">
 
         </section>
         <div class="modal" v-if="showSearch">
 
         </div>
+            <el-backtop target=".biquge-box"></el-backtop>
     </div>
 </template>
 
 <script>
-import { mapGetters , mapActions } from 'vuex'
+import { mapGetters , mapActions, mapMutations } from 'vuex'
+const {ipcRenderer: ipc} = require('electron');
 
 export default {
     name: 'biquge',
@@ -37,12 +39,15 @@ export default {
     }),
     computed: {
         ...mapGetters([
-            'getTest'
+            'getTest', 'getChapterList', 'getBookId'
         ])
     },
     methods: {
         ...mapActions([
-
+            
+        ]),
+        ...mapMutations([
+            'setChapterList', 'setBookId'
         ]),
         showSearchHandler() {
             this.showSearch = true;
@@ -92,22 +97,73 @@ export default {
 			this.bookList = bookList
 		},
         setSectionContet(item) {
-            console.log(item)
+            
             this.showSearch = false;
+            this.setBookId(item.link.split('/txt/')[1].split('/index.html')[0]);
             this.$http.get('http://www.shuquge.com/'+item.link).then(res => {
                 // console.log(res)
                 let htmlText = res.data.split('<body>')[1].split('</body>')[0];
-                console.log(htmlText)
-                document.querySelector('.biquge-section').innerHTML = htmlText;
+                // ipc.send('saveFile', 'keyword.html', res.data);
+                let ele = document.createElement('div');
+                ele.innerHTML = htmlText;
+                console.log(ele.querySelector('.listmain'))
+                const contentBody = ele.querySelector('.listmain');
+                this.setChapterList(contentBody)
+                this.appendChapter();
             })
+        },
+        appendChapter() {
+            let chapterBox = document.querySelector('.biquge-section');
+            if(this.getChapterList) {
+                chapterBox.appendChild(this.getChapterList)
+            }
+            
+        },
+        disposeChild(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log(e.target);
+            const a_ele = e.target;
+            const url = 'http://www.shuquge.com/' + this.getBookId + '/' + a_ele.getAttribute('href');
+            this.$router.push({
+                path: '/readBook',
+                query: {
+                    url: this.getBookId + '/' + a_ele.getAttribute('href')
+                }
+            })
+            // this.getContent(url)
         }
     },
-    created() {
-        console.log(this.getTest)
+    mounted() {
+        console.log('getChapterList', this.getChapterList)
+        this.appendChapter();
     }
 }
 </script>
-
+<style lang="scss">
+.listmain {
+    dl {
+        display: flex;
+        flex-wrap: wrap;
+        dd {
+            padding: 5px 10px;
+            width: 200px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        dt {
+            width: 100%;
+            margin: 5px 0;
+            font-weight: 500;
+            font-size: 18px;
+        }
+    }
+}
+.el-backtop {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.5) !important;
+}
+</style>
 <style lang="scss" scoped>
 .biquge-box {
     width: 100%;

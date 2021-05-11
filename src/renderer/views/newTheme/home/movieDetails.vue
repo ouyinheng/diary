@@ -38,9 +38,9 @@
 					<p class="content overflow-text-el" :title="item.introduce.info_item_desc">{{item.introduce.info_item_desc}}</p>
 				</p>
 				<p>
-                    <el-link type="primary" @click="toMovieDesHandler(item)">查看详情<i class="el-icon-arrow-right"></i></el-link>
-					<!-- 
-					<mu-badge
+                    <!-- <el-link type="primary" @click="toMovieDesHandler(item)">查看详情<i class="el-icon-arrow-right"></i></el-link> -->
+					
+					<!-- <mu-badge
 						v-for="(Item, Index) in item.list"
 						:key="Index"
 						v-if="!gj.includes(Item.title)"
@@ -50,17 +50,17 @@
 						<mu-button color="primary" @click="btnHandle(Item, item)">
 							{{Item.title}}
 						</mu-button>
-					</mu-badge>
-                     -->
-					<!-- <mu-button
+					</mu-badge> -->
+                    
+					<mu-button
 						color="primary"
 						v-for="(Item, Index) in item.list"
 						:key="Index"
 						v-if="!gj.includes(Item.title)"
 						@click="btnHandle(Item, item)">
 						{{Item.title}}
-					</mu-button> -->
-					<!-- <mu-button color="primary" v-if="item.list.length==0" @click="play(item.href)">立即播放</mu-button> -->
+					</mu-button>
+					<mu-button color="primary" v-if="item.list.length==0" @click="play(item.href)">立即播放</mu-button>
 				</p>
 			</el-col>
 		</el-row>
@@ -74,6 +74,7 @@
 import getDetailsList from './getDetailsList'
 import getQQMovieInfo from '../../../utils/mixins/getQQMovieInfo'
 import { mapGetters, mapMutations } from 'vuex'
+const {ipcRenderer: ipc} = require('electron');
 export default {
     name: 'movieDetails',
     data() {
@@ -92,6 +93,7 @@ export default {
                 '腾讯': 'getQqList',
                 '优酷': 'getYkList',
             }
+            console.log(this[obj[this.getSelectSourch]])
             return this[obj[this.getSelectSourch]]
         }
     },
@@ -101,7 +103,7 @@ export default {
         ]),
         handleCommand(command) {
             this.setSelectSourch(command)
-            if(this.title === this.getSearchKeyWord && this.infos.length > 0)return;
+            // if(this.title === this.getSearchKeyWord && this.infos.length > 0)return;
             this.getInfo(this.title)
         },
         play(url) {
@@ -159,7 +161,7 @@ export default {
         this.title = this.$route.query.title
         // getDetailsList.init(this.title)
         console.log(this.title, this.getSearchKeyWord)
-        if(this.title === this.getSearchKeyWord && this.infos.length > 0)return;
+        // if(this.title === this.getSearchKeyWord && this.infos.length > 0)return;
         this.setSearchKeyWord(this.title)
         this.getInfo(this.title)
     }

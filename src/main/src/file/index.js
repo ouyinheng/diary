@@ -2,12 +2,36 @@ const fs = require('fs');
 const path = require('path');
 
 export default {
-    saveFile(name, data) {
-        fs.writeFile(`E:\\${name}`, data,  function(err) {
-            if (err) {
-                return console.error(err);
+    init() {
+        return ['saveFile', 'getFileData', 'WhetherTheFileExists']
+    },
+    saveFile(event, name="test", data) {
+        console.log('name:saveFile', name)
+        if(fs.existsSync('E:\\diary\\')) {
+            fs.writeFile('E:\\diary\\' + name, data,  function(err) {
+                if (err) {
+                    return console.error(err);
+                }
+            });
+        } else {
+            fs.mkdirSync('E:\\diary');
+            fs.writeFile('E:\\diary\\' + name, data,  function(err) {
+                if (err) {
+                    return console.error(err);
+                }
+            });
+        }
+    },
+    getFileData(event, url) {
+        fs.readFile(path.join(__dirname, url),"utf8",(err,data)=>{
+            console.log(data)
+            if(err){
+                event.sender.send('asynchronous-reply', "读取失败");
+            }else{
+                event.sender.send('asynchronous-reply', data);
             }
-        });
+            
+        })
     },
     /**
      * 文件是否存在，如果不存在则创建
