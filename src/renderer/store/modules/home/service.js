@@ -16,3 +16,5 @@ export const getTypelist = () => axios.get('http://api.tgmmvip.com/wolong/video/
 
 // 获取分类详情
 export const getTypeDetails = (type) => axios.get(`http://api.tgmmvip.com/wolong/gae/video/list?area=&size=20&year=&page=0&type=${type}`)
+
+// 获取推荐

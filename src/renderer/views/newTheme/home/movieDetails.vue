@@ -67,6 +67,7 @@
 		<el-row v-if="infos.length==0">
 			暂无数据
 		</el-row>
+        <iframe v-show="false" id="test" src="https://v.qq.com/x/search/?q=%E5%B0%86%E5%A4%9C&stag=0&smartbox_ab=" frameborder="0"></iframe>
     </div>
 </template>
 
@@ -164,6 +165,13 @@ export default {
         // if(this.title === this.getSearchKeyWord && this.infos.length > 0)return;
         this.setSearchKeyWord(this.title)
         this.getInfo(this.title)
+    },
+    mounted() {
+        // const test = document.querySelector('#test');
+        // console.log('-------------', test)
+        // window.onload = () => {
+        //     console.log('-------------', test.contentWindow.document.querySelector('._infos'))
+        // }
     }
 }
 </script>

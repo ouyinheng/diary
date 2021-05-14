@@ -21,7 +21,7 @@
         <div class="modal" v-if="showSearch">
 
         </div>
-            <el-backtop target=".biquge-box"></el-backtop>
+        <el-backtop target=".biquge-box"></el-backtop>
     </div>
 </template>
 
@@ -115,7 +115,11 @@ export default {
         appendChapter() {
             let chapterBox = document.querySelector('.biquge-section');
             if(this.getChapterList) {
-                chapterBox.appendChild(this.getChapterList)
+                try {
+                    chapterBox.appendChild(this.getChapterList)
+                } catch (error) {
+                    
+                }
             }
             
         },
@@ -135,7 +139,7 @@ export default {
         }
     },
     mounted() {
-        console.log('getChapterList', this.getChapterList)
+        // console.log('getChapterList', this.getChapterList)
         this.appendChapter();
     }
 }
