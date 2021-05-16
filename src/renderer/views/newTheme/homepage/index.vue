@@ -36,7 +36,7 @@
                     <div class="title more" @click="toTypeDetails(getRecommListGet)">更多 <i class="el-icon-d-arrow-right"></i></div>
                 </div>
                 <div class="m_col" >
-					<div class="m-col-item" v-for="(item, index) in getRecommListGet"  style="margin: 20px" :key="index" @click="toTypeDetails(item.title)">
+					<div class="m-col-item" v-for="(item, index) in getRecommListGet"  style="margin: 20px" :key="index" @click="toInfo(item)">
 						<el-card :body-style="{ padding: '0px'}" shadow="hover">
 							<div style="height:400px;overflow:hidden;min-width: 270px;">
 								<el-image :src="item.cover" :title="item.title"></el-image>
@@ -55,7 +55,7 @@
                     <div class="title more" @click="toTypeDetails(getTeleplayList)">更多 <i class="el-icon-d-arrow-right"></i></div>
                 </div>
                 <div class="m_col" >
-					<div class="m-col-item" v-for="(item, index) in getTeleplayList"  style="margin: 20px" :key="index" @click="toTypeDetails(item.title)">
+					<div class="m-col-item" v-for="(item, index) in getTeleplayList"  style="margin: 20px" :key="index" @click="toInfo(item)">
 						<el-card :body-style="{ padding: '0px'}" shadow="hover">
 							<div style="height:400px;overflow:hidden;min-width: 270px;">
 								<el-image :src="item.cover" :title="item.title"></el-image>
@@ -110,8 +110,14 @@ export default {
             'getRecommList',
             'getTVRecommList'
 		]),
-        toInfo(item) {
-
+        toInfo({title, id}) {
+            this.$router.push({
+				path: '/doubanInfo',
+				query: {
+					title,
+                    id
+				}
+			})
         },
         toTypeDetails(ele) {
             this.$router.push('/typeDetails')
