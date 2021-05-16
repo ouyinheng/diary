@@ -9,3 +9,7 @@ export const setRecommList = function (state, list) {
 export const setTypeList = function (state, list) {
     state.TypeList = list
 }
+export const setTeleplayList = function (state, teleplayList) {
+    state.teleplayList = teleplayList
+}
+
