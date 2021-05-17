@@ -16,3 +16,7 @@ export const getSearchKeyWord = function(state) {
 export const getSelectSourch = function(state) {
     return state.selectSourch
 }
+export const getVideoType = function(state) {
+    return state.videoType
+}
+

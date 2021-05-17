@@ -48,6 +48,14 @@ export default [{
             path: '/movieDetails',
             name: 'movieDetails',
             component: require("@/views/newTheme/home/movieDetails").default,
+        }, {
+            path: '/typeDetails',
+            name: 'typeDetails',
+            component: require("@/views/newTheme/homepage/typeDetails").default,
+        }, {
+            path: '/doubanInfo',
+            name: 'doubanInfo',
+            component: require("@/views/newTheme/homepage/doubanInfo").default,
         }
     ]
 }, {
@@ -62,8 +70,4 @@ export default [{
     path: '/xgplayer',
     name: 'xgplayer',
     component: require("@/views/newTheme/xgplayer/index").default,
-}, {
-    path: '/typeDetails',
-    name: 'typeDetails',
-    component: require("@/views/newTheme/homepage/typeDetails").default,
 }]

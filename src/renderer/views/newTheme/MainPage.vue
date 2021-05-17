@@ -3,6 +3,9 @@
         <div class="top" :class="{ hiddenTop: hiddenTop}">
             <div class="top_left">
                 <img class="logo" src="../../assets/images/logo_icon.png" @click.stop="goHome()">
+                <mu-button v-if="!isHomeLink" icon color="primary" small @click.native="$route.back()">
+                    <span class="el-icon-arrow-left"></span>
+                </mu-button>
                 <div class="link" v-if="isHomeLink">
                     <span v-for="(item, index) in menus" :key="index" :class="{
                         active: item.link===activeIndex
@@ -35,7 +38,7 @@
                 <span></span>
                 <span class="close-play el-icon-circle-close" @click.stop="closePlayHandler"></span>
             </header>
-            <show-movie :playUrl="getPlayMovieUrl" v-if="showCom" v-show="!getClosePlay"></show-movie>
+            <show-movie :playUrl="getPlayMovieUrl" :type="getVideoType" v-if="showCom" v-show="!getClosePlay"></show-movie>
         </div>
     </div>
 </template>
@@ -99,7 +102,7 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'getPlayMovieUrl', 'getClosePlay'
+            'getPlayMovieUrl', 'getClosePlay', 'getVideoType'
         ]),
         loading() {
             return this.$store.state.Counter.loading;
@@ -191,7 +194,7 @@ export default {
         }
         .play-box {
             position: fixed;
-            z-index: 99999;
+            z-index: 999999;
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, .6);
@@ -208,6 +211,7 @@ export default {
                 align-items: center;
                 justify-content: space-between;
                 padding: 0 10px;
+                z-index: 100000;
                 .close-play {
                     font-size: 25px;
                     color: white;

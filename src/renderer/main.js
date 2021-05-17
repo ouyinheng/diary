@@ -29,7 +29,17 @@ Vue.themeSetup = Vue.prototype.$themeSetup = themeSetup
 Vue.theme = Vue.prototype.$theme = theme
 // 全局注册
 Vue.use(Stick)
+import VueXgplayer from 'vue-xgplayer'
 
+Vue.use(VueXgplayer, {
+  // globalOptions
+//   enterLogo: {
+//     url: 'https://uploadfile.bizhizu.cn/up/ec/85/b6/ec85b6d07d9f2c2d8d1062aa03d9b322.jpg',
+//     width: 100,
+//     height: 40
+//   },
+  playsinline: true
+})
 /* eslint-disable no-new */
 new Vue({
   components: { App },

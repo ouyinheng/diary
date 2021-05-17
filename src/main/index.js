@@ -13,9 +13,9 @@ const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:9080` 
 let trayIcon = path.join(__dirname, 'app');
 function createWindow() {
 	mainWindow = new BrowserWindow({
-		height: 663,
+		height: 700,
 		useContentSize: true,
-		width: 1200,
+		width: 1300,
 		frame: false,
 		hasShadow: true,
 		transparent: false,

@@ -16,3 +16,6 @@ export const setSearchKeyWord = function(state, searchKeyWord) {
 export const setSelectSourch = function(state, selectSourch) {
     state.selectSourch = selectSourch
 }
+export const setVideoType = function(state, videoType) {
+    state.videoType = videoType
+}

@@ -19,3 +19,19 @@ export const getTypeDetailsActions = ({ commit }) => {
 		return resp.data.data;
 	});
 }
+
+export const getRecommList = ({ commit }) => {
+    return Svc.getRecommList().then((resp) => {
+        console.log(resp.data)
+        commit('setRecommList', resp.data.subjects)
+        return resp.data.data
+    })
+}
+export const getTVRecommList = ({ commit }) => {
+    return Svc.getTVRecommList().then((resp) => {
+        console.log(resp.data)
+        commit('setTeleplayList', resp.data.subjects)
+        return resp.data.data
+    })
+}
+

@@ -13,3 +13,6 @@ export const getSites = function(state) {
 export const getTypeList = function(state) {
     return state.TypeList;
 }
+export const getTeleplayList = function(state) {
+    return state.teleplayList;
+}

@@ -31,32 +31,44 @@
                         </mu-grid-tile>
                     </mu-grid-list>
                 </div>
-                <!--  -->
-                <div class="now_showing" v-for="(ele, col) in getRecommListGet" :key="col" >
-                    <div class="between p-2">
-                        <div class="title">{{ele.albumTitle}}</div>
-                        <div class="title more" @click="toTypeDetails(ele)">更多 <i class="el-icon-d-arrow-right"></i></div>
-                    </div>
-                    <Stick
-                        :list="ele.videoList"
-                        :loadTriggerDistance="200"
-                    >
-                        <template slot-scope="scope">
-                            <el-card class="el-image">
-                                <el-image scroll-container=".right" style="height: 400px;" fit="fill" :src="scope.data.imgUrl">
-                                    <div slot="error" class="image-slot">
-                                        <el-image :src="cover"></el-image>
-                                    </div>
-                                    <div slot="placeholder" class="image-slot">
-                                        加载中<span class="dot">...</span>
-                                    </div>
-                                </el-image>
-                                <h2>{{scope.data.title}}</h2>
-                                <span class="el-iamge-right">{{scope.data.updateText}}</span>
-                            </el-card>
-                        </template>
-                    </Stick>
+                <div class="between p-2">
+                    <div class="title">电影</div>
+                    <div class="title more" @click="toTypeDetails(getRecommListGet)">更多 <i class="el-icon-d-arrow-right"></i></div>
                 </div>
+                <div class="m_col" >
+					<div class="m-col-item" v-for="(item, index) in getRecommListGet"  style="margin: 20px" :key="index" @click="toInfo(item)">
+						<el-card :body-style="{ padding: '0px'}" shadow="hover">
+							<div style="height:400px;overflow:hidden;min-width: 270px;">
+								<el-image :src="item.cover" :title="item.title"></el-image>
+							</div>
+							<div style="padding: 14px;">
+								<p style="color:#37a;text-align:center;font-size:16px;">{{item.title}}</p>
+								<div class="bottom clearfix" style="color:#e09015;text-align:center;">
+									{{item.rate}}分
+								</div>
+							</div>
+						</el-card>
+					</div>
+				</div>
+                <div class="between p-2">
+                    <div class="title">电视剧</div>
+                    <div class="title more" @click="toTypeDetails(getTeleplayList)">更多 <i class="el-icon-d-arrow-right"></i></div>
+                </div>
+                <div class="m_col" >
+					<div class="m-col-item" v-for="(item, index) in getTeleplayList"  style="margin: 20px" :key="index" @click="toInfo(item)">
+						<el-card :body-style="{ padding: '0px'}" shadow="hover">
+							<div style="height:400px;overflow:hidden;min-width: 270px;">
+								<el-image :src="item.cover" :title="item.title"></el-image>
+							</div>
+							<div style="padding: 14px;">
+								<p style="color:#37a;text-align:center;font-size:16px;">{{item.title}}</p>
+								<div class="bottom clearfix" style="color:#e09015;text-align:center;">
+									{{item.rate}}分
+								</div>
+							</div>
+						</el-card>
+					</div>
+				</div>
             </section>
         </div>
 	</div>
@@ -76,7 +88,8 @@ export default {
             'getSites',
             'getTypeList',
             'getBannerList',
-            'getRecommListGet'
+            'getRecommListGet',
+            'getTeleplayList'
         ]),
         // sites() {
         //     return this.$store.state.Home.sites
@@ -94,10 +107,17 @@ export default {
             // 'getHomePageResourth',
             // 'getHomePageTypeList',
             'getBanner',
-            // 'getRecommList'
+            'getRecommList',
+            'getTVRecommList'
 		]),
-        toInfo(item) {
-
+        toInfo({title, id}) {
+            this.$router.push({
+				path: '/doubanInfo',
+				query: {
+					title,
+                    id
+				}
+			})
         },
         toTypeDetails(ele) {
             this.$router.push('/typeDetails')
@@ -109,7 +129,8 @@ export default {
         // this.infos = list.rss.list.video;
         // this.getHomePageTypeList()
         this.getBanner()
-        // this.getRecommList();
+        this.getRecommList();
+        this.getTVRecommList();
     }
 }
 </script>

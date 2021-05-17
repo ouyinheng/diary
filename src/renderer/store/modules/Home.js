@@ -10,7 +10,8 @@ export default {
         loading: false,
         sites: ['sites'],
         TypeList: [],
-        playMovieUrl: ''
+        playMovieUrl: '',
+        teleplayList: [], // 电视剧
     },
     actions,
     mutations,

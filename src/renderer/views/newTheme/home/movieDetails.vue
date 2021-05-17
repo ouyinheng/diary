@@ -53,6 +53,7 @@
 					</mu-badge> -->
                     
 					<mu-button
+                        style="width:80px"
 						color="primary"
 						v-for="(Item, Index) in item.list"
 						:key="Index"
@@ -67,7 +68,7 @@
 		<el-row v-if="infos.length==0">
 			暂无数据
 		</el-row>
-        <iframe v-show="false" id="test" src="https://v.qq.com/x/search/?q=%E5%B0%86%E5%A4%9C&stag=0&smartbox_ab=" frameborder="0"></iframe>
+        <iframe v-show="false" width="0" height="0" :src="iframeSrc"></iframe>
     </div>
 </template>
 
@@ -96,11 +97,19 @@ export default {
             }
             console.log(this[obj[this.getSelectSourch]])
             return this[obj[this.getSelectSourch]]
+        },
+        iframeSrc() {
+            const obj = {
+                '腾讯': `https://v.qq.com/x/search/?q=${encodeURIComponent(this.title)}`,
+                '优酷': `https://so.iqiyi.com/so/q_${encodeURIComponent(encodeURIComponent(this.title))}`,
+            }
+            const url = obj[this.getSelectSourch]
+            return url
         }
     },
     methods: {
         ...mapMutations([
-            'setPlayMovieUrl', 'setClosePlay', 'setSelectSourch', 'setSearchKeyWord'
+            'setPlayMovieUrl', 'setClosePlay', 'setSelectSourch', 'setSearchKeyWord', 'setVideoType'
         ]),
         handleCommand(command) {
             this.setSelectSourch(command)
@@ -109,6 +118,7 @@ export default {
         },
         play(url) {
             this.setPlayMovieUrl(url);
+            this.setVideoType('webview')
             this.setClosePlay(false);
             return;
             console.log(window.location.href + ':' + window.location.port)
@@ -193,8 +203,18 @@ export default {
 			padding: 0 15px 0 0;
 		}
 		.sub {
-			color: rgba(0, 0, 0, .7);
-			font-size: 14px;
+			// color: rgba(0, 0, 0, .7);
+			// font-size: 14px;
+            display: inline-block;
+            vertical-align: top;
+            padding: 2px 5px;
+            margin: 6px 5px 0 0;
+            font-size: 12px;
+            line-height: 1;
+            color: #666;
+            border: 1px solid #ececec;
+            border-radius: 2px;
+            background-color: #f8f8f8;
 		}
 		.type {
 			color: #999;
