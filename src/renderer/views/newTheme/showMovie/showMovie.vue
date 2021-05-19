@@ -2,7 +2,9 @@
 	<div class="movie">
         <!-- https://api.yueliangjx.com/?url= -->
         <!-- https://660e.com/?url= -->
-		<webview v-if="type === 'webview'" :src="'https://660e.com/?url=' + url" plugins></webview>
+        <!-- https://jsap.attakids.com/?url=https://v.qq.com/x/cover/tk3l27paq7sqr0z/p0036mrfj8h.html -->
+        <!-- https://17kyun.com/jx.php?url=https://v.qq.com/x/cover/tk3l27paq7sqr0z/p0036mrfj8h.html -->
+		<webview v-if="type === 'webview'" :src="'https://jsap.attakids.com/?url=' + url" plugins></webview>
         <xgplayer v-else-if="type === 'html'" :options="playerOptions"></xgplayer>
 	</div>
 </template>

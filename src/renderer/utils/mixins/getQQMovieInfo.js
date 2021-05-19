@@ -42,7 +42,7 @@ export default {
                 
             }
         },
-        parseHtml(html) {
+        parseHtml(html, next=true) {
             let div = document.createElement('div');
             div.innerHTML = html;
             let info =  div.querySelectorAll('.result_item.result_item_v');
@@ -83,11 +83,12 @@ export default {
                 this.list.push(movieInfo)
             })
             // this.infos = this.list
-            this.setQqList(this.list)
+            if(next)this.setQqList(this.list)
             // console.log(this.infos)
 		    // this.SET_LOADING_FALSE();
+            return movieInfo
         },
-        parseIQYHtml(html) {
+        parseIQYHtml(html, next=true) {
             let div = document.createElement('div');
             div.innerHTML = html;
             let info =  div.querySelectorAll('.qy-search-result-con .layout-main div[desc="card"] div[desc="剧集类"],[desc="单视频"],[desc="长视频(电影)类"]');
@@ -138,9 +139,10 @@ export default {
                 this.list.push(movieInfo)
             })
             // this.infos = this.list
-            this.setYkList(this.list)
+            if(next)this.setYkList(this.list)
             // console.log(this.infos)
 		    // this.SET_LOADING_FALSE();
+            return movieInfo;
         }
     },
     created() {

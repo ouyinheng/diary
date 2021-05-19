@@ -47,8 +47,14 @@
                                 </div>
                             </div>
                             <div class="demo-list" v-if="activeTab === 1">
+                                <div style="margin-top: 10px;">
+                                    <el-button @click="playTXVideo(item)" v-for="(item, index) in txListInfo" :key="index">{{item.name}}</el-button>
+                                </div>
                             </div>
                             <div class="demo-list" v-if="activeTab === 2">
+                                <div style="margin-top: 10px;">
+                                    <el-button @click="playIQYVideo(item)" v-for="(item, index) in iqyListInfo" :key="index">{{item.name}}</el-button>
+                                </div>
                             </div>
                         </div>
                     </el-col>
@@ -61,8 +67,11 @@
 <script>
 const {ipcRenderer: ipc} = require('electron');
 import { mapGetters, mapMutations } from 'vuex'
+import getQQMovieInfo from '../../../utils/mixins/getQQMovieInfo'
+
 export default {
 	name: 'TvPlay',
+    mixins: [getQQMovieInfo],
 	data() {
 		return {
             id: '',
@@ -74,7 +83,9 @@ export default {
             playRRListInfo: {
                 episodes: []
             }, // 人人视频数据
-            rrPlayUrl: 'https://qn-cdn-web-local.rr.tv/'
+            rrPlayUrl: 'https://qn-cdn-web-local.rr.tv/',
+            txListInfo: [],
+            iqyListInfo: []
 		}
 	},
     watch: {
@@ -115,13 +126,15 @@ export default {
             this.descHtml = item.querySelector('#info').innerHTML.replace(/\/a>/ig, '/span>').replace(/<a/ig, '<span')
             this.scenarioHtml = item.querySelector('.related-info .indent').innerText
             this.getRRList()
+            this.getTXList()
+            this.getIQYList()
         },
         getRRList(need=true, title) {
             // https://web-api.rr.tv/search/season_h5?keywords=%E8%87%B4%E5%91%BD%E5%A5%B3%E4%BA%BA%20%E7%AC%AC%E4%B8%80%E5%AD%A3&size=10&id=&sort=&5-16-21
             this.$http.get(`https://web-api.rr.tv/search/season_h5?keywords=${encodeURIComponent(title ? title : this.title)}`).then(res => {
                 // console.log(res)
                 const infoSub = this.info.introduce.title.sub.split('(')[1].split(')')[0]
-                console.log(infoSub, res.data)
+                // console.log(infoSub, res.data)
                 const list = res.data.result.filter(item => item.year == infoSub);
                 if(list.length > 0) {
                     this.$http.get(`https://content.json.rr.tv/morpheus/detail/${list[0].id}`).then(res => {
@@ -136,6 +149,47 @@ export default {
                 }
             })
         },
+        getTXList(title) {
+            this.$http.get(`https://v.qq.com/x/search/?q=${encodeURIComponent(title ? title : this.title)}`).then(res => {
+                const item = this.parseHtml(res.data, false);
+                if(item.list.length==0) {
+                    this.txListInfo = [{
+                        name: '1',
+                        href: item.href,
+                        type: 'webview'
+                    }]
+                } else {
+                    this.txListInfo = item.list.map((ele, index) => {
+                        return {
+                            name: index + 1,
+                            href: ele.url,
+                            type: 'webview'
+                        }
+                    })
+                }
+            })
+        },
+        getIQYList(title) {
+            this.$http.get(`https://so.iqiyi.com/so/q_${encodeURIComponent(title ? title : this.title)}`).then(res => {
+                const item = this.parseIQYHtml(res.data, false);
+                console.log(item)
+                if(item.list.length==0) {
+                    this.iqyListInfo = [{
+                        name: '1',
+                        href: item.href,
+                        type: 'webview'
+                    }]
+                } else {
+                    this.iqyListInfo = item.list.map((ele, index) => {
+                        return {
+                            name: index + 1,
+                            href: ele.url.includes('https:') ? ele.url : 'https:' + ele.url,
+                            type: 'webview'
+                        }
+                    })
+                }
+            })
+        },
         deleteContent(dom) {
             Array.from(dom.querySelectorAll('span')).forEach(item => {
                 console.log()
@@ -145,6 +199,17 @@ export default {
             const url = this.rrPlayUrl + item.key + `?sign=cc14b3645229d0db6c1ca3811d04514c&t=60a139af`
             this.setPlayMovieUrl(url);
             this.setVideoType('html')
+            this.setClosePlay(false);
+        },
+        playTXVideo(item) {
+            this.setPlayMovieUrl(item.href);
+            this.setVideoType('webview')
+            this.setClosePlay(false);
+        },
+        playIQYVideo(item) {
+            console.log(item)
+            this.setPlayMovieUrl(item.href);
+            this.setVideoType('webview')
             this.setClosePlay(false);
         }
 	},
