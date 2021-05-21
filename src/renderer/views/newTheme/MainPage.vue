@@ -3,7 +3,7 @@
         <div class="top" :class="{ hiddenTop: hiddenTop}">
             <div class="top_left">
                 <img class="logo" src="../../assets/images/logo_icon.png" @click.stop="goHome()">
-                <el-button v-if="!isHomeLink" icon="el-icon-arrow-left" style="-webkit-app-region: no-drag;margin-left: 10px;" size="small" @click="$router.back()" circle></el-button>
+                <el-button v-if="!isHomeLink" icon="el-icon-arrow-left" style="-webkit-app-region: no-drag;margin-left: 10px;" size="mini" circle @click.native="$router.back()"></el-button>
                 <div class="link" v-if="isHomeLink">
                     <span v-for="(item, index) in menus" :key="index" :class="{
                         active: item.link===activeIndex

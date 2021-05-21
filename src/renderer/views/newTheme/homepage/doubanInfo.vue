@@ -1,6 +1,6 @@
 <template>
     <div class="douban_info" ref="douban_info">
-        <header>
+        <!-- <header>
             <div>
                 <mu-button icon color="primary" small @click="backUp">
                     <span class="el-icon-arrow-left"></span>
@@ -9,7 +9,7 @@
             <div class="">
                 
             </div>
-        </header>
+        </header> -->
         <div class="right">
             <div class="content-box">
                 <el-row class="header_info">
@@ -125,6 +125,15 @@ export default {
             }
             this.descHtml = item.querySelector('#info').innerHTML.replace(/\/a>/ig, '/span>').replace(/<a/ig, '<span')
             this.scenarioHtml = item.querySelector('.related-info .indent').innerText
+            const grayAd = item.querySelector('.gray_ad');
+            if(grayAd) {
+                let list = [];
+                grayAd.querySelectorAll('ul li a').forEach(item => {
+                    list.push(decodeURIComponent(item.getAttribute('href').split('url=')[1].split('&')[0]))
+                })
+                console.log(list)
+            }
+            console.log('filmSource', this.filmSource)
             this.getRRList()
             this.getTXList()
             this.getIQYList()
@@ -132,13 +141,10 @@ export default {
         getRRList(need=true, title) {
             // https://web-api.rr.tv/search/season_h5?keywords=%E8%87%B4%E5%91%BD%E5%A5%B3%E4%BA%BA%20%E7%AC%AC%E4%B8%80%E5%AD%A3&size=10&id=&sort=&5-16-21
             this.$http.get(`https://web-api.rr.tv/search/season_h5?keywords=${encodeURIComponent(title ? title : this.title)}`).then(res => {
-                // console.log(res)
                 const infoSub = this.info.introduce.title.sub.split('(')[1].split(')')[0]
-                // console.log(infoSub, res.data)
                 const list = res.data.result.filter(item => item.year == infoSub);
                 if(list.length > 0) {
                     this.$http.get(`https://content.json.rr.tv/morpheus/detail/${list[0].id}`).then(res => {
-                        console.log(res)
                         this.playRRListInfo = res.data.result
                         
                     })
@@ -192,7 +198,6 @@ export default {
         },
         deleteContent(dom) {
             Array.from(dom.querySelectorAll('span')).forEach(item => {
-                console.log()
             })
         },
         playRRVideo(item) {
@@ -250,7 +255,7 @@ export default {
 .douban_info {
     width: 100vw;
     height: 100vh;
-    // padding-top: 6vh;
+    padding-top: 6vh;
     color: black;
     overflow: hidden;
     header {

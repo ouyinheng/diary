@@ -175,6 +175,13 @@ export default {
         // if(this.title === this.getSearchKeyWord && this.infos.length > 0)return;
         this.setSearchKeyWord(this.title)
         this.getInfo(this.title)
+    },
+    mounted() {
+        // const test = document.querySelector('#test');
+        // console.log('-------------', test)
+        // window.onload = () => {
+        //     console.log('-------------', test.contentWindow.document.querySelector('._infos'))
+        // }
     }
 }
 </script>
