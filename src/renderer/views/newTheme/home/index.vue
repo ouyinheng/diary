@@ -27,7 +27,7 @@
 							<span class="title">《{{ item.subject.title || '' }}》</span>
 							<span class="intro">—— {{item.payload.title}}</span>
 						</h3>
-						<div class="view" @click="toDetailsHandler(item.subject.title)">观看</div>
+						<div class="view" @click="toDetailsHandler(item)">观看</div>
 						<!-- <h5 class="description">{{item.payload.description}}</h5> -->
 					</div>
 			</el-carousel-item>
@@ -75,7 +75,16 @@ export default {
 		cancelDragName() {
 			this.drag = "";
 		},
-        toDetailsHandler(title) {
+        toDetailsHandler(item) {
+            console.log(item);
+            this.$router.push({
+                path: '/doubanInfo',
+                query: {
+                    title: item.subject.title,
+                    id: item.subject.id
+                }
+            })
+            return;
             this.$router.push({
                 path: '/movieDetails',
                 query: {

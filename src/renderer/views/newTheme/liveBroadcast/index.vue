@@ -1,37 +1,11 @@
 <template>
     <div class="liveBroadcast">
-        <header>
-            <el-switch
-                v-model="displayForm"
-                active-color="#13ce66"
-                inactive-color="#ff4949">
-            </el-switch>
-        </header>
-        <div class="m_col" v-if="displayForm">
-            <div class="m-col-item" v-for="(item, index) in getIptv" :key="index"  style="margin: 20px" @click="play(item)">
-                <el-card :body-style="{ padding: '0px'}" shadow="hover">
-                    <div style="overflow:hidden;">
-                        <el-image src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg" :title="item.name">
-                            <div slot="placeholder" class="image-slot">
-                                加载中<span class="dot">...</span>
-                            </div>
-                        </el-image>
-                    </div>
-                    <div style="padding: 4px;">
-                        <p style="color:#37a;text-align:center;font-size:16px;">{{item.name}}</p>
-                    </div>
-                </el-card>
+        <div class="live_content" id="video"></div>
+        <div class="live_list">
+            <div class="m-col-item live_item" v-for="(item, index) in getIptv" :key="index"  style="margin: 20px" @click="play(item)">
+                {{item.name}}
             </div>
         </div>
-        <!-- <v-list v-else three-line>
-            <v-list-item v-for="(item, index) in getIptv" :key="index"  style="margin: 20px" @click="play(item)">
-                <v-list-item-content>
-                    <v-list-item-title v-html="item.name"></v-list-item-title>
-                    <v-list-item-subtitle v-html="item.group"></v-list-item-subtitle>
-                </v-list-item-content>
-            </v-list-item>
-            <v-divider></v-divider>
-        </v-list> -->
     </div>
 </template>
 
@@ -60,23 +34,48 @@ export default {
             return '';
         },
         play(item) {
-			const BrowserWindow = require('electron').remote.BrowserWindow
-			let win = new BrowserWindow({
-				width: 900,
-				height: 520,
-				frame: true,
-				webPreferences: {
-					webSecurity: false,
-					plugins: true
-				}
-			});
-			win.on('close', function () { win = null })
-			win.loadURL(window.location.origin + '/#/' + 'showMovies?url='+item.url)
-			win.show()
+            console.log('-----item: ', item.url)
+            this.livePlay(item.url)
+			// const BrowserWindow = require('electron').remote.BrowserWindow
+			// let win = new BrowserWindow({
+			// 	width: 900,
+			// 	height: 520,
+			// 	frame: true,
+			// 	webPreferences: {
+			// 		webSecurity: false,
+			// 		plugins: true
+			// 	}
+			// });
+			// win.on('close', function () { win = null })
+			// win.loadURL(window.location.origin + '/#/' + 'showMovies?url='+item.url)
+			// win.show()
 		},
+        livePlay(url) {
+            var videoObject = {
+                container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
+                variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+                autoplay: true,
+                html5m3u8: true,
+                video: url,//视频地址
+                hlsjsConfig: {   // hlsjs和CDNBye的配置参数
+                    debug: false,
+                    // Other hlsjsConfig options provided by hls.js
+                    p2pConfig: {
+                        logLevel: true,
+                        live: true, // 如果是直播设为true
+                        // Other p2pConfig options provided by CDNBye
+                        // https://github.com/cdnbye/hlsjs-p2p-engine/blob/master/docs/%E4%B8%AD%E6%96%87/API.md
+                    }
+                }
+            };
+            var player = new ckplayer(videoObject);
+        }
     },
     created() {
         console.log('asdf', window.location.origin + '/#/')
+    },
+    mounted() {
+        this.livePlay(this.getIptv[0].url)
     }
 }
 </script>
@@ -88,10 +87,31 @@ export default {
     padding-top: 40px;
     // background-color: black;
     color: black;
+    display: flex;
+    justify-content: space-around;
     .m_col {
         display: grid;
         justify-content: space-between;
         grid-template-columns: repeat(auto-fill, 300px);
+    }
+    .live_item {
+        padding: 4px;
+        border-bottom: 1px solid gray;
+        cursor: pointer;
+        &:hover {
+            color: #409EFF;
+        }
+    }
+    .live_content {
+        width: 100%;
+        height: 100%;
+    }
+    .live_list {
+        width: 200px;
+        max-width: 300px;
+        border-left: 1px solid black;
+        height: 100%;
+        overflow: auto;
     }
 }
 </style>

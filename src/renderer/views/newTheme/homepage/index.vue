@@ -37,12 +37,12 @@
                 </div>
                 <div class="m_col" >
 					<div class="m-col-item" v-for="(item, index) in getRecommListGet"  style="margin: 20px" :key="index" @click="toInfo(item)">
-						<el-card :body-style="{ padding: '0px'}" shadow="hover">
-							<div style="height:400px;overflow:hidden;min-width: 270px;">
+						<el-card style="height:340px;overflow:hidden;width: 200px;" :body-style="{ padding: '0px'}" shadow="hover">
+							<div style="height:287px;overflow:hidden;width: 200px;">
 								<el-image :src="item.cover" :title="item.title"></el-image>
 							</div>
-							<div style="padding: 14px;">
-								<p style="color:#37a;text-align:center;font-size:16px;">{{item.title}}</p>
+							<div style="">
+								<div style="color:#37a;text-align:center;font-size:16px;">{{item.title}}</div>
 								<div class="bottom clearfix" style="color:#e09015;text-align:center;">
 									{{item.rate}}分
 								</div>
@@ -56,12 +56,12 @@
                 </div>
                 <div class="m_col" >
 					<div class="m-col-item" v-for="(item, index) in getTeleplayList"  style="margin: 20px" :key="index" @click="toInfo(item)">
-						<el-card :body-style="{ padding: '0px'}" shadow="hover">
-							<div style="height:400px;overflow:hidden;min-width: 270px;">
+						<el-card style="height:340px;overflow:hidden;width: 200px;" :body-style="{ padding: '0px'}" shadow="hover">
+							<div style="height:287px;overflow:hidden;width: 200px;">
 								<el-image :src="item.cover" :title="item.title"></el-image>
 							</div>
-							<div style="padding: 14px;">
-								<p style="color:#37a;text-align:center;font-size:16px;">{{item.title}}</p>
+							<div style="">
+								<div style="color:#37a;text-align:center;font-size:16px;">{{item.title}}</div>
 								<div class="bottom clearfix" style="color:#e09015;text-align:center;">
 									{{item.rate}}分
 								</div>
