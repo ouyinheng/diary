@@ -7,6 +7,8 @@ export default {
     data() {
         return {
             list: [],
+            iqyList: [],
+            txList: []
         }
     },
     computed: {
@@ -43,6 +45,7 @@ export default {
             }
         },
         parseHtml(html, next=true) {
+            this.txList = []
             let div = document.createElement('div');
             div.innerHTML = html;
             let info =  div.querySelectorAll('.result_item.result_item_v');
@@ -81,14 +84,16 @@ export default {
                     list
                 }
                 this.list.push(movieInfo)
+                this.txList.push(movieInfo)
             })
             // this.infos = this.list
             if(next)this.setQqList(this.list)
             // console.log(this.infos)
 		    // this.SET_LOADING_FALSE();
-            return movieInfo
+            return this.txList
         },
         parseIQYHtml(html, next=true) {
+            this.iqyList = [];
             let div = document.createElement('div');
             div.innerHTML = html;
             let info =  div.querySelectorAll('.qy-search-result-con .layout-main div[desc="card"] div[desc="剧集类"],[desc="单视频"],[desc="长视频(电影)类"]');
@@ -112,7 +117,7 @@ export default {
                     return dom.querySelector('.info-lbl') &&dom.querySelector('.info-lbl').innerText === text
                 })
                 console.log("dList('主演:')[0]", dList('主演:')[0])
-                const getTitledom = item.querySelector('.qy-search-result-tit .main-tit .orange') || item.querySelector('.qy-search-result-tit .main-tit span')
+                const getTitledom = item.querySelector('.qy-search-result-tit .main-tit') || item.querySelector('.qy-search-result-tit .main-tit span')
                 movieInfo = {
                     // id: item.querySelector('.result_item.result_item_v') ? item.querySelector('.result_item.result_item_v').getAttribute('data-id') : '',
                     href: item.querySelector('.result-figure .main-tit') ? item.querySelector('.result_figure .qy-mod-link').getAttribute('href') : '',
@@ -137,12 +142,13 @@ export default {
                     list
                 }
                 this.list.push(movieInfo)
+                this.iqyList.push(movieInfo)
             })
             // this.infos = this.list
             if(next)this.setYkList(this.list)
             // console.log(this.infos)
 		    // this.SET_LOADING_FALSE();
-            return movieInfo;
+            return this.iqyList
         }
     },
     created() {

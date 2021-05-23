@@ -22,8 +22,6 @@
 				<p>
 					<span style="font-size:16px;font-weight:bold;">{{item.introduce.title.pri}}</span>
 					<span class="sub">{{item.introduce.title.sub}}</span>
-					<!--
-					<span class="type">{{item.introduce.title.type}}</span> -->
 				</p>
 				<p class="info_item" style="margin-top: 10px;">
 					<span>导演：</span>
@@ -38,20 +36,6 @@
 					<p class="content overflow-text-el" :title="item.introduce.info_item_desc">{{item.introduce.info_item_desc}}</p>
 				</p>
 				<p>
-                    <!-- <el-link type="primary" @click="toMovieDesHandler(item)">查看详情<i class="el-icon-arrow-right"></i></el-link> -->
-					
-					<!-- <mu-badge
-						v-for="(Item, Index) in item.list"
-						:key="Index"
-						v-if="!gj.includes(Item.title)"
-						:content="Item.type == 2 ? '预告' : ''"
-						color="secondary"
-						class="mr-2">
-						<mu-button color="primary" @click="btnHandle(Item, item)">
-							{{Item.title}}
-						</mu-button>
-					</mu-badge> -->
-                    
 					<mu-button
                         style="width:80px"
 						color="primary"
@@ -59,12 +43,16 @@
 						:key="Index"
 						v-if="!gj.includes(Item.title)"
 						@click="btnHandle(Item, item)">
-						{{Item.title}}
+                        <div style="width: 80px;overflow: hidden;height: 35px;">{{Item.title}}</div>
 					</mu-button>
 					<mu-button color="primary" v-if="item.list.length==0" @click="play(item.href)">立即播放</mu-button>
 				</p>
 			</el-col>
 		</el-row>
+        <el-row v-for="(item, index) in otherInfos" :key="index" style="margin-bottom: 20px;">
+            <el-col :span="24">
+			</el-col>
+        </el-row>
 		<el-row v-if="infos.length==0">
 			暂无数据
 		</el-row>
@@ -77,15 +65,17 @@ import getDetailsList from './getDetailsList'
 import getQQMovieInfo from '../../../utils/mixins/getQQMovieInfo'
 import { mapGetters, mapMutations } from 'vuex'
 const {ipcRenderer: ipc} = require('electron');
+import bbSourth from '../moreSourth/88'
 export default {
     name: 'movieDetails',
     data() {
         return {
             title: '',
             gj: ['收起', '展开'],
+            otherInfos: []
         }
     },
-    mixins: [getQQMovieInfo],
+    mixins: [getQQMovieInfo, bbSourth],
     computed: {
         ...mapGetters([
             'getSelectSourch', 'getQqList', 'getYkList'
@@ -175,6 +165,7 @@ export default {
         // if(this.title === this.getSearchKeyWord && this.infos.length > 0)return;
         this.setSearchKeyWord(this.title)
         this.getInfo(this.title)
+        this.get88List()
     },
     mounted() {
         // const test = document.querySelector('#test');

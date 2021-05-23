@@ -75,7 +75,7 @@ export default {
         console.log('asdf', window.location.origin + '/#/')
     },
     mounted() {
-        this.livePlay(this.getIptv[0].url)
+        this.livePlay('https://www2.88zy.live/share/LGb8lHB4qFfPR8uF' || this.getIptv[0].url)
     }
 }
 </script>
