@@ -54,6 +54,7 @@ export const getRecommList = async () => {
 export const getDetailsList = async (index) => {
     let details = {};
     await axios.get(`https://movie.douban.com/ithil_j/activity/movie_annual${localStorage.yearIndex}/widget/${index}`).then(res => {
+        console.log('res.data.res', res.data.res)
         details = res.data.res
     })
     return details

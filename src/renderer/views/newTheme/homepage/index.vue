@@ -25,8 +25,8 @@
                         <!-- <div class="title more">更多 <i class="el-icon-d-arrow-right"></i></div> -->
                     </div>
                     <mu-grid-list class="gridlist-inline-demo" :cols="4">
-                        <mu-grid-tile class="mu-grid-tile" v-for="(item, index) in getBannerList" :key="index" @click="toInfo(item.title)">
-                            <el-image style="width: 100%;" :src="item.img" fit="fill"></el-image>
+                        <mu-grid-tile class="mu-grid-tile" v-for="(item, index) in recommList" :key="index" @click="toRecomInfo(item)">
+                            <el-image style="width: 100%;" :src="item.cover" fit="unset"></el-image>
                             <span slot="title">{{item.title}}</span>
                         </mu-grid-tile>
                     </mu-grid-list>
@@ -76,6 +76,7 @@
 
 <script>
 import iconOyhMenus from '../components/magicIcon/menus'
+const cheerio = require('cheerio')
 import { mapGetters, mapActions } from 'vuex'
 import * as utils from '@/utils/index'
 export default {
@@ -100,7 +101,8 @@ export default {
         title: '迪丽热巴',
         rate: '8.9',
         infos: [],
-        keyWord: ''
+        keyWord: '',
+        recommList: []
     }),
     methods: {
         ...mapActions([
@@ -110,12 +112,44 @@ export default {
             'getRecommList',
             'getTVRecommList'
 		]),
+        async doubanMovieCrawler (url, movies = []) {
+            const start = parseInt(Math.random()*220)
+            const res = await this.$http.get(`https://movie.douban.com/top250?start=${start}&filter=`)
+            const $ = cheerio.load(res.data)
+            $('.grid_view .item').each(function () {
+                const elem = $(this)
+                movies.push({
+                    id: elem.find('.hd a').attr('href'),
+                    title: elem.find('.info .hd .title').text().trim(),
+                    star: elem.find('.info .bd .star .rating_num').text().trim(),
+                    url: elem.find('.hd a').attr('href'),
+                    cover: elem.find('.pic img').attr('src'),
+                    info: elem.find('.info .bd').children('p').first().text().trim(),
+                    oneSentenceComment: elem.find('.info .bd .quote').text().trim()
+                })
+            })
+            let list = [];
+            // [1,2,3,4].forEach(item => {
+            //     list.push(movies[parseInt(Math.random()*25)])
+            // })
+            this.recommList = movies.slice(0,4);
+            console.log('movies', movies)
+        },
         toInfo({title, id}) {
             this.$router.push({
 				path: '/doubanInfo',
 				query: {
 					title,
                     id
+				}
+			})
+        },
+        toRecomInfo({title, url}) {
+            this.$router.push({
+				path: '/doubanInfo',
+				query: {
+					title,
+                    url
 				}
 			})
         },
@@ -131,6 +165,7 @@ export default {
         this.getBanner()
         this.getRecommList();
         this.getTVRecommList();
+        this.doubanMovieCrawler();
     }
 }
 </script>

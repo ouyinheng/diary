@@ -2,7 +2,7 @@
     <div class="liveBroadcast">
         <div class="live_content" id="video"></div>
         <div class="live_list">
-            <div class="m-col-item live_item" v-for="(item, index) in getIptv" :key="index"  style="margin: 20px" @click="play(item)">
+            <div class="m-col-item live_item" v-for="(item, index) in Iptvs" :key="index"  style="margin: 20px" @click="play(item)" v-if="item.show">
                 {{item.name}}
             </div>
         </div>
@@ -11,10 +11,20 @@
 
 <script>
 import { mapGetters , mapActions } from 'vuex'
+const path = require('path');
+if (process.env.NODE_ENV === "production") {
+    global.__lib = path.join(__dirname, "./static");
+}
+import dbOption from "../../../../main/src/sql/getAllOption.js";
+const Iptv =
+    process.env.NODE_ENV === "development"
+        ? "Iptv.json"
+        : `${global.__lib}/lib/Iptv.json`;
 export default {
     name: 'liveBroadcast',
     data: () => ({
         displayForm: true, // true: 卡片；false：列表
+        Iptvs: []
     }),
     computed: {
         ...mapGetters([
@@ -72,10 +82,14 @@ export default {
         }
     },
     created() {
-        console.log('asdf', window.location.origin + '/#/')
     },
     mounted() {
-        this.livePlay('https://www2.88zy.live/share/LGb8lHB4qFfPR8uF' || this.getIptv[0].url)
+        dbOption.init(Iptv)
+        dbOption.getData((db) => {
+            this.Iptvs = db.get("posts").value()
+            console.log('asdf', this.Iptvs)
+            this.livePlay(this.Iptvs[0].url)
+        });
     }
 }
 </script>

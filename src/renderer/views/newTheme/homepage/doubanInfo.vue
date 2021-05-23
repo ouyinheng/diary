@@ -312,8 +312,9 @@ export default {
 	},
 	created() {
         this.id = this.$route.query.id;
+        const url = this.$route.query.url;
         this.title = this.$route.query.title;
-		this.$http.get(`https://movie.douban.com/subject/${this.id}/`).then(res => {
+		this.$http.get(this.id ? `https://movie.douban.com/subject/${this.id}/` : url).then(res => {
             // ipc.send('saveFile', this.title+'.html', res.data);
             this.$nextTick(() => {
                 this.doubanParseHtml(res.data);
