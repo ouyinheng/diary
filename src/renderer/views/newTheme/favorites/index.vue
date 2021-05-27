@@ -2,10 +2,7 @@
     <div class="favorites">
         <header>
             <div>
-                <!-- <el-button icon="el-icon-arrow-left"></el-button> -->
-                <mu-button icon color="primary" small v-if="!showFolder" @click="showFolder=true">
-                    <span class="el-icon-arrow-left"></span>
-                </mu-button>
+                 <el-button icon="el-icon-arrow-left" size="small" circle v-if="!showFolder" @click="showFolder=true"></el-button>
             </div>
             <div>
                 <el-input

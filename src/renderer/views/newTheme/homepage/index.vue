@@ -1,22 +1,5 @@
 <template>
 	<div class="homepage">
-		<!-- <header>
-            <div>
-                <el-button icon="el-icon-arrow-left"></el-button>
-                <mu-button icon color="primary" small v-if="!showFolder" @click="showFolder=true">
-                    <span class="el-icon-arrow-left"></span>
-                </mu-button>
-            </div>
-            <div>
-                <el-input
-                    size="small"
-                    class="header_search"
-                    placeholder="请输入内容"
-                    suffix-icon="el-icon-search"
-                    v-model="keyWord">
-                </el-input>
-            </div>
-        </header> -->
 		<div class="right">
             <section class="section">
                 <div class="now_showing">
@@ -24,30 +7,35 @@
                         <div class="title">推荐</div>
                         <!-- <div class="title more">更多 <i class="el-icon-d-arrow-right"></i></div> -->
                     </div>
-                    <mu-grid-list class="gridlist-inline-demo" :cols="4">
-                        <mu-grid-tile class="mu-grid-tile" v-for="(item, index) in recommList" :key="index" @click="toRecomInfo(item)">
-                            <el-image style="width: 100%;" :src="item.cover" fit="unset"></el-image>
-                            <span slot="title">{{item.title}}</span>
-                        </mu-grid-tile>
-                    </mu-grid-list>
+                    <div class="m_col" >
+                        <div class="m-col-item" v-for="(item, index) in recommList"  style="margin: 10px" :key="index" @click="toRecomInfo(item)">
+                            <v-card class="mx-auto" style="height:350px;overflow:hidden;width: 200px;">
+                                <v-img
+                                    :src="item.cover"
+                                    width="200px"
+                                ></v-img>
+                                <v-card-title :title="item.title">
+                                    {{item.title}}
+                                </v-card-title>
+                            </v-card>
+                        </div>
+                    </div>
                 </div>
                 <div class="between p-2">
                     <div class="title">电影</div>
                     <div class="title more" @click="toTypeDetails(getRecommListGet)">更多 <i class="el-icon-d-arrow-right"></i></div>
                 </div>
                 <div class="m_col" >
-					<div class="m-col-item" v-for="(item, index) in getRecommListGet"  style="margin: 20px" :key="index" @click="toInfo(item)">
-						<el-card style="height:340px;overflow:hidden;width: 200px;" :body-style="{ padding: '0px'}" shadow="hover">
-							<div style="height:287px;overflow:hidden;width: 200px;">
-								<el-image :src="item.cover" :title="item.title"></el-image>
-							</div>
-							<div style="">
-								<div style="color:#37a;text-align:center;font-size:16px;">{{item.title}}</div>
-								<div class="bottom clearfix" style="color:#e09015;text-align:center;">
-									{{item.rate}}分
-								</div>
-							</div>
-						</el-card>
+					<div class="m-col-item" v-for="(item, index) in getRecommListGet"  style="margin: 10px" :key="index" @click="toInfo(item)">
+                        <v-card class="mx-auto" style="height:350px;overflow:hidden;width: 200px;">
+                            <v-img
+                                :src="item.cover"
+                                width="200px"
+                            ></v-img>
+                            <v-card-title :title="item.title">
+                                {{item.title}}
+                            </v-card-title>
+                        </v-card>
 					</div>
 				</div>
                 <div class="between p-2">
@@ -55,18 +43,16 @@
                     <div class="title more" @click="toTypeDetails(getTeleplayList)">更多 <i class="el-icon-d-arrow-right"></i></div>
                 </div>
                 <div class="m_col" >
-					<div class="m-col-item" v-for="(item, index) in getTeleplayList"  style="margin: 20px" :key="index" @click="toInfo(item)">
-						<el-card style="height:340px;overflow:hidden;width: 200px;" :body-style="{ padding: '0px'}" shadow="hover">
-							<div style="height:287px;overflow:hidden;width: 200px;">
-								<el-image :src="item.cover" :title="item.title"></el-image>
-							</div>
-							<div style="">
-								<div style="color:#37a;text-align:center;font-size:16px;">{{item.title}}</div>
-								<div class="bottom clearfix" style="color:#e09015;text-align:center;">
-									{{item.rate}}分
-								</div>
-							</div>
-						</el-card>
+					<div class="m-col-item" v-for="(item, index) in getTeleplayList"  style="margin: 10px" :key="index" @click="toInfo(item)">
+						<v-card class="mx-auto" style="height:350px;overflow:hidden;width: 200px;">
+                            <v-img
+                                :src="item.cover"
+                                width="200px"
+                            ></v-img>
+                            <v-card-title :title="item.title">
+                                {{item.title}}
+                            </v-card-title>
+                        </v-card>
 					</div>
 				</div>
             </section>
@@ -132,7 +118,7 @@ export default {
             // [1,2,3,4].forEach(item => {
             //     list.push(movies[parseInt(Math.random()*25)])
             // })
-            this.recommList = movies.slice(0,4);
+            this.recommList = movies.slice(0,5);
             console.log('movies', movies)
         },
         toInfo({title, id}) {
@@ -170,12 +156,13 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .homepage {
 	width: 100vw;
     height: 100vh;
     padding-top: 6vh;
     color: black;
+    background-color: #fdfdfd;
     header {
         height: 50px;
         padding: 10px;
@@ -221,12 +208,13 @@ export default {
                 .mu-grid-tile {
                     overflow: hidden;
                     user-select: none;
+                    border-radius: 5px;
                 }
             }
             .m_col {
                 display: grid;
                 justify-content: space-between;
-                grid-template-columns: repeat(auto-fill, 310px);
+                grid-template-columns: repeat(auto-fill, 220px);
             }
             .el-iamge {
                 position: relative;
@@ -239,6 +227,14 @@ export default {
                     background-color: rgba(0, 0, 0, .3);
                     color: white;
                 }
+            }
+            .v-card__title {
+                word-break: break-all;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                display: block !important;
+                font-size: 20px !important;
             }
             .list {
                 .item-list {

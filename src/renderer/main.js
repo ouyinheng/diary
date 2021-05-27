@@ -10,9 +10,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 import './element-variables.scss'
 Vue.use(ElementUI);
 
-import MuseUI from 'muse-ui';
-import 'muse-ui/dist/muse-ui.css';
-Vue.use(MuseUI);
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+Vue.use(Vuetify)
 
 import _ from 'lodash' 
 Vue.prototype.$lodash = _;

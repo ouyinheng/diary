@@ -2,24 +2,27 @@
     <div class="apply">
         <section class="section">
             <div class="apply-left">
-                <mu-paper :z-depth="1" class="demo-list-wrap">
-                    <mu-list textline="three-line">
-                        <mu-sub-header>今天</mu-sub-header>
-                        <div v-for="(item, index) in applyList" :key="index" @click="setRoute(item)">
-                            <mu-list-item avatar :ripple="false" button>
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="https://picsum.photos/1920/1080?random">
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-content>
-                                    <mu-list-item-title>{{item.name}}</mu-list-item-title>
-                                </mu-list-item-content>
-                            </mu-list-item>
-                            <mu-divider></mu-divider>
-                        </div>
-                    </mu-list>
-                </mu-paper>
+                <v-list shaped class="demo-list-wrap">
+                    <v-subheader>今天</v-subheader>
+                    <v-list-item-group
+                        v-model="selectedItem"
+                        color="primary"
+                    >
+                        <v-list-item
+                            v-for="(item, index) in applyList"
+                            :key="index"  @click="setRoute(item)"
+                        >
+                            <v-list-item-icon>
+                                <v-avatar>
+                                    <img src="https://picsum.photos/1920/1080?random">
+                                </v-avatar>
+                            </v-list-item-icon>
+                            <v-list-item-content>
+                                <v-list-item-title v-text="item.name"></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list-item-group>
+                </v-list>
             </div>
             <div class="apply-right">
                 <router-view></router-view>

@@ -1,47 +1,37 @@
 <template>
-    <div class="doubanInfo">
-        <header class="db-hader" :style="{
-            backgroundImage: `url('${bannerImg}')`
-        }">
-            <div class="movie-content">
-                <v-img
-                    :src="info.cover"
-                    lazy-src="https://uploadfile.bizhizu.cn/up/ec/85/b6/ec85b6d07d9f2c2d8d1062aa03d9b322.jpg"
-                    class="grey poster"
-                    :alt="info.introduce.title.pri"
-                >
-                </v-img>
-                <!-- <img class="poster" :src="info.cover" :alt="info.introduce.title.pri"> -->
-                <div style="width: 220px;"></div>
-                <div class="movie-info">
-                    <h3>
-                        {{info.introduce.title.pri}}
-                        <span class="sub">{{info.introduce.title.sub}}</span>
-                    </h3>
-                   
-                    <div class="intro" ref="desc">
-                        <div v-html="info.dy"></div>
-                        <!-- <div v-html="info.bj"></div> -->
-                        <!-- <div v-html="info.type"></div> -->
-                        <div v-html="info.actor"></div>
-                    </div>
-                </div>
+    <div class="douban_info" ref="douban_info">
+        <div class="right">
+            <div class="content-box">
+                <el-row class="header_info">
+                    <el-col :span="6">
+                        <el-image :src="info.cover" class="cover_image"></el-image>
+                    </el-col>
+                    <el-col :span="18">
+                        <p>
+                            <span style="font-size:16px;font-weight:bold;">{{info.introduce.title.pri}}</span>
+                            <span class="sub">{{info.introduce.title.sub}}</span>
+                        </p>
+                        <div class="intro" ref="desc" v-html="descHtml">
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-row class="header_info" style="background-color: white">
+                    <el-col :span="24">
+                        <div class="scen_title">剧情介绍</div>
+                        <div class="scenario" ref="scenario" v-html="scenarioHtml">
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-row class="header_info" style="background-color: white">
+                    <el-col :span="24">
+                        <div class="scen_title">播放列表</div>
+                        <div class="play_list">
+                            
+                        </div>
+                    </el-col>
+                </el-row>
             </div>
-            <div class="play-btn">
-                <v-btn depressed color="#df2d2d" style="color: white;">
-                    <i class="el-icon-caret-right"></i>&nbsp;&nbsp;播&nbsp;&nbsp;放&nbsp;&nbsp;
-                </v-btn>
-            </div>
-        </header>
-        <section class="movie-section">
-            <el-row class="header_info" style="background-color: white;width: 80%;">
-                <el-col :span="24">
-                    <div class="scen_title">剧情介绍</div>
-                    <div class="scenario" ref="scenario" v-html="scenarioHtml">
-                    </div>
-                </el-col>
-            </el-row>
-        </section>
+        </div>
     </div>
 </template>
 
@@ -49,19 +39,17 @@
 const {ipcRenderer: ipc} = require('electron');
 import { mapGetters, mapMutations } from 'vuex'
 import getQQMovieInfo from '../../../utils/mixins/getQQMovieInfo'
-import bannerImg from '../../../../../static/images/banner_bg.png'
 
 export default {
 	name: 'TvPlay',
     mixins: [getQQMovieInfo],
 	data() {
 		return {
-            bannerImg: bannerImg,
             id: '',
             title: '',
             descHtml: '',
             scenarioHtml: '', //剧情
-            info: {introduce: {title:{pri: '',sub:''}}},
+            info: {},
             activeTab: 0,
             playRRListInfo: [], // 人人视频数据
             rrPlayUrl: 'https://qn-cdn-web-local.rr.tv/',
@@ -105,13 +93,9 @@ export default {
                         type: '',
                     },
                 },
-                dy: item.querySelector('#info span:nth-of-type(1)').innerHTML.replace(/\/a>/ig, '/span>').replace(/<a/ig, '<span'),
-                // bj: item.querySelector('#info span:nth-of-type(2)').innerHTML.replace(/\/a>/ig, '/span>').replace(/<a/ig, '<span'),
-                // type: item.querySelector('#info span.p1:nth-of-type(1)').innerHTML.replace(/\/a>/ig, '/span>').replace(/<a/ig, '<span'),
-                actor: item.querySelector('#info span.actor').innerHTML.replace(/\/a>/ig, '/span>').replace(/<a/ig, '<span'),
                 rating: item.querySelector('.result-right .score') ? item.querySelector('.result-right .score').innerText : '',
             }
-            this.descHtml = item.querySelector('#info span:not(.p1)').innerHTML.replace(/\/a>/ig, '/span>').replace(/<a/ig, '<span')
+            this.descHtml = item.querySelector('#info').innerHTML.replace(/\/a>/ig, '/span>').replace(/<a/ig, '<span')
             this.scenarioHtml = item.querySelector('.related-info .indent').innerText
             let sourth = item.querySelectorAll('.gray_ad .bs li a');
             let list = [];
@@ -245,93 +229,121 @@ export default {
 	}
 }
 </script>
+
 <style lang="scss">
-.doubanInfo {
+.douban_info {
+    .el-input--small .el-input__inner {
+        border-radius: 50px;
+    }
+    .el-btn+.el-btn {
+        margin-left: 0 !important;
+    }
+    .el-btn {
+        width: 80px;
+        margin-right: 5px !important;
+        margin-top: 5px !important;
+    }
+    .intro{
+        &>span {
+            line-height: 25px;
+        }
+        span[text='官方网站'] {
+            display: none;
+        }
+        select {
+            display: none;
+        }
+    }
+}
+</style>
+
+<style lang="scss" scoped>
+.douban_info {
     width: 100vw;
     height: 100vh;
     margin-top: 6vh;
     color: black;
     overflow: hidden;
-    .play-btn {
-        position: absolute;
-        bottom: 30px;
-        left: 50%;
+    header {
+        height: 50px;
+        padding: 10px;
+        background-color: white;
+        display: flex;
+        justify-content: space-between;
+        .header_search {
+            width: 250px;
+        }
     }
-    .db-hader {
+    .right {
         width: 100%;
-        height: 320px;
-        object-fit: cover;
-        position: relative;
-        .movie-content {
-            width: 70%;
-            margin: 0 auto;
-            display: flex;
-            color: white;
-            .poster {
-                position: absolute;
-                width: 220px;
-                height: 315px;
-                top: 70px;
-                display: block;
-                border: 4px solid white;
-            }
-            .movie-info {
-                margin-top: 70px;
-                margin-left: 50px;
-                .sub {
-                    display: inline-block;
-                    vertical-align: top;
-                    padding: 2px 5px;
-                    margin: 6px 5px 0 0;
-                    font-size: 12px;
-                    line-height: 1;
-                    font-weight: 400;
-                    color: rgba( 255, 255, 255, .8);
-                    border-radius: 2px;
+        height: calc(100% - 50px);
+        background-color: rgba(255, 255, 255, .1);
+        padding: 10px 20px;
+        overflow: {
+            x: hidden;
+            y: auto;
+        };
+        .content-box {
+            padding: 0px 20px;
+            .header_info {
+                background-color: #eee;
+                padding: 20px;
+                box-sizing: content-box;
+                border-radius: 20px;
+                margin-bottom: 20px;
+                .scen_title {
+                    color: #ff5f00;
+                    font-size: 20px;
                 }
-                .intro {
-                    width: 550px;
-                    font-size: 12px;
-                    line-height: 20px;
-                    padding-top: 10px;
-                    .actor {
-                        display: block;
-                        width: 550px;
-                        height: 20px;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
+                .play_list {
+                    .demo-list {
+                        min-height: 150px;
                     }
                 }
             }
+            .cover_image {
+                // width: 180px;
+                border-radius: 5px;
+                background: #ebebeb;
+            }
+            .sub {
+                // color: rgba(0, 0, 0, .7);
+                // font-size: 14px;
+                display: inline-block;
+                vertical-align: top;
+                padding: 2px 5px;
+                margin: 6px 5px 0 0;
+                font-size: 12px;
+                line-height: 1;
+                color: #666;
+                border: 1px solid #ececec;
+                border-radius: 2px;
+                background-color: #f8f8f8;
+            }
+            .type {
+                color: #999;
+                font-size: 12px;
+            }
+            .info_item {
+                zoom: 1;
+                max-width: 100%;
+                margin-top: 10px;
+                overflow: hidden;
+                color: rgba(0, 0, 0, .7);
+                font-size: 12px;
+                letter-spacing: normal;
+                line-height: 22px;
+                text-overflow: ellipsis;
+                vertical-align: top;
+                white-space: nowrap;
+                word-break: break-all;
+            }
         }
     }
-    .movie-section {
-        margin-top: 90px;
-        width: 100%;
-        height: 400px;
-        background-color: whtie;
-        display: flex;
-        justify-content: space-around;
-        .header_info {
-            background-color: #eee;
-            padding: 20px;
-            box-sizing: content-box;
-            .scen_title {
-                color: #ff5f00;
-                font-size: 20px;
-            }
-            .scenario {
-                margin-top: 20px;
-                font-size: 14px;
-                line-height: 19px;
-            }
-            .play_list {
-                .demo-list {
-                    min-height: 150px;
-                }
-            }
-        }
+    .m_col {
+        display: grid;
+        justify-content: space-between;
+        grid-template-columns: repeat(auto-fill, 300px);
     }
 }
 </style>

@@ -1,13 +1,13 @@
 <template>
-    <mu-dialog title="提示" width="300" :open.sync="dialogVisible">
+    <el-dialog title="提示" width="300" :visible.sync="dialogVisible">
         <el-form ref="form" :model="form" :rules="rules" label-width="80px">
 			<el-form-item label="文件名" prop="name">
 				<el-input v-model="form.name" maxlength="8"></el-input>
 			</el-form-item>
 		</el-form>
-        <mu-button slot="actions" flat @click="close">关闭</mu-button>
-        <mu-button slot="actions" flat color="primary" @click="addFavorites">确定</mu-button>
-    </mu-dialog>
+        <v-button slot="actions" flat @click="close">关闭</v-button>
+        <v-button slot="actions" flat color="primary" @click="addFavorites">确定</v-button>
+    </el-dialog>
 </template>
 
 <script>

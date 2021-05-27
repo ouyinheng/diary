@@ -3,9 +3,9 @@
         <header>
             <div>
                 <!-- <el-button icon="el-icon-arrow-left"></el-button> -->
-                <mu-button icon color="primary" small @click="backUp">
+                <!-- <el-button icon color="primary" small @click="backUp">
                     <span class="el-icon-arrow-left"></span>
-                </mu-button>
+                </el-button> -->
             </div>
             <div>
                 <el-input
@@ -42,7 +42,7 @@
             </el-row>
             <div class="m_col" >
                 <div class="m-col-item" v-for="(item, index) in infos"  style="margin: 20px" :key="index" @click="toInfo(item)">
-                    <el-card :body-style="{ padding: '0px'}" shadow="hover">
+                    <!-- <el-card :body-style="{ padding: '0px'}" shadow="hover">
                         <div style="height:400px;overflow:hidden;min-width: 270px;">
                             <el-image :src="item.cover" :title="item.title"></el-image>
                         </div>
@@ -52,7 +52,16 @@
                                 {{item.rate}}分
                             </div>
                         </div>
-                    </el-card>
+                    </el-card> -->
+                    <v-card class="mx-auto" style="height:350px;overflow:hidden;width: 200px;">
+                        <v-img
+                            :src="item.cover"
+                            width="200px"
+                        ></v-img>
+                        <v-card-title :title="item.title">
+                            {{item.title}}
+                        </v-card-title>
+                    </v-card>
                 </div>
             </div>
             <div>
@@ -214,7 +223,7 @@ export default {
         .m_col {
             display: grid;
             justify-content: space-between;
-            grid-template-columns: repeat(auto-fill, 310px);
+            grid-template-columns: repeat(auto-fill, 220px);
         }
         // .header {
         //     display:flex;

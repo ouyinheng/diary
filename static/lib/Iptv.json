@@ -10,6 +10,30 @@
     },
     {
       "id": 1,
+      "name": "冯小刚",
+      "url": "http://101.71.255.229:6610/zjhs/2/10115/index.m3u8?virtualDomain=zjhs.live_hls.zte.com",
+      "group": "冯小刚",
+      "icon": "",
+      "show": true
+    },
+    {
+      "id": 1,
+      "name": "古天乐",
+      "url": "http://101.71.255.229:6610/zjhs/2/10119/index.m3u8?virtualDomain=zjhs.live_hls.zte.com",
+      "group": "国语动漫电影",
+      "icon": "",
+      "show": true
+    },
+    {
+      "id": 1,
+      "name": "李连杰",
+      "url": "http://101.71.255.229:6610/zjhs/2/10120/index.m3u8?virtualDomain=zjhs.live_hls.zte.com",
+      "group": "港产恐咘搞笑",
+      "icon": "",
+      "show": true
+    },
+    {
+      "id": 1,
       "name": "直播",
       "url": "http://cdn.adultiptv.net/livecams.m3u8",
       "group": "720",

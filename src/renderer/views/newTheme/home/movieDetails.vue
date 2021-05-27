@@ -36,16 +36,16 @@
 					<p class="content overflow-text-el" :title="item.introduce.info_item_desc">{{item.introduce.info_item_desc}}</p>
 				</p>
 				<p>
-					<mu-button
-                        style="width:80px"
-						color="primary"
+					<el-button
+                        style="width:80px;margin: 5px;color: white"
+						type="primary"
+                        size="small"
 						v-for="(Item, Index) in item.list"
 						:key="Index"
 						v-if="!gj.includes(Item.title)"
-						@click="btnHandle(Item, item)">
-                        <div style="width: 80px;overflow: hidden;height: 35px;">{{Item.title}}</div>
-					</mu-button>
-					<mu-button color="primary" v-if="item.list.length==0" @click="play(item.href)">立即播放</mu-button>
+						@click="btnHandle(Item, item)">{{Item.title}}
+					</el-button>
+					<el-button type="primary" size="small" v-if="item.list.length==0" @click="play(item.href)">立即播放</el-button>
 				</p>
 			</el-col>
 		</el-row>
