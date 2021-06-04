@@ -1,7 +1,7 @@
 <template>
 	<div class="homepage">
 		<div class="right">
-            <section class="section">
+            <section class="homepage_section">
                 <div class="now_showing">
                     <div class="between p-2">
                         <div class="title">推荐</div>
@@ -182,7 +182,7 @@ export default {
             x: hidden;
             y: auto;
         };
-        .section {
+        .homepage_section {
             color: black;
             .title {
                 color: black;

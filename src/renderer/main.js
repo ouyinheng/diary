@@ -9,9 +9,9 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './element-variables.scss'
 Vue.use(ElementUI);
-
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+
 Vue.use(Vuetify)
 
 import _ from 'lodash' 
@@ -45,6 +45,7 @@ new Vue({
   components: { App },
   router,
   store,
+  vuetify: new Vuetify(),
   template: '<App/>'
 }).$mount('#app')
 

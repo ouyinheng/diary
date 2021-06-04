@@ -28,8 +28,8 @@
                 </div>
             </div>
             <div class="play-btn">
-                <v-btn depressed color="#df2d2d" style="color: white;">
-                    <i class="el-icon-caret-right"></i>&nbsp;&nbsp;播&nbsp;&nbsp;放&nbsp;&nbsp;
+                <v-btn depressed color="#df2d2d" style="color: white;" @click="showDialog=true">
+                    <i class="el-icon-caret-right"></i>播放
                 </v-btn>
             </div>
         </header>
@@ -40,8 +40,20 @@
                     <div class="scenario" ref="scenario" v-html="scenarioHtml">
                     </div>
                 </el-col>
+                <!-- <el-col :span="24" class="mt-6">
+                    <div class="scen_title">播放列表</div>
+                    <div class="scenario">
+                        <el-tabs v-model="activeName" @tab-click="handleClick">
+                            <el-tab-pane label="用户管理" name="0">用户管理</el-tab-pane>
+                            <el-tab-pane label="配置管理" name="1">配置管理</el-tab-pane>
+                            <el-tab-pane label="角色管理" name="2">角色管理</el-tab-pane>
+                            <el-tab-pane label="定时任务补偿" name="3">定时任务补偿</el-tab-pane>
+                        </el-tabs>
+                    </div>
+                </el-col> -->
             </el-row>
         </section>
+        <play-list v-model="showDialog" v-if="showDialog"></play-list>
     </div>
 </template>
 
@@ -50,13 +62,17 @@ const {ipcRenderer: ipc} = require('electron');
 import { mapGetters, mapMutations } from 'vuex'
 import getQQMovieInfo from '../../../utils/mixins/getQQMovieInfo'
 import bannerImg from '../../../../../static/images/banner_bg.png'
-
+import playList from './playList'
 export default {
 	name: 'TvPlay',
     mixins: [getQQMovieInfo],
+    components: {
+        'play-list': playList
+    },
 	data() {
 		return {
             bannerImg: bannerImg,
+            showDialog: false,
             id: '',
             title: '',
             descHtml: '',
@@ -66,7 +82,8 @@ export default {
             playRRListInfo: [], // 人人视频数据
             rrPlayUrl: 'https://qn-cdn-web-local.rr.tv/',
             txListInfo: [],
-            iqyListInfo: []
+            iqyListInfo: [],
+            activeName: '0'
 		}
 	},
     watch: {
@@ -90,6 +107,9 @@ export default {
         },
         backUp(item) {
             this.$router.back();
+        },
+        handleClick() {
+
         },
 		// https://movie.douban.com/subject/30464901/?tag=%E7%83%AD%E9%97%A8&from=gaia_video
         doubanParseHtml(html) {
@@ -249,13 +269,25 @@ export default {
 .doubanInfo {
     width: 100vw;
     height: 100vh;
-    margin-top: 6vh;
+    padding-top: 6vh;
     color: black;
     overflow: hidden;
+    overflow-y: auto;
+    // padding-bottom: 30px;
+    .mt-6 {
+        margin-top: 30px;
+    }
     .play-btn {
         position: absolute;
         bottom: 30px;
+        width: 70%;
         left: 50%;
+        right: 50%;
+        transform: translate(-50%, 0%);
+        .v-btn {
+            margin-left: 270px;
+            width: 150px;
+        }
     }
     .db-hader {
         width: 100%;
@@ -301,6 +333,13 @@ export default {
                         white-space: nowrap;
                         overflow: hidden;
                         text-overflow: ellipsis;
+                    }
+                    .attrs {
+                        max-height: 60px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        width: 100%;
+                        display: inline-block;
                     }
                 }
             }

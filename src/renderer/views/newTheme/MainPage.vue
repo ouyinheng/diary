@@ -8,8 +8,8 @@
                     <span v-for="(item, index) in menus" :key="index" :class="{
                         active: item.link===activeIndex
                     }" @click="setActive(index)">{{item.name}}</span>
+                    <el-input class="search-el-input" v-if="isHomeLink" v-model="keyword" size="mini" placeholder="请输入内容" @keyup.native.enter="enterDetails" clearable></el-input>
                 </div>
-                <el-input v-if="isHomeLink" v-model="keyword" size="mini" placeholder="请输入内容" @keyup.native.enter="enterDetails" clearable></el-input>
             </div>
             <div class="setting">
                 <span class="iconfont icon-minus" @click="closeWin('min')"></span>
@@ -160,7 +160,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     * {
         box-sizing: border-box;
         margin: 0;
@@ -181,6 +181,12 @@ export default {
         height: 100%;
         display: flex;
         position: relative;
+        .search-el-input {
+            width: 200px;
+            input {
+                background-color: transparent;
+            }
+        }
         .closePlay {
             // display: none;
             bottom: 80px;

@@ -40,6 +40,8 @@ html,
 body {
 	-webkit-app-region: drag;
 	color: #d1d1d1;
+    font-family: 'element-icon';
+    letter-spacing: 3px;
 }
 #app {
 	width: 100vw;
