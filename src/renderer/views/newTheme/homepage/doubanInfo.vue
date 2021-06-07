@@ -4,13 +4,15 @@
             backgroundImage: `url('${bannerImg}')`
         }">
             <div class="movie-content">
-                <v-img
-                    :src="info.cover"
-                    lazy-src="https://uploadfile.bizhizu.cn/up/ec/85/b6/ec85b6d07d9f2c2d8d1062aa03d9b322.jpg"
-                    class="grey poster"
-                    :alt="info.introduce.title.pri"
-                >
-                </v-img>
+                <div class="cover-box">
+                    <v-img
+                        :src="info.cover"
+                        lazy-src="https://uploadfile.bizhizu.cn/up/ec/85/b6/ec85b6d07d9f2c2d8d1062aa03d9b322.jpg"
+                        class="grey poster"
+                        :alt="info.introduce.title.pri"
+                    >
+                    </v-img>
+                </div>
                 <!-- <img class="poster" :src="info.cover" :alt="info.introduce.title.pri"> -->
                 <div style="width: 220px;"></div>
                 <div class="movie-info">
@@ -28,7 +30,7 @@
                 </div>
             </div>
             <div class="play-btn">
-                <v-btn depressed color="#df2d2d" style="color: white;" @click="showDialog=true">
+                <v-btn depressed color="#df2d2d" style="color: white;" @click="showTheList">
                     <i class="el-icon-caret-right"></i>播放
                 </v-btn>
             </div>
@@ -40,20 +42,27 @@
                     <div class="scenario" ref="scenario" v-html="scenarioHtml">
                     </div>
                 </el-col>
-                <!-- <el-col :span="24" class="mt-6">
+                <el-col :span="24" class="mt-6">
                     <div class="scen_title">播放列表</div>
                     <div class="scenario">
-                        <el-tabs v-model="activeName" @tab-click="handleClick">
-                            <el-tab-pane label="用户管理" name="0">用户管理</el-tab-pane>
-                            <el-tab-pane label="配置管理" name="1">配置管理</el-tab-pane>
-                            <el-tab-pane label="角色管理" name="2">角色管理</el-tab-pane>
-                            <el-tab-pane label="定时任务补偿" name="3">定时任务补偿</el-tab-pane>
-                        </el-tabs>
+                       <v-data-table
+                            dense
+                            :headers="headers"
+                            :items="tableData"
+                            item-key="name"
+                            class="elevation-1"
+                        >
+                        <template v-slot:item.title="{ item }">
+                            <div @click="showTheList">
+                                {{ item.title }}
+                            </div>
+                        </template>
+                        </v-data-table>
                     </div>
-                </el-col> -->
+                </el-col>
             </el-row>
         </section>
-        <play-list v-model="showDialog" v-if="showDialog"></play-list>
+        <play-list v-model="showDialog" v-if="showDialog" :movieName="movieName"></play-list>
     </div>
 </template>
 
@@ -69,6 +78,18 @@ export default {
     components: {
         'play-list': playList
     },
+    computed: {
+        tableData() {
+            let list = [];
+            list = this.playRRListInfo.map(item => {
+                return {
+                    ...item,
+                    laiyuan: '人人'
+                }
+            })
+            return list;
+        }
+    },
 	data() {
 		return {
             bannerImg: bannerImg,
@@ -83,7 +104,14 @@ export default {
             rrPlayUrl: 'https://qn-cdn-web-local.rr.tv/',
             txListInfo: [],
             iqyListInfo: [],
-            activeName: '0'
+            activeName: '0',
+            movieName: '',
+            headers: [
+                { text: '片名', align: 'start', value: 'title'},
+                { text: '来源', value: 'laiyuan' },
+                { text: '上映', value: 'year' },
+                { text: '语言', value: 'area' },
+            ]
 		}
 	},
     watch: {
@@ -104,6 +132,24 @@ export default {
         ]),
         setAcitve(index) {
             this.activeTab = index;
+        },
+        tableRowClassName({row, rowIndex}) {
+            if (rowIndex === 1) {
+                return 'warning-row';
+            } else if (rowIndex === 3) {
+                return 'success-row';
+            }
+            return '';
+        },
+        // 获取播放列表
+        showTheList() {
+            let name = this.info.introduce.title.pri.split(' ');
+            this.movieName = name.length > 0 ? name[0] : '';
+            if(this.movieName) {
+                this.showDialog = true;
+            } else {
+                this.$message.error('解析失败');
+            }
         },
         backUp(item) {
             this.$router.back();
@@ -147,45 +193,50 @@ export default {
                 this.getTXList()
             }
             this.getRRList()
-            // console.log('list', list)
             // this.getRRList()
         },
-        getRRList(need=true, title) {
-            const that = this;
-            // https://web-api.rr.tv/search/season_h5?keywords=%E8%87%B4%E5%91%BD%E5%A5%B3%E4%BA%BA%20%E7%AC%AC%E4%B8%80%E5%AD%A3&size=10&id=&sort=&5-16-21
-            this.$http.get(`https://www.mahua110.com/search/-------------.html?wd=${encodeURIComponent(title ? title : this.title)}`).then(res => {
-                const ele = document.createElement('div');
-                let html = res.data;
-                ele.innerHTML = html.split('<body>')[1].split('</body>')[0];
-                const searchList = ele.querySelectorAll('#searchList .clearfix')
-                searchList.forEach(item => {
-                    let movieInfo = {
-                        id: '',
-                        href: item.querySelector('a').getAttribute('href'),
-                        cover: item.querySelector('a').getAttribute('data-original'),
-                        source: {
-                            img: '',
-                            text: '麻花影视'
-                        },
-                        introduce: {
-                            title: {
-                                pri: item.querySelector('.detail .searchkey').innerText,
-                                sub: '',
-                                type: '',
-                            },
-                            info_item_odd: item.querySelector('.detail p:nth-of-type(1)').innerText.replace('导演：', ''),
-                            info_item_even: item.querySelector('.detail p:nth-of-type(2)').innerText.replace('主演：', ''),
-                            info_item_desc: item.querySelector('.detail .hidden-xs').innerText.replace('简介：', ''),
-                        },
-                        rating: item.querySelector('a .pic-tag.pic-tag-top').innerText.trim(),
-                        list: []
-                    }
-                    console.log('人人', movieInfo)
-                    that.playRRListInfo.push(movieInfo)
-                })
-                // playRRListInfo
-            })
-        },
+        getRRList(title) {
+			// https://web-api.rr.tv/search/season_h5?keywords=%E8%87%B4%E5%91%BD%E5%A5%B3%E4%BA%BA%20%E7%AC%AC%E4%B8%80%E5%AD%A3&size=10&id=&sort=&5-16-21
+			this.$http.get(`https://web-api.rr.tv/search/season_h5?keywords=${encodeURIComponent(title ? title : this.title)}`).then((res) => {
+                this.playRRListInfo = res.data.result;
+            });
+		},
+        // getRRList(need=true, title) {
+        //     const that = this;
+        //     // https://web-api.rr.tv/search/season_h5?keywords=%E8%87%B4%E5%91%BD%E5%A5%B3%E4%BA%BA%20%E7%AC%AC%E4%B8%80%E5%AD%A3&size=10&id=&sort=&5-16-21
+        //     this.$http.get(`https://www.mahua110.com/search/-------------.html?wd=${encodeURIComponent(title ? title : this.title)}`).then(res => {
+        //         const ele = document.createElement('div');
+        //         let html = res.data;
+        //         ele.innerHTML = html.split('<body>')[1].split('</body>')[0];
+        //         const searchList = ele.querySelectorAll('#searchList .clearfix')
+        //         searchList.forEach(item => {
+        //             let movieInfo = {
+        //                 id: '',
+        //                 href: item.querySelector('a').getAttribute('href'),
+        //                 cover: item.querySelector('a').getAttribute('data-original'),
+        //                 source: {
+        //                     img: '',
+        //                     text: '麻花影视'
+        //                 },
+        //                 introduce: {
+        //                     title: {
+        //                         pri: item.querySelector('.detail .searchkey').innerText,
+        //                         sub: '',
+        //                         type: '',
+        //                     },
+        //                     info_item_odd: item.querySelector('.detail p:nth-of-type(1)').innerText.replace('导演：', ''),
+        //                     info_item_even: item.querySelector('.detail p:nth-of-type(2)').innerText.replace('主演：', ''),
+        //                     info_item_desc: item.querySelector('.detail .hidden-xs').innerText.replace('简介：', ''),
+        //                 },
+        //                 rating: item.querySelector('a .pic-tag.pic-tag-top').innerText.trim(),
+        //                 list: []
+        //             }
+        //             console.log('人人', movieInfo)
+        //             that.playRRListInfo.push(movieInfo)
+        //         })
+        //         // playRRListInfo
+        //     })
+        // },
         getTXList(title) {
             this.$http.get(`https://v.qq.com/x/search/?q=${encodeURIComponent(title ? title : this.title)}`).then(res => {
                 const item = this.parseHtml(res.data, false);
@@ -258,6 +309,7 @@ export default {
             this.$nextTick(() => {
                 this.doubanParseHtml(res.data);
                 // 获取人人数据
+                this.getRRList();
             })
         })
 	},
@@ -269,11 +321,28 @@ export default {
 .doubanInfo {
     width: 100vw;
     height: 100vh;
-    padding-top: 6vh;
+    // padding-top: 6vh;
     color: black;
     overflow: hidden;
     overflow-y: auto;
     // padding-bottom: 30px;
+    .m_col {
+        display: grid;
+        justify-content: space-between;
+        grid-template-columns: repeat(auto-fill, 220px);
+        .cover-box {
+            width: 200px;
+            height: 300px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .movie-cover {
+            transition: all .3s;
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
     .mt-6 {
         margin-top: 30px;
     }
@@ -291,21 +360,34 @@ export default {
     }
     .db-hader {
         width: 100%;
-        height: 320px;
+        height: calc(320px + 6vh);
         object-fit: cover;
         position: relative;
+        background-size: 100% 100%;
         .movie-content {
             width: 70%;
             margin: 0 auto;
             display: flex;
             color: white;
-            .poster {
+            .cover-box {
                 position: absolute;
                 width: 220px;
                 height: 315px;
                 top: 70px;
-                display: block;
+                box-shadow: 1px 1px 30px #000;
                 border: 4px solid white;
+                overflow: hidden;
+                box-sizing: content-box;
+                cursor: pointer;
+            }
+            .poster {
+                width: 220px;
+                height: 315px;
+                display: block;
+                transition: all .3s;
+                &:hover {
+                    transform: scale(1.1);
+                }
             }
             .movie-info {
                 margin-top: 70px;
@@ -344,6 +426,13 @@ export default {
                 }
             }
         }
+    }
+    .el-table .warning-row {
+        background: oldlace;
+    }
+
+    .el-table .success-row {
+        background: #f0f9eb;
     }
     .movie-section {
         margin-top: 90px;

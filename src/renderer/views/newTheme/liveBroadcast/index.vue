@@ -2,7 +2,7 @@
     <div class="liveBroadcast">
         <div class="live_content" id="video"></div>
         <div class="live_list">
-            <div class="m-col-item live_item" v-for="(item, index) in Iptvs" :key="index"  style="margin: 20px" @click="play(item)" v-if="item.show">
+            <div class="m-col-item live_item" v-for="(item, index) in Iptvs" :key="index"  style="margin: 20px" @click="play(item)" v-if="true || item.show">
                 {{item.name}}
             </div>
         </div>

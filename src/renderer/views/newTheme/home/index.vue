@@ -10,7 +10,7 @@
 			height="100vh"
 			direction="vertical"
 			:autoplay="true"
-			:interval="10000"
+			:interval="100000"
 			v-if="detailsList.length > 0"
 		>
 			<el-carousel-item
@@ -76,7 +76,6 @@ export default {
 			this.drag = "";
 		},
         toDetailsHandler(item) {
-            console.log(item);
             this.$router.push({
                 path: '/doubanInfo',
                 query: {
@@ -95,13 +94,11 @@ export default {
 	},
 	async created() {
 		let updateTime = new Date().getTime(); // 更新时间
-		// console.log('updateTime - localStorage.updateTime', updateTime - localStorage.updateTime)
 		if (
 			localStorage.updateTime &&
 			updateTime - localStorage.updateTime <= (1000 * 1800)
 		) {
 			this.detailsList = JSON.parse(localStorage.detailsList);
-			// console.log(this.detailsList);
 		} else {
 			this.movieList = await getRecommList();
 			this.getDetailsList();
@@ -130,7 +127,7 @@ export default {
 			background-color: rgba(0,0,0,0.2);
 			.section {
 				position: absolute;
-				bottom: 120px;
+				bottom: -550px;
 				left: 100px;
 				.title {
 					color: white;

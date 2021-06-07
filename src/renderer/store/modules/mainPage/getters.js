@@ -19,4 +19,6 @@ export const getSelectSourch = function(state) {
 export const getVideoType = function(state) {
     return state.videoType
 }
-
+export const getShowTheMovieBox = function(state) {
+    return state.showTheMovieBox
+}

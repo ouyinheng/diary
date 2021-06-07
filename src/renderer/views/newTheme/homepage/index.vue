@@ -10,10 +10,13 @@
                     <div class="m_col" >
                         <div class="m-col-item" v-for="(item, index) in recommList"  style="margin: 10px" :key="index" @click="toRecomInfo(item)">
                             <v-card class="mx-auto" style="height:350px;overflow:hidden;width: 200px;">
-                                <v-img
-                                    :src="item.cover"
-                                    width="200px"
-                                ></v-img>
+                                <div class="cover-box">
+                                    <v-img
+                                        class="movie-cover"
+                                        :src="item.cover"
+                                        width="200px"
+                                    ></v-img>
+                                </div>
                                 <v-card-title :title="item.title">
                                     {{item.title}}
                                 </v-card-title>
@@ -28,10 +31,13 @@
                 <div class="m_col" >
 					<div class="m-col-item" v-for="(item, index) in getRecommListGet"  style="margin: 10px" :key="index" @click="toInfo(item)">
                         <v-card class="mx-auto" style="height:350px;overflow:hidden;width: 200px;">
-                            <v-img
-                                :src="item.cover"
-                                width="200px"
-                            ></v-img>
+                            <div class="cover-box">
+                                <v-img
+                                    class="movie-cover"
+                                    :src="item.cover"
+                                    width="200px"
+                                ></v-img>
+                            </div>
                             <v-card-title :title="item.title">
                                 {{item.title}}
                             </v-card-title>
@@ -45,10 +51,13 @@
                 <div class="m_col" >
 					<div class="m-col-item" v-for="(item, index) in getTeleplayList"  style="margin: 10px" :key="index" @click="toInfo(item)">
 						<v-card class="mx-auto" style="height:350px;overflow:hidden;width: 200px;">
-                            <v-img
-                                :src="item.cover"
-                                width="200px"
-                            ></v-img>
+                            <div class="cover-box">
+                                <v-img
+                                    class="movie-cover"
+                                    :src="item.cover"
+                                    width="200px"
+                                ></v-img>
+                            </div>
                             <v-card-title :title="item.title">
                                 {{item.title}}
                             </v-card-title>
@@ -251,5 +260,17 @@ export default {
             }
         }
 	}
+    .cover-box {
+        width: 200px;
+        height: 300px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .movie-cover {
+        transition: all .3s;
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
 }
 </style>

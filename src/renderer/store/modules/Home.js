@@ -12,6 +12,7 @@ export default {
         TypeList: [],
         playMovieUrl: '',
         teleplayList: [], // 电视剧
+        showTheMovieBox: false, // 展示播放界面
     },
     actions,
     mutations,

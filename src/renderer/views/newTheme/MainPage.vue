@@ -3,7 +3,7 @@
         <div class="top" :class="{ hiddenTop: hiddenTop}">
             <div class="top_left">
                 <img class="logo" src="../../assets/images/logo_icon.png" @click.stop="goHome()">
-                <el-button v-if="!isHomeLink" icon="el-icon-arrow-left" style="-webkit-app-region: no-drag;margin-left: 10px;" size="mini" circle @click.native="$router.back()"></el-button>
+                <span v-if="!isHomeLink" class="btn-icon el-icon-arrow-left" style="-webkit-app-region: no-drag;margin-left: 10px;" @click="$router.back()"></span>
                 <div class="link" v-if="isHomeLink">
                     <span v-for="(item, index) in menus" :key="index" :class="{
                         active: item.link===activeIndex
@@ -12,9 +12,10 @@
                 </div>
             </div>
             <div class="setting">
-                <span class="iconfont icon-minus" @click="closeWin('min')"></span>
-                <span class="iconfont icon-fullscreen-expand" @click="closeWin('max')"></span>
-                <span class="iconfont icon-error" @click="closeWin('close')"></span>
+                <span class="btn-icon el-icon-caret-right" @click.stop="showThisBox"></span>
+                <span class="btn-icon iconfont icon-minus" @click="closeWin('min')"></span>
+                <span class="btn-icon iconfont icon-fullscreen-expand" @click="closeWin('max')"></span>
+                <span class="btn-icon iconfont icon-error" @click="closeWin('close')"></span>
             </div>
         </div>
         <div class="section">
@@ -29,14 +30,12 @@
                 </el-scrollbar>
             </div>
         </div>
-        <div class="play-box" :class="{
-                'closePlay': getClosePlay
-            }" @click.stop="showThisBox" v-if="getPlayMovieUrl">
-            <header class="play-box-header" v-if="!getClosePlay">
+        <div class="play-box" v-if="getShowTheMovieBox">
+            <header class="play-box-header">
                 <span></span>
                 <span class="close-play el-icon-circle-close" @click.stop="closePlayHandler"></span>
             </header>
-            <show-movie :playUrl="getPlayMovieUrl" :type="getVideoType" v-if="showCom" v-show="!getClosePlay"></show-movie>
+            <show-movie :playUrl="getPlayMovieUrl" :type="getVideoType" v-if="showCom"></show-movie>
         </div>
     </div>
 </template>
@@ -81,7 +80,6 @@ export default {
     },
     watch: {
         $route (to, from ) {
-            console.log(from)
             this.needKeep = !!from.meta.needKeep
             if(this.pageName.includes(to.name)) {
                 this.transition = 'page-transfer'
@@ -89,7 +87,7 @@ export default {
         },
         '$route.fullPath'(path) {
             this.activeIndex = path;
-            this.hiddenTop = (this.activeIndex != '/newThemeRouter');
+            this.hiddenTop = (this.activeIndex != '/newThemeRouter' && this.$route.name != 'doubanInfo');
         },
         getPlayMovieUrl() {
             this.showCom = false;
@@ -100,7 +98,7 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'getPlayMovieUrl', 'getClosePlay', 'getVideoType'
+            'getPlayMovieUrl', 'getClosePlay', 'getVideoType', 'getShowTheMovieBox'
         ]),
         loading() {
             return this.$store.state.Counter.loading;
@@ -112,6 +110,7 @@ export default {
     methods: {
         ...mapMutations([
 			'setClosePlay',
+            'setShowTheMovieBox'
         ]),
         enterDetails() {
             if(this.keyword) {
@@ -124,10 +123,7 @@ export default {
             }
         },
         showThisBox() {
-            console.log(this.getClosePlay)
-            if(this.getClosePlay) {
-                this.setClosePlay(false)
-            }
+            this.setShowTheMovieBox(true)
         },
         closeWin(type) {
             if(this.max&&type === 'max') {
@@ -144,18 +140,16 @@ export default {
             this.$router.push(this.menus[index].link)
         },
         goHome() {
-            console.log('newThemeRouter')
             this.$router.push('/newThemeRouter')
         },
         closePlayHandler() {
             // this.closePlay = true;
-            this.setClosePlay(true)
+            this.setShowTheMovieBox(false)
         }
     },
     created() {
         this.activeIndex = this.$route.fullPath;
-        this.hiddenTop = (this.activeIndex != '/newThemeRouter');
-        console.log('getPlayMovieUrl', this.getPlayMovieUrl)
+        this.hiddenTop = (this.activeIndex != '/newThemeRouter' && this.$route.name != 'doubanInfo');
     }
 };
 </script>
@@ -275,8 +269,18 @@ export default {
                     }
                 }
             }
+            .btn-icon {
+                font-size: 20px;
+                cursor: pointer;
+                transition: all .3s;
+                &:hover {
+                    color: #409EFF;
+                    transform: scale(1.3);
+                }
+            }
             .setting {
                 margin: 0 10px;
+                
                 span {
                     -webkit-app-region: no-drag;
                 }

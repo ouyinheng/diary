@@ -19,3 +19,7 @@ export const setSelectSourch = function(state, selectSourch) {
 export const setVideoType = function(state, videoType) {
     state.videoType = videoType
 }
+export const setShowTheMovieBox = function(state, showTheMovieBox) {
+    console.log('asdf', showTheMovieBox)
+    state.showTheMovieBox = showTheMovieBox
+}
