@@ -53,7 +53,7 @@
                             class="elevation-1"
                         >
                         <template v-slot:item.title="{ item }">
-                            <div @click="showTheList">
+                            <div class="title_btn" @click="showTheList(item)">
                                 {{ item.title }}
                             </div>
                         </template>
@@ -62,7 +62,7 @@
                 </el-col>
             </el-row>
         </section>
-        <play-list v-model="showDialog" v-if="showDialog" :movieName="movieName"></play-list>
+        <play-list v-model="showDialog" v-if="showDialog" :movieName="movieName" :selectItem="selectItem"></play-list>
     </div>
 </template>
 
@@ -81,17 +81,39 @@ export default {
     computed: {
         tableData() {
             let list = [];
+            let iqylist = [];
+            let txlist = [];
+            this.iqyListInfo.forEach(item => {
+                console.log(item)
+                iqylist.push({
+                    title: item.introduce.title.pri,
+                    laiyuan: '爱奇艺',
+                    year: '',
+                    area: '',
+                    href: item.href
+                })
+            })
+            this.txListInfo.forEach(item => {
+                txlist.push({
+                    title: item.introduce.title.pri,
+                    laiyuan: '腾讯',
+                    year: '',
+                    area: '',
+                    href: item.href
+                })
+            })
             list = this.playRRListInfo.map(item => {
                 return {
                     ...item,
                     laiyuan: '人人'
                 }
             })
-            return list;
+            return list.concat(iqylist).concat(txlist);
         }
     },
 	data() {
 		return {
+            selectItem: null,
             bannerImg: bannerImg,
             showDialog: false,
             id: '',
@@ -142,11 +164,12 @@ export default {
             return '';
         },
         // 获取播放列表
-        showTheList() {
+        showTheList(item) {
             let name = this.info.introduce.title.pri.split(' ');
             this.movieName = name.length > 0 ? name[0] : '';
             if(this.movieName) {
                 this.showDialog = true;
+                this.selectItem = item;
             } else {
                 this.$message.error('解析失败');
             }
@@ -201,42 +224,6 @@ export default {
                 this.playRRListInfo = res.data.result;
             });
 		},
-        // getRRList(need=true, title) {
-        //     const that = this;
-        //     // https://web-api.rr.tv/search/season_h5?keywords=%E8%87%B4%E5%91%BD%E5%A5%B3%E4%BA%BA%20%E7%AC%AC%E4%B8%80%E5%AD%A3&size=10&id=&sort=&5-16-21
-        //     this.$http.get(`https://www.mahua110.com/search/-------------.html?wd=${encodeURIComponent(title ? title : this.title)}`).then(res => {
-        //         const ele = document.createElement('div');
-        //         let html = res.data;
-        //         ele.innerHTML = html.split('<body>')[1].split('</body>')[0];
-        //         const searchList = ele.querySelectorAll('#searchList .clearfix')
-        //         searchList.forEach(item => {
-        //             let movieInfo = {
-        //                 id: '',
-        //                 href: item.querySelector('a').getAttribute('href'),
-        //                 cover: item.querySelector('a').getAttribute('data-original'),
-        //                 source: {
-        //                     img: '',
-        //                     text: '麻花影视'
-        //                 },
-        //                 introduce: {
-        //                     title: {
-        //                         pri: item.querySelector('.detail .searchkey').innerText,
-        //                         sub: '',
-        //                         type: '',
-        //                     },
-        //                     info_item_odd: item.querySelector('.detail p:nth-of-type(1)').innerText.replace('导演：', ''),
-        //                     info_item_even: item.querySelector('.detail p:nth-of-type(2)').innerText.replace('主演：', ''),
-        //                     info_item_desc: item.querySelector('.detail .hidden-xs').innerText.replace('简介：', ''),
-        //                 },
-        //                 rating: item.querySelector('a .pic-tag.pic-tag-top').innerText.trim(),
-        //                 list: []
-        //             }
-        //             console.log('人人', movieInfo)
-        //             that.playRRListInfo.push(movieInfo)
-        //         })
-        //         // playRRListInfo
-        //     })
-        // },
         getTXList(title) {
             this.$http.get(`https://v.qq.com/x/search/?q=${encodeURIComponent(title ? title : this.title)}`).then(res => {
                 const item = this.parseHtml(res.data, false);
@@ -247,7 +234,6 @@ export default {
         getIQYList(title) {
             this.$http.get(`https://so.iqiyi.com/so/q_${encodeURIComponent(title ? title : this.title)}`).then(res => {
                 const item = this.parseIQYHtml(res.data, false);
-                console.log('item', item)
                 this.iqyListInfo = item
             })
         },
@@ -309,7 +295,7 @@ export default {
             this.$nextTick(() => {
                 this.doubanParseHtml(res.data);
                 // 获取人人数据
-                this.getRRList();
+                // this.getRRList();
             })
         })
 	},
@@ -326,6 +312,12 @@ export default {
     overflow: hidden;
     overflow-y: auto;
     // padding-bottom: 30px;
+    .title_btn {
+        cursor: pointer;
+        &:hover {
+            color: #409EFF;
+        }
+    }
     .m_col {
         display: grid;
         justify-content: space-between;

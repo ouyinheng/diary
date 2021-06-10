@@ -25,7 +25,7 @@
 					<div class="masking">
 						<h3 class="section">
 							<span class="title">《{{ item.subject.title || '' }}》</span>
-							<span class="intro">—— {{item.payload.title}}</span>
+							<span class="intro">—— {{parseTitle(item.payload.title)}}</span>
 						</h3>
 						<div class="view" @click="toDetailsHandler(item)">观看</div>
 						<!-- <h5 class="description">{{item.payload.description}}</h5> -->
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { data } from 'cheerio/lib/api/attributes';
 import { getRecommList, getDetailsList } from "./getRecommSourth";
 export default {
 	name: "recommend",
@@ -47,6 +48,24 @@ export default {
 		};
 	},
 	methods: {
+        parseTitle(title) {
+            const year = localStorage.yearIndex;
+            const yearList = JSON.parse(localStorage.yearList);
+            if(!yearList.every(item => !title.includes(item))) {
+                return title
+            } else {
+                return year + '年' + title;
+            }
+        },
+        judgeShowMovie(datas) {
+            let bool = false;
+            if(datas.subjects && datas.subjects.length > 0 && datas.subject && datas.payload && datas.payload.background_img) {
+                bool = true;
+            } else if(datas.payload && datas.payload.widgets.length > 0 && datas.payload.widgets[0].subjects.length > 0) {
+                bool = true;
+            }
+            return bool;
+        },
 		async getDetailsList() {
 			try {
                 await this.movieList.forEach(async (item, index) => {
@@ -57,11 +76,29 @@ export default {
                             payload: datas.payload,
                             subject: datas.subject,
                         });
-                        localStorage.setItem(
-                            "detailsList",
-                            JSON.stringify(this.detailsList)
-                        );
+                    } else if(datas.payload && datas.payload.widgets.length > 0 && datas.payload.widgets[0].subjects.length > 0) {
+                        
+                        const index = parseInt(datas.payload.widgets.length * Math.random())
+                        this.detailsList.push({
+                            payload: datas.payload.widgets[index].payload,
+                            subject: datas.payload.widgets[index].subject,
+                        });
+                        // datas.payload.widgets[index].subjects.forEach(ele => {
+                        //     this.detailsList.push({
+                        //         // payload: datas.payload,
+                        //         subject: ele,
+                        //     });
+                        // })
+                    } else if(datas.subject && !datas.subjects && datas.payload && datas.payload.background_img) {
+                        this.detailsList.push({
+                            payload: datas.payload,
+                            subject: datas.subject,
+                        });
                     }
+                    localStorage.setItem(
+                        "detailsList",
+                        JSON.stringify(this.detailsList)
+                    );
                 });
             } catch (error) {
                 
@@ -98,7 +135,7 @@ export default {
 			localStorage.updateTime &&
 			updateTime - localStorage.updateTime <= (1000 * 1800)
 		) {
-			this.detailsList = JSON.parse(localStorage.detailsList);
+			this.detailsList = JSON.parse(localStorage.detailsList).filter(item => item.subject);
 		} else {
 			this.movieList = await getRecommList();
 			this.getDetailsList();

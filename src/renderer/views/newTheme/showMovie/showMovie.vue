@@ -5,7 +5,7 @@
         <!-- https://jsap.attakids.com/?url=https://v.qq.com/x/cover/tk3l27paq7sqr0z/p0036mrfj8h.html -->
         <!-- https://17kyun.com/jx.php?url=https://v.qq.com/x/cover/tk3l27paq7sqr0z/p0036mrfj8h.html -->
 		<webview v-if="type === 'webview'" :src="'https://jsap.attakids.com/?url=' + url" plugins></webview>
-        <xgplayer v-else-if="type === 'html'" :options="playerOptions"></xgplayer>
+        <xgplayer style="height: 100vh" v-else-if="type === 'html'" :options="playerOptions"></xgplayer>
 	</div>
 </template>
 <script>
@@ -53,6 +53,9 @@ export default {
 .movie {
 	width: 100vw;
 	height: 100vh;
+    .vue-xgplayer {
+        height: 100vh !important;
+    }
 	webview {
 		width: 100%;
 		height: 100%;
