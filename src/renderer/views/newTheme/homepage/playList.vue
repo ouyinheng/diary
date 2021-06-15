@@ -1,6 +1,6 @@
 <template>
 	<v-app>
-		<v-dialog class="v-dialog-playlist" :persistent="true" v-model="dialog" width="374">
+		<v-dialog class="v-dialog-playlist" :persistent="true" v-model="dialog" width="374" style="height: 80%">
 			<v-card :loading="loading" class="mx-auto my-card" max-width="374">
 				<template slot="progress">
 					<v-progress-linear
@@ -11,12 +11,12 @@
 				</template>
 				<v-img
 					height="250"
-					:src="playRRListInfo.coverUrl"
+					:src="playListInfo.coverUrl"
 				></v-img>
-				<v-card-title>{{playRRListInfo.title}}<span style="font-size: 12px;color: gainsboro">{{playRRListInfo.plots}}.{{playRRListInfo.playDateInfo}}.{{playRRListInfo.score.toFixed(2)}}</span></v-card-title>
+				<v-card-title>{{playListInfo.title}}<span style="font-size: 12px;color: gainsboro">{{playListInfo.plots}}.{{playListInfo.playDateInfo}}</span></v-card-title>
 				<v-card-text>
 					<div class="over-3-tips">
-						{{playRRListInfo.desc}}
+						{{playListInfo.desc}}
 					</div>
 				</v-card-text>
 				<v-divider class="mx-4"></v-divider>
@@ -27,7 +27,7 @@
 						active-class="deep-purple accent-4 white--text"
 						column
 					>
-						<v-chip v-for="(item, index) in playRRListInfo.episodes" :key="index" @click="parseUrl(item.key)">{{item.episodeNo}}</v-chip>
+						<v-chip v-for="(item, index) in playListInfo.episodes" :key="index" @click="parseUrl(item[obj.hrefKey])">{{item[obj.name]}}</v-chip>
 					</v-chip-group>
 				</v-card-text>
 				<v-card-actions>
@@ -55,8 +55,13 @@ export default {
 	},
 	data() {
 		return {
+            obj: {
+                name: 'episodeNo',
+                hrefKey: 'key'
+            },
 			loading: false,
             selection: 0,
+            playListInfo: null,
 			dialog: false,
 			model: null,
 			signKey: "", //人人播放key
@@ -102,14 +107,31 @@ export default {
 		console.log("selectItem", this.selectItem);
 		if (this.selectItem.laiyuan === "人人") {
 			this.getList(this.selectItem.id);
-		}
+		} else if( this.selectItem.laiyuan === '爱奇艺' ) {
+            this.playListInfo = {
+                laiyuan: '爱奇艺',
+                title: this.selectItem.title,
+                coverUrl: this.selectItem.cover,
+                plots: '',
+                playDateInfo: '',
+                desc: '',
+                episodes: this.selectItem.list
+            }
+            this.obj = {
+                name: 'title',
+                hrefKey: 'url'
+            }
+        }
 	},
 };
 </script>
 
 <style lang="scss" scoped>
 .my-card {
-    height: 75%;
+    height: 600px;
+}
+.v-dialog {
+    background-color: white;
 }
 .over-3-tips {
     display: inline-block;
@@ -122,7 +144,7 @@ export default {
 }
 .v-dialog-playlist {
     background-color: white;
-    height: 75vh;
+    height: 75vh !important;
     .image {
         width: 160px;
     }

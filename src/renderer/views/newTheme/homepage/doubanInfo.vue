@@ -84,20 +84,23 @@ export default {
             let iqylist = [];
             let txlist = [];
             this.iqyListInfo.forEach(item => {
-                console.log(item)
                 iqylist.push({
                     title: item.introduce.title.pri,
                     laiyuan: '爱奇艺',
+                    cover: item.cover,
                     year: '',
                     area: '',
+                    list: item.list,
                     href: item.href
                 })
             })
             this.txListInfo.forEach(item => {
                 txlist.push({
                     title: item.introduce.title.pri,
+                    cover: item.cover,
                     laiyuan: '腾讯',
                     year: '',
+                    list: item.list,
                     area: '',
                     href: item.href
                 })
@@ -150,7 +153,7 @@ export default {
     },
 	methods: {
         ...mapMutations([
-            'setPlayMovieUrl', 'setClosePlay', 'setVideoType'
+            'setPlayMovieUrl', 'setClosePlay', 'setVideoType', 'setShowTheMovieBox'
         ]),
         setAcitve(index) {
             this.activeTab = index;
@@ -167,12 +170,22 @@ export default {
         showTheList(item) {
             let name = this.info.introduce.title.pri.split(' ');
             this.movieName = name.length > 0 ? name[0] : '';
-            if(this.movieName) {
-                this.showDialog = true;
-                this.selectItem = item;
-            } else {
-                this.$message.error('解析失败');
+            if(item.laiyuan === '人人') {
+                if(this.movieName) {
+                    this.showDialog = true;
+                    this.selectItem = item;
+                } else {
+                    this.$message.error('解析失败');
+                }
+            } else if(item.laiyuan === '爱奇艺') {
+                if(item.list.length > 0) {
+                    this.showDialog = true;
+                    this.selectItem = item;
+                } else {
+                    this.playIQYVideo(item)
+                }
             }
+            
         },
         backUp(item) {
             this.$router.back();
@@ -227,14 +240,14 @@ export default {
         getTXList(title) {
             this.$http.get(`https://v.qq.com/x/search/?q=${encodeURIComponent(title ? title : this.title)}`).then(res => {
                 const item = this.parseHtml(res.data, false);
-                console.log('tx', item)
                 this.txListInfo = item;
             })
         },
         getIQYList(title) {
             this.$http.get(`https://so.iqiyi.com/so/q_${encodeURIComponent(title ? title : this.title)}`).then(res => {
                 const item = this.parseIQYHtml(res.data, false);
-                this.iqyListInfo = item
+                this.iqyListInfo = item;
+                console.log('aqi', item)
             })
         },
         deleteContent(dom) {
@@ -266,7 +279,6 @@ export default {
         getMoreList(Item, item) {
             this.$http.get(`https://s.video.qq.com/get_playsource?id=${item.id}&plat=2&type=4&range=0-1&data_type=2&video_type=2&plname=qq&otype=json&callback=getMoreList&_t=${new Date().getTime()}`).then(res => {
 				let result = JSON.parse(res.data.substring(12, res.data.length-1));
-				console.log(item, result)
 				item.list = result.PlaylistItem.videoPlayList.map(row => {
 					return {
 						title: row.title,
@@ -277,6 +289,7 @@ export default {
 			})
         },
         playIQYVideo(item) {
+            console.log('item', item)
             let url = item.href || item.url;
             if(url && !url.includes('https:')) {
                 url = 'http:' + url
@@ -284,6 +297,7 @@ export default {
             this.setPlayMovieUrl(url);
             this.setVideoType('webview')
             this.setClosePlay(false);
+            this.setShowTheMovieBox(true)
         }
 	},
 	created() {

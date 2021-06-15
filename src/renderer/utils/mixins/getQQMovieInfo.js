@@ -8,7 +8,8 @@ export default {
         return {
             list: [],
             iqyList: [],
-            txList: []
+            txList: [],
+            dbList: []
         }
     },
     computed: {
@@ -30,19 +31,11 @@ export default {
         getInfo(keyword) {
             this.list = [];
             // this.SET_LOADING_TURE();
-            if(this.getSelectSourch === '腾讯') {
-                this.$http.get(`https://v.qq.com/x/search/?q=${keyword}`).then(res => {
-                    // ipc.send('saveFile', keyword+'.html', res.data);
-                    this.parseHtml(res.data)
-                })
-            } else if(this.getSelectSourch === '优酷') {
-                // 
-                axios.get(`https://so.iqiyi.com/so/q_${keyword}`).then(res => {
-                    ipc.send('saveFile', keyword+'.html', res.data);
-                    this.parseIQYHtml(res.data)
-                })
-                
-            }
+            this.$http.get(`https://www.douban.com/search?q=${keyword}`).then(res => {
+                ipc.send('saveFile', keyword+'.html', res.data);
+                this.parseDBHtml(res.data)
+            })
+           
         },
         parseHtml(html, next=true) {
             this.txList = []
@@ -51,6 +44,7 @@ export default {
             let info =  div.querySelectorAll('.result_item.result_item_v');
             let movieInfo = {}
             Array.from(info).forEach(div => {
+                console.log('div', div)
                 let list  = [];
                 let item = document.createElement('div');
                 item.appendChild(div)
@@ -88,7 +82,6 @@ export default {
             })
             // this.infos = this.list
             if(next)this.setQqList(this.list)
-            // console.log(this.infos)
 		    // this.SET_LOADING_FALSE();
             return this.txList
         },
@@ -116,11 +109,12 @@ export default {
                     dom.appendChild(item)
                     return dom.querySelector('.info-lbl') &&dom.querySelector('.info-lbl').innerText === text
                 })
-                console.log("dList('主演:')[0]", dList('主演:')[0])
                 const getTitledom = item.querySelector('.qy-search-result-tit .main-tit') || item.querySelector('.qy-search-result-tit .main-tit span')
+                console.log('iqi-div', item.querySelector('.result-figure .qy-mod-link-wrap .qy-mod-link'))
+
                 movieInfo = {
                     // id: item.querySelector('.result_item.result_item_v') ? item.querySelector('.result_item.result_item_v').getAttribute('data-id') : '',
-                    href: item.querySelector('.result-figure .main-tit') ? item.querySelector('.result_figure .qy-mod-link').getAttribute('href') : '',
+                    href: item.querySelector('.result-figure .qy-mod-link-wrap .qy-mod-link') ? item.querySelector('.result-figure .qy-mod-link-wrap .qy-mod-link').getAttribute('href') : '',
                     cover: item.querySelector('.qy-mod-cover') ? item.querySelector('.qy-mod-cover').getAttribute('src') : '',
                     source: {
                         img: '',
@@ -146,9 +140,30 @@ export default {
             })
             // this.infos = this.list
             if(next)this.setYkList(this.list)
-            // console.log(this.infos)
 		    // this.SET_LOADING_FALSE();
             return this.iqyList
+        },
+        parseDBHtml(html) {
+            let list = [];
+            let div = document.createElement('div');
+            div.innerHTML = html;
+            let info =  div.querySelectorAll('.result');
+            Array.from(info).forEach(div => {
+                if(div.innerHTML.includes('<span>[电影]</span>')) {
+                    list.push({
+                        title: div.querySelector('.content .title h3 a').innerText,
+                        id: div.querySelector('.content .title h3 a').getAttribute('onclick').split('sid:')[1].split(', qcat:')[0].trim(),
+                        subjectCast: div.querySelector('.subject-cast').innerText,
+                        desc: div.querySelector('.content>p').innerText,
+                        cover: div.querySelector('.pic a img').getAttribute('src')
+                    })
+                }
+                // let list  = [];
+                // let item = document.createElement('div');
+                // item.appendChild(div)
+                
+            })
+            this.dbList = list;
         }
     },
     created() {
