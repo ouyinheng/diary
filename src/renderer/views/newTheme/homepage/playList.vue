@@ -27,7 +27,7 @@
 						active-class="deep-purple accent-4 white--text"
 						column
 					>
-						<v-chip v-for="(item, index) in playListInfo.episodes" :key="index" @click="parseUrl(item[obj.hrefKey])">{{item[obj.name]}}</v-chip>
+						<v-chip v-for="(item, index) in playListInfo.episodes" :key="index" @click="parseUrl(item[obj.hrefKey], item[obj.name])">{{item[obj.name]}}</v-chip>
 					</v-chip-group>
 				</v-card-text>
 				<v-card-actions>
@@ -121,17 +121,32 @@ export default {
                 name: 'title',
                 hrefKey: 'url'
             }
+        } else if( this.selectItem.laiyuan === '腾讯' ) {
+            this.playListInfo = {
+                laiyuan: '腾讯',
+                title: this.selectItem.title,
+                coverUrl: this.selectItem.cover,
+                plots: '',
+                playDateInfo: '',
+                desc: '',
+                id: this.selectItem.id,
+                episodes: this.selectItem.list
+            }
+            this.obj = {
+                name: 'title',
+                hrefKey: 'url'
+            }
         }
 	},
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .my-card {
-    height: 600px;
 }
 .v-dialog {
     background-color: white;
+    height: 600px;
 }
 .over-3-tips {
     display: inline-block;

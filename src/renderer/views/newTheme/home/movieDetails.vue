@@ -1,11 +1,13 @@
 <template>
     <div class="header_box movie-info">
-        <el-row v-for="(item, index) in dbList" :key="index" style="margin: 20px 0;" @click.native="toDetails(item)">
-			<el-col :span="6">
+        <el-row v-for="(item, index) in dbList" :key="index" style="margin: 20px 0;">
+			<el-col :span="4">
 				<el-image :src="item.cover" class="cover_image"></el-image>
 			</el-col>
-			<el-col :span="18">
-                {{item.title}}
+			<el-col :span="16">
+                <div class="title" @click="toDetails(item)">{{item.title}}</div>
+                <div class="sub">{{item.subjectCast}}</div>
+                <div class="sub">{{item.desc}}</div>
 			</el-col>
 		</el-row>
 		<el-row v-if="dbList.length==0">
@@ -63,7 +65,7 @@ export default {
 		margin: 0 auto;
 		color: black;
         .cover_image {
-            width: 160px;
+            width: 90%;
             border-radius: 5px;
             background: #ebebeb;
         }
@@ -73,19 +75,26 @@ export default {
 			align-items: center;
 			padding: 0 15px 0 0;
 		}
+        .title {
+            font-size: 20px;
+            margin: 0 0 4px 0;
+            color: black;
+            cursor: pointer;
+            &:hover {
+                color: #409EFF;
+            }
+            // line-height: 20px;
+        }
 		.sub {
 			// color: rgba(0, 0, 0, .7);
-			// font-size: 14px;
-            display: inline-block;
-            vertical-align: top;
-            padding: 2px 5px;
-            margin: 6px 5px 0 0;
-            font-size: 12px;
-            line-height: 1;
+			font-size: 14px;
+            line-height: 23px;
+            display: block;
             color: #666;
-            border: 1px solid #ececec;
-            border-radius: 2px;
-            background-color: #f8f8f8;
+            margin-bottom: 0.125rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
 		}
 		.type {
 			color: #999;

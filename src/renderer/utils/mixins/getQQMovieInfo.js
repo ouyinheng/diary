@@ -44,7 +44,6 @@ export default {
             let info =  div.querySelectorAll('.result_item.result_item_v');
             let movieInfo = {}
             Array.from(info).forEach(div => {
-                console.log('div', div)
                 let list  = [];
                 let item = document.createElement('div');
                 item.appendChild(div)
@@ -110,8 +109,6 @@ export default {
                     return dom.querySelector('.info-lbl') &&dom.querySelector('.info-lbl').innerText === text
                 })
                 const getTitledom = item.querySelector('.qy-search-result-tit .main-tit') || item.querySelector('.qy-search-result-tit .main-tit span')
-                console.log('iqi-div', item.querySelector('.result-figure .qy-mod-link-wrap .qy-mod-link'))
-
                 movieInfo = {
                     // id: item.querySelector('.result_item.result_item_v') ? item.querySelector('.result_item.result_item_v').getAttribute('data-id') : '',
                     href: item.querySelector('.result-figure .qy-mod-link-wrap .qy-mod-link') ? item.querySelector('.result-figure .qy-mod-link-wrap .qy-mod-link').getAttribute('href') : '',

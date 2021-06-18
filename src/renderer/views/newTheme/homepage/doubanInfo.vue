@@ -30,8 +30,8 @@
                 </div>
             </div>
             <div class="play-btn">
-                <v-btn depressed color="#df2d2d" style="color: white;" @click="showTheList">
-                    <i class="el-icon-caret-right"></i>播放
+                <v-btn depressed color="#df2d2d" style="color: white;" @click="collectHandler">
+                    <i class="el-icon-caret-right"></i>收藏
                 </v-btn>
             </div>
         </header>
@@ -49,7 +49,8 @@
                             dense
                             :headers="headers"
                             :items="tableData"
-                            item-key="name"
+                            hide-default-footer
+                            :items-per-page="10000"
                             class="elevation-1"
                         >
                         <template v-slot:item.title="{ item }">
@@ -99,6 +100,7 @@ export default {
                     title: item.introduce.title.pri,
                     cover: item.cover,
                     laiyuan: '腾讯',
+                    id: item.id,
                     year: '',
                     list: item.list,
                     area: '',
@@ -184,6 +186,14 @@ export default {
                 } else {
                     this.playIQYVideo(item)
                 }
+            } else if(item.laiyuan === '腾讯') {
+                if(item.list.length > 0) {
+                    console.log(item)
+                    this.showDialog = true;
+                    this.selectItem = item;
+                } else {
+                    this.playIQYVideo(item)
+                }
             }
             
         },
@@ -247,7 +257,6 @@ export default {
             this.$http.get(`https://so.iqiyi.com/so/q_${encodeURIComponent(title ? title : this.title)}`).then(res => {
                 const item = this.parseIQYHtml(res.data, false);
                 this.iqyListInfo = item;
-                console.log('aqi', item)
             })
         },
         deleteContent(dom) {
@@ -289,7 +298,6 @@ export default {
 			})
         },
         playIQYVideo(item) {
-            console.log('item', item)
             let url = item.href || item.url;
             if(url && !url.includes('https:')) {
                 url = 'http:' + url
@@ -298,6 +306,9 @@ export default {
             this.setVideoType('webview')
             this.setClosePlay(false);
             this.setShowTheMovieBox(true)
+        },
+        collectHandler() {
+            
         }
 	},
 	created() {
